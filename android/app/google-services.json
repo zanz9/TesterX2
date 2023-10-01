@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "225895357531",
+    "project_id": "testerx--2",
+    "storage_bucket": "testerx--2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225895357531:android:38006a15790519c17a337e",
+        "android_client_info": {
+          "package_name": "com.example.testerx2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIJsrVaMUuL_kvPMC5K_LLMGD5vxXolYY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
