@@ -42,6 +42,7 @@ class TestBody extends StatelessWidget {
           AnswerButton(
             question: question,
             indexPage: indexPage,
+            pageController: pageController,
           )
         ],
       ),

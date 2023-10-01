@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/models/question.dart';
 import 'package:testerx2/presentation/test/cubit/answer_cubit.dart';
 import 'package:testerx2/presentation/test/cubit/test_current_page_cubit.dart';
 import 'package:testerx2/presentation/test/test.dart';
+import 'package:testerx2/router/router.dart';
 
 @RoutePage()
 class TestPageScreen extends StatelessWidget {
@@ -31,7 +33,34 @@ class TestPageScreen extends StatelessWidget {
             appBar: AppBar(
               title: Text('${state + 1}/${questions.length}'),
               centerTitle: true,
-              automaticallyImplyLeading: false,
+              leading: IconButton(
+                icon: const Icon(Icons.exit_to_app),
+                onPressed: () {
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (context) => CupertinoAlertDialog(
+                      title:
+                          const Text('Вы действительно хотите закончить тест?'),
+                      actions: [
+                        CupertinoDialogAction(
+                          onPressed: () {
+                            context.router.pop(context);
+                            context.router.replace(const HomeRoute());
+                          },
+                          child: const Text('Закончить'),
+                        ),
+                        CupertinoDialogAction(
+                          onPressed: () {
+                            context.router.pop(context);
+                          },
+                          child: const Text('Отмена'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              // automaticallyImplyLeading: false,
             ),
             endDrawer: Drawer(
               width: 100,

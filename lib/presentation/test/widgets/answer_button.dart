@@ -10,10 +10,12 @@ class AnswerButton extends StatefulWidget {
     super.key,
     required this.question,
     required this.indexPage,
+    required this.pageController,
   });
 
   final int indexPage;
   final Question question;
+  final PageController pageController;
 
   @override
   State<AnswerButton> createState() => _AnswerButtonState();
@@ -59,6 +61,12 @@ class _AnswerButtonState extends State<AnswerButton> {
             splashColor: Colors.black.withOpacity(.04),
             highlightColor: Colors.black.withOpacity(.04),
             onTap: () {
+              if (isPressed) {
+                widget.pageController.nextPage(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease);
+                return;
+              }
               Progress progress = Progress(
                 page: widget.indexPage,
                 selected: index,
