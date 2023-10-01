@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/models/question.dart';
-import 'package:testerx2/presentation/test/bloc/answer_bloc.dart';
+import 'package:testerx2/presentation/test/cubit/answer_cubit.dart';
 import 'package:testerx2/presentation/test/cubit/test_current_page_cubit.dart';
 import 'package:testerx2/presentation/test/test.dart';
 
@@ -22,14 +22,12 @@ class TestPageScreen extends StatelessWidget {
           create: (context) => TestCurrentPageCubit(),
         ),
         BlocProvider(
-          create: (context) => AnswerBloc(),
+          create: (context) => AnswerCubit(),
         ),
       ],
       child: BlocBuilder<TestCurrentPageCubit, int>(
         builder: (context, state) {
-          context.read<AnswerBloc>().add(AddIndex(index: state));
           return Scaffold(
-            key: key,
             appBar: AppBar(
               title: Text('${state + 1}/${questions.length}'),
               centerTitle: true,
@@ -43,7 +41,6 @@ class TestPageScreen extends StatelessWidget {
                 itemBuilder: (context, index) => ListTile(
                   title: Text((index + 1).toString()),
                   onTap: () {
-                    // context.read<TestCurrentPageCubit>().changePage(index);
                     pageController.animateToPage(
                       index,
                       duration: const Duration(seconds: 1),
@@ -54,15 +51,17 @@ class TestPageScreen extends StatelessWidget {
               ),
             ),
             body: PageView.builder(
-              physics: const NeverScrollableScrollPhysics(),
               controller: pageController,
               onPageChanged: (page) {
                 context.read<TestCurrentPageCubit>().changePage(page);
               },
               itemCount: questions.length,
-              itemBuilder: (context, index) => TestBody(
-                question: questions[index],
-                pageController: pageController,
+              itemBuilder: (context, index) => KeepAlivePage(
+                child: TestBody(
+                  indexPage: index,
+                  question: questions[index],
+                  pageController: pageController,
+                ),
               ),
             ),
           );
@@ -70,4 +69,30 @@ class TestPageScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class KeepAlivePage extends StatefulWidget {
+  const KeepAlivePage({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _KeepAlivePageState createState() => _KeepAlivePageState();
+}
+
+class _KeepAlivePageState extends State<KeepAlivePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    return widget.child;
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }

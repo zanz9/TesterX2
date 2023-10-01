@@ -1,55 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:testerx2/presentation/test/bloc/answer_bloc.dart';
-import 'package:testerx2/presentation/test/cubit/test_current_page_cubit.dart';
+import 'package:testerx2/models/index.dart';
+import 'package:testerx2/presentation/test/cubit/answer_cubit.dart';
+import 'package:testerx2/presentation/test/models/progress.dart';
 
-class AnswerButton extends StatelessWidget {
+class AnswerButton extends StatefulWidget {
   const AnswerButton({
     super.key,
-    required this.answer,
-    required this.index,
-    required this.isRight,
-    required this.pageController,
+    required this.question,
+    required this.indexPage,
   });
 
-  final String answer;
-  final int index;
-  final bool isRight;
-  final PageController pageController;
+  final int indexPage;
+  final Question question;
 
   @override
+  State<AnswerButton> createState() => _AnswerButtonState();
+}
+
+class _AnswerButtonState extends State<AnswerButton> {
+  bool isPressed = false;
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AnswerBloc, AnswerState>(
-      builder: (context, state) {
+    return ListView.separated(
+      shrinkWrap: true,
+      itemCount: widget.question.answers!.length,
+      physics: const NeverScrollableScrollPhysics(),
+      separatorBuilder: (context, index) => const SizedBox(
+        height: 12,
+      ),
+      itemBuilder: (context, index) {
+        bool isRight =
+            widget.question.answers![index] == widget.question.rights!.first;
         Color bgColor = Colors.white;
-        bool isPressed = false;
-        if (state is AnswerPressed) {
-          final progressMap = state.progressMap;
-          final progress =
-              progressMap[context.read<TestCurrentPageCubit>().state];
-          if (progress != null) {
-            if (progress.selected == index && isRight) {
+
+        if (isPressed) {
+          if (context.read<AnswerCubit>().state[widget.indexPage]!.selected ==
+              index) {
+            if (isRight) {
               bgColor = Colors.greenAccent;
-            } else if (progress.selected == index && !isRight) {
+            } else {
               bgColor = Colors.redAccent;
-            } else if (progress.selected != index && isRight) {
+            }
+          } else {
+            if (isRight) {
               bgColor = Colors.greenAccent;
             }
-            isPressed = true;
-          }
-        }
-        void onTap() {
-          if (isPressed) {
-            context.read<AnswerBloc>().emit(AnswerInitial());
-            pageController.nextPage(
-              duration: const Duration(seconds: 1),
-              curve: Curves.ease,
-            );
-          } else {
-            context
-                .read<AnswerBloc>()
-                .add(OnPressed(isRight: isRight, indexAnswer: index));
           }
         }
 
@@ -61,10 +58,19 @@ class AnswerButton extends StatelessWidget {
           child: InkWell(
             splashColor: Colors.black.withOpacity(.04),
             highlightColor: Colors.black.withOpacity(.04),
-            onTap: onTap,
+            onTap: () {
+              Progress progress = Progress(
+                page: widget.indexPage,
+                selected: index,
+              );
+              context.read<AnswerCubit>().add(widget.indexPage, progress);
+              setState(() {
+                isPressed = true;
+              });
+            },
             child: Padding(
               padding: const EdgeInsets.all(12),
-              child: HtmlWidget(answer),
+              child: HtmlWidget(widget.question.answers![index]),
             ),
           ),
         );
