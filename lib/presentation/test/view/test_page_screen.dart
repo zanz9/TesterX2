@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/models/question.dart';
 import 'package:testerx2/presentation/test/cubit/answer_cubit.dart';
 import 'package:testerx2/presentation/test/cubit/test_current_page_cubit.dart';
+import 'package:testerx2/presentation/test/models/progress.dart';
 import 'package:testerx2/presentation/test/test.dart';
 import 'package:testerx2/router/router.dart';
 
@@ -17,6 +18,7 @@ class TestPageScreen extends StatelessWidget {
   final List<Question> questions;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     PageController pageController = PageController(initialPage: 0);
     return MultiBlocProvider(
       providers: [
@@ -36,24 +38,38 @@ class TestPageScreen extends StatelessWidget {
               leading: IconButton(
                 icon: const Icon(Icons.exit_to_app),
                 onPressed: () {
+                  final remained = questions.length -
+                      context.read<AnswerCubit>().state.length;
                   showCupertinoDialog(
                     context: context,
                     builder: (context) => CupertinoAlertDialog(
                       title:
                           const Text('Вы действительно хотите закончить тест?'),
+                      content: remained != 0
+                          ? const Text('У вас есть не отвеченные вопросы')
+                          : null,
                       actions: [
                         CupertinoDialogAction(
                           onPressed: () {
                             context.router.pop(context);
-                            context.router.replace(const HomeRoute());
+                            context.router.replace(TestFinishRoute(
+                              progressMap: context.read<AnswerCubit>().state,
+                              questions: questions,
+                            ));
                           },
-                          child: const Text('Закончить'),
+                          child: Text(
+                            'Закончить',
+                            style: TextStyle(color: theme.primaryColor),
+                          ),
                         ),
                         CupertinoDialogAction(
                           onPressed: () {
                             context.router.pop(context);
                           },
-                          child: const Text('Отмена'),
+                          child: Text(
+                            'Отмена',
+                            style: TextStyle(color: theme.primaryColor),
+                          ),
                         ),
                       ],
                     ),
@@ -62,22 +78,42 @@ class TestPageScreen extends StatelessWidget {
               ),
               // automaticallyImplyLeading: false,
             ),
-            endDrawer: Drawer(
-              width: 100,
-              child: ListView.separated(
-                itemCount: questions.length,
-                separatorBuilder: (context, index) => const Divider(),
-                itemBuilder: (context, index) => ListTile(
-                  title: Text((index + 1).toString()),
-                  onTap: () {
-                    pageController.animateToPage(
-                      index,
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.ease,
-                    );
-                  },
-                ),
-              ),
+            endDrawer: BlocBuilder<AnswerCubit, Map<int, Progress>>(
+              builder: (context, state) {
+                return Drawer(
+                  width: 100,
+                  child: ListView.separated(
+                    itemCount: questions.length,
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemBuilder: (context, index) {
+                      final isRight = state[index]?.isRight;
+                      Color color = Colors.black;
+                      if (isRight != null) {
+                        if (isRight) {
+                          color = Colors.greenAccent;
+                        } else {
+                          color = Colors.redAccent;
+                        }
+                      }
+                      return ListTile(
+                        title: Text(
+                          (index + 1).toString(),
+                          style: TextStyle(
+                            color: color,
+                          ),
+                        ),
+                        onTap: () {
+                          pageController.animateToPage(
+                            index,
+                            duration: const Duration(seconds: 1),
+                            curve: Curves.ease,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                );
+              },
             ),
             body: PageView.builder(
               controller: pageController,

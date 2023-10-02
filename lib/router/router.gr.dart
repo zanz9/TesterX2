@@ -45,6 +45,17 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const TestEditorScreen(),
       );
     },
+    TestFinishRoute.name: (routeData) {
+      final args = routeData.argsAs<TestFinishRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: TestFinishScreen(
+          key: args.key,
+          questions: args.questions,
+          progressMap: args.progressMap,
+        ),
+      );
+    },
     TestPageRoute.name: (routeData) {
       final args = routeData.argsAs<TestPageRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -137,6 +148,49 @@ class TestEditorRoute extends PageRouteInfo<void> {
   static const String name = 'TestEditorRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [TestFinishScreen]
+class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
+  TestFinishRoute({
+    Key? key,
+    required List<Question> questions,
+    required Map<int, Progress> progressMap,
+    List<PageRouteInfo>? children,
+  }) : super(
+          TestFinishRoute.name,
+          args: TestFinishRouteArgs(
+            key: key,
+            questions: questions,
+            progressMap: progressMap,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'TestFinishRoute';
+
+  static const PageInfo<TestFinishRouteArgs> page =
+      PageInfo<TestFinishRouteArgs>(name);
+}
+
+class TestFinishRouteArgs {
+  const TestFinishRouteArgs({
+    this.key,
+    required this.questions,
+    required this.progressMap,
+  });
+
+  final Key? key;
+
+  final List<Question> questions;
+
+  final Map<int, Progress> progressMap;
+
+  @override
+  String toString() {
+    return 'TestFinishRouteArgs{key: $key, questions: $questions, progressMap: $progressMap}';
+  }
 }
 
 /// generated route for

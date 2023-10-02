@@ -8,8 +8,10 @@ import 'package:testerx2/presentation/history/history.dart';
 import 'package:testerx2/presentation/home/home.dart';
 import 'package:testerx2/presentation/main/main.dart';
 import 'package:testerx2/presentation/settings/settings.dart';
+import 'package:testerx2/presentation/test/models/progress.dart';
 import 'package:testerx2/presentation/test/test.dart';
 import 'package:testerx2/presentation/test_editor/view/index.dart';
+import 'package:testerx2/presentation/test_finish/test_finish.dart';
 import 'package:testerx2/presentation/test_preview/test_preview.dart';
 
 part 'router.gr.dart';
@@ -46,6 +48,10 @@ class AppRouter extends _$AppRouter {
         AutoRoute(
           path: '/test',
           page: TestPageRoute.page,
+        ),
+        AutoRoute(
+          path: '/test_finish',
+          page: TestFinishRoute.page,
         ),
         AutoRoute(
           page: TestEditorRoute.page,

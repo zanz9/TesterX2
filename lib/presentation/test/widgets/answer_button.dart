@@ -29,9 +29,7 @@ class _AnswerButtonState extends State<AnswerButton> {
       shrinkWrap: true,
       itemCount: widget.question.answers!.length,
       physics: const NeverScrollableScrollPhysics(),
-      separatorBuilder: (context, index) => const SizedBox(
-        height: 12,
-      ),
+      separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         bool isRight =
             widget.question.answers![index] == widget.question.rights!.first;
@@ -70,6 +68,7 @@ class _AnswerButtonState extends State<AnswerButton> {
               Progress progress = Progress(
                 page: widget.indexPage,
                 selected: index,
+                isRight: isRight,
               );
               context.read<AnswerCubit>().add(widget.indexPage, progress);
               setState(() {
