@@ -16,15 +16,23 @@ class TestPreviewScreen extends StatelessWidget {
     super.key,
     required this.testName,
     required this.file,
+    required this.qBackup,
   });
   final String testName;
-  final File file;
+  final File? file;
+  final String? qBackup;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final temp = file.readAsStringSync();
-    final temp2 = jsonDecode(temp);
+    var temp2;
+    if (file != null) {
+      final temp = file!.readAsStringSync();
+      temp2 = jsonDecode(temp);
+    } else {
+      temp2 = jsonDecode(qBackup!);
+    }
+
     TX data = TX.fromJson(temp2);
     int length = data.questions!.length;
     return Scaffold(
@@ -47,7 +55,7 @@ class TestPreviewScreen extends StatelessWidget {
                   sliderLength: length.toDouble(),
                 ),
                 const SizedBox(height: 16),
-                TestChoose(data: data),
+                TestChoose(data: data, testName: testName),
               ],
             ),
           ),
@@ -61,9 +69,11 @@ class TestChoose extends StatelessWidget {
   const TestChoose({
     super.key,
     required this.data,
+    required this.testName,
   });
 
   final TX data;
+  final String testName;
 
   @override
   Widget build(BuildContext context) {
@@ -91,8 +101,8 @@ class TestChoose extends StatelessWidget {
                   color: Colors.greenAccent,
                 ),
                 onTap: () {
-                  // String qBackup =
-                  //     jsonEncode(data.toJson()); //! shared_preference
+                  String qBackup =
+                      jsonEncode(data.toJson()); //! shared_preference
 
                   // final bool multiple = data.multiple!;
                   List<Question> questions = data.questions!;
@@ -101,7 +111,9 @@ class TestChoose extends StatelessWidget {
                   questions.map((e) => e.answers?.shuffle()).toList();
                   context.router.replace(
                     TestPageRoute(
+                      testName: testName,
                       questions: data.questions!,
+                      qBackup: qBackup,
                     ),
                   );
                 },

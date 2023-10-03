@@ -14,8 +14,13 @@ class TestPageScreen extends StatelessWidget {
   const TestPageScreen({
     super.key,
     required this.questions,
+    required this.testName,
+    required this.qBackup,
   });
   final List<Question> questions;
+  final String testName;
+  final String qBackup;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -40,6 +45,7 @@ class TestPageScreen extends StatelessWidget {
                 onPressed: () {
                   final remained = questions.length -
                       context.read<AnswerCubit>().state.length;
+                  final progressMap = context.read<AnswerCubit>().state;
                   showCupertinoDialog(
                     context: context,
                     builder: (context) => CupertinoAlertDialog(
@@ -53,8 +59,10 @@ class TestPageScreen extends StatelessWidget {
                           onPressed: () {
                             context.router.pop(context);
                             context.router.replace(TestFinishRoute(
-                              progressMap: context.read<AnswerCubit>().state,
+                              progressMap: progressMap,
                               questions: questions,
+                              testName: testName,
+                              qBackup: qBackup,
                             ));
                           },
                           child: Text(

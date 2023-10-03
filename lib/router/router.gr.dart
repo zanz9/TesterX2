@@ -53,6 +53,8 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           questions: args.questions,
           progressMap: args.progressMap,
+          testName: args.testName,
+          qBackup: args.qBackup,
         ),
       );
     },
@@ -63,6 +65,8 @@ abstract class _$AppRouter extends RootStackRouter {
         child: TestPageScreen(
           key: args.key,
           questions: args.questions,
+          testName: args.testName,
+          qBackup: args.qBackup,
         ),
       );
     },
@@ -74,6 +78,7 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           testName: args.testName,
           file: args.file,
+          qBackup: args.qBackup,
         ),
       );
     },
@@ -157,6 +162,8 @@ class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
     Key? key,
     required List<Question> questions,
     required Map<int, Progress> progressMap,
+    required String testName,
+    required String qBackup,
     List<PageRouteInfo>? children,
   }) : super(
           TestFinishRoute.name,
@@ -164,6 +171,8 @@ class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
             key: key,
             questions: questions,
             progressMap: progressMap,
+            testName: testName,
+            qBackup: qBackup,
           ),
           initialChildren: children,
         );
@@ -179,6 +188,8 @@ class TestFinishRouteArgs {
     this.key,
     required this.questions,
     required this.progressMap,
+    required this.testName,
+    required this.qBackup,
   });
 
   final Key? key;
@@ -187,9 +198,13 @@ class TestFinishRouteArgs {
 
   final Map<int, Progress> progressMap;
 
+  final String testName;
+
+  final String qBackup;
+
   @override
   String toString() {
-    return 'TestFinishRouteArgs{key: $key, questions: $questions, progressMap: $progressMap}';
+    return 'TestFinishRouteArgs{key: $key, questions: $questions, progressMap: $progressMap, testName: $testName, qBackup: $qBackup}';
   }
 }
 
@@ -199,12 +214,16 @@ class TestPageRoute extends PageRouteInfo<TestPageRouteArgs> {
   TestPageRoute({
     Key? key,
     required List<Question> questions,
+    required String testName,
+    required String qBackup,
     List<PageRouteInfo>? children,
   }) : super(
           TestPageRoute.name,
           args: TestPageRouteArgs(
             key: key,
             questions: questions,
+            testName: testName,
+            qBackup: qBackup,
           ),
           initialChildren: children,
         );
@@ -219,15 +238,21 @@ class TestPageRouteArgs {
   const TestPageRouteArgs({
     this.key,
     required this.questions,
+    required this.testName,
+    required this.qBackup,
   });
 
   final Key? key;
 
   final List<Question> questions;
 
+  final String testName;
+
+  final String qBackup;
+
   @override
   String toString() {
-    return 'TestPageRouteArgs{key: $key, questions: $questions}';
+    return 'TestPageRouteArgs{key: $key, questions: $questions, testName: $testName, qBackup: $qBackup}';
   }
 }
 
@@ -237,7 +262,8 @@ class TestPreviewRoute extends PageRouteInfo<TestPreviewRouteArgs> {
   TestPreviewRoute({
     Key? key,
     required String testName,
-    required File file,
+    required File? file,
+    required String? qBackup,
     List<PageRouteInfo>? children,
   }) : super(
           TestPreviewRoute.name,
@@ -245,6 +271,7 @@ class TestPreviewRoute extends PageRouteInfo<TestPreviewRouteArgs> {
             key: key,
             testName: testName,
             file: file,
+            qBackup: qBackup,
           ),
           initialChildren: children,
         );
@@ -260,16 +287,19 @@ class TestPreviewRouteArgs {
     this.key,
     required this.testName,
     required this.file,
+    required this.qBackup,
   });
 
   final Key? key;
 
   final String testName;
 
-  final File file;
+  final File? file;
+
+  final String? qBackup;
 
   @override
   String toString() {
-    return 'TestPreviewRouteArgs{key: $key, testName: $testName, file: $file}';
+    return 'TestPreviewRouteArgs{key: $key, testName: $testName, file: $file, qBackup: $qBackup}';
   }
 }
