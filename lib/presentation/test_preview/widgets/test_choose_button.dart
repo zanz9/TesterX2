@@ -11,6 +11,7 @@ class TestChooseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Expanded(
       child: Container(
         height: 150,
@@ -18,7 +19,7 @@ class TestChooseButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: theme.shadowColor,
               spreadRadius: 1,
               blurRadius: 5,
               offset: const Offset(0, 0),
@@ -26,6 +27,7 @@ class TestChooseButton extends StatelessWidget {
           ],
         ),
         child: Material(
+          color: theme.cardColor,
           borderRadius: BorderRadius.circular(10),
           child: InkWell(
             borderRadius: BorderRadius.circular(10),

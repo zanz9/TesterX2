@@ -25,6 +25,7 @@ class _AnswerButtonState extends State<AnswerButton> {
   bool isPressed = false;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ListView.separated(
       shrinkWrap: true,
       itemCount: widget.question.answers!.length,
@@ -33,7 +34,7 @@ class _AnswerButtonState extends State<AnswerButton> {
       itemBuilder: (context, index) {
         bool isRight =
             widget.question.answers![index] == widget.question.rights!.first;
-        Color bgColor = Colors.white;
+        Color bgColor = theme.cardColor;
 
         if (isPressed) {
           if (context.read<AnswerCubit>().state[widget.indexPage]!.selected ==

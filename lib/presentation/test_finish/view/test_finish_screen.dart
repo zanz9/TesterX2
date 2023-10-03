@@ -39,7 +39,7 @@ class TestFinishScreen extends StatelessWidget {
           height: 55,
           child: ListContainer(
             bodyText: 'Перепройти тест',
-            rightSide: const Icon(Icons.replay),
+            rightSide: Icon(Icons.replay, color: theme.hintColor),
             onTap: () {
               context.router.replace(TestPreviewRoute(
                 testName: testName,
@@ -90,9 +90,10 @@ class FinishListContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(

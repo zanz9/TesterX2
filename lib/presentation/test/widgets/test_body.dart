@@ -24,7 +24,7 @@ class TestBody extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: theme.cardColor,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Padding(

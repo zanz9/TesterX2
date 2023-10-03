@@ -17,11 +17,11 @@ class TestLengthSlider extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           height: 100,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: theme.cardColor,
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
+                color: theme.shadowColor,
                 spreadRadius: 1,
                 blurRadius: 5,
                 offset: const Offset(0, 0),

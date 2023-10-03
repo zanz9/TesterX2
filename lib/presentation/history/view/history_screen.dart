@@ -8,6 +8,7 @@ class HistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -22,7 +23,7 @@ class HistoryScreen extends StatelessWidget {
               return ListContainer(
                 bodyText: 'Тест $index',
                 secondaryText: 'Пройдено на 100%',
-                rightSide: const Icon(Icons.replay),
+                rightSide: Icon(Icons.replay, color: theme.hintColor),
                 onTap: () {},
               );
             },

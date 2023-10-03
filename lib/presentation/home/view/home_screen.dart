@@ -43,7 +43,11 @@ class HomeScreen extends StatelessWidget {
                   highlightColor: Colors.transparent,
                 ),
                 child: BottomNavigationBar(
+                  backgroundColor:
+                      theme.bottomNavigationBarTheme.backgroundColor,
                   selectedIconTheme: IconThemeData(color: theme.primaryColor),
+                  unselectedIconTheme:
+                      theme.bottomNavigationBarTheme.unselectedIconTheme,
                   showUnselectedLabels: false,
                   showSelectedLabels: false,
                   currentIndex: tabsRouter.activeIndex,

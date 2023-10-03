@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:testerx2/router/router.dart';
+import 'package:testerx2/ui/theme/darkTheme.dart';
 import 'package:testerx2/ui/theme/lightTheme.dart';
 
 Future<void> main() async {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
     final theme = Theme.of(context);
     return MaterialApp.router(
       title: 'TesterX',
-      theme: lightTheme(primaryColor, theme),
+      theme: darkTheme(primaryColor, theme),
       routerConfig: appRouter.config(),
     );
   }

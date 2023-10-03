@@ -94,6 +94,7 @@ class _TestsListState extends State<TestsList> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SliverList.separated(
       itemCount: files.length,
       separatorBuilder: (context, index) => const SizedBox(height: 12),
@@ -102,7 +103,8 @@ class _TestsListState extends State<TestsList> {
         final fileName = file.path.split('/').last.replaceFirst('.TX', '');
         return ListContainer(
           bodyText: fileName,
-          rightSide: const Icon(Icons.arrow_forward_ios_rounded),
+          rightSide:
+              Icon(Icons.arrow_forward_ios_rounded, color: theme.hintColor),
           onTap: () {
             context.router.push(TestPreviewRoute(
               testName: fileName,

@@ -21,7 +21,7 @@ class ListContainer extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: theme.shadowColor,
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, 0),
@@ -29,6 +29,7 @@ class ListContainer extends StatelessWidget {
         ],
       ),
       child: Material(
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(10),
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
