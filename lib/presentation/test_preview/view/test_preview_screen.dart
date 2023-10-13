@@ -25,6 +25,7 @@ class TestPreviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // ignore: prefer_typing_uninitialized_variables
     var temp2;
     if (file != null) {
       final temp = file!.readAsStringSync();
