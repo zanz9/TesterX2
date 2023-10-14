@@ -8,21 +8,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterBloc() : super(RegisterInitial()) {
     on<OnRegister>((event, emit) async {
       try {
-        final credential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: event.email,
           password: event.password,
         );
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           emit(RegisterPasswordWeak());
-          print('The password provided is too weak.');
         } else if (e.code == 'email-already-in-use') {
           emit(RegisterEmailAlreadyInUse());
-          print('The account already exists for that email.');
         }
-      } catch (e) {
-        print(e);
       }
     });
   }

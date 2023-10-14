@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:testerx2/myapp.dart';
 import 'package:testerx2/ui/ui.dart';
 
 class ToggleContainer extends StatefulWidget {
   const ToggleContainer({
     super.key,
+    required this.bodyText,
+    required this.onTap,
+    required this.initialValue,
   });
-
+  final String bodyText;
+  final Function() onTap;
+  final bool initialValue;
   @override
   State<ToggleContainer> createState() => _SettingsListContainerState();
 }
@@ -15,40 +18,30 @@ class ToggleContainer extends StatefulWidget {
 class _SettingsListContainerState extends State<ToggleContainer> {
   bool value = false;
 
-  changeTheme() {
-    if (value) {
-      MyApp.of(context).changeTheme(ThemeMode.dark);
-    } else {
-      MyApp.of(context).changeTheme(ThemeMode.light);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    setState(() {
-      value = MyApp.of(context).theme == ThemeMode.dark;
-    });
+    value = widget.initialValue;
   }
 
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: ListContainer(
-        bodyText: 'Тёмная тема',
+        bodyText: widget.bodyText,
         rightSide: CupertinoSwitch(
           value: value,
           onChanged: (v) {
             setState(() {
               value = v;
-              changeTheme();
+              widget.onTap();
             });
           },
         ),
         onTap: () {
           setState(() {
             value = !value;
-            changeTheme();
+            widget.onTap();
           });
         },
       ),
