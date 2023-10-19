@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/firebase_options.dart';
 import 'package:testerx2/myapp.dart';
 import 'package:testerx2/router/router.dart';
+import 'package:testerx2/utils/shared_preferences/index.dart';
 
 Future<void> main() async {
   GetIt.I.registerSingleton<AppRouter>(AppRouter());
@@ -15,5 +16,8 @@ Future<void> main() async {
   );
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isDark = prefs.getBool('isDark') ?? false;
+  bool isUseLocalTxFiles = prefs.getBool('useLocalTxFiles') ?? false;
+  GetIt.I
+      .registerSingleton<LocalTxFiles>(LocalTxFiles(isUse: isUseLocalTxFiles));
   runApp(MyApp(isDark: isDark));
 }

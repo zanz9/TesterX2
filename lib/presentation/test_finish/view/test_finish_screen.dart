@@ -36,7 +36,7 @@ class TestFinishScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 30),
         child: SizedBox(
-          height: 55,
+          height: 56,
           child: ListContainer(
             bodyText: 'Перепройти тест',
             rightSide: Icon(Icons.replay, color: theme.hintColor),

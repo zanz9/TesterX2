@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/presentation/auth/auth.dart';
@@ -38,11 +39,8 @@ class RegisterScreen extends StatelessWidget {
                   labelHide: true,
                   controller: passwordController,
                 ),
-                // const SizedBox(height: 24),
-                // const PasswordInput(
-                //   labelHide: true,
-                //   isSecond: true,
-                // ),
+                const SizedBox(height: 24),
+                const BuildDropdownButton(),
                 const SizedBox(height: 48),
                 SignButton(
                   text: 'Зарегистрироваться',
@@ -69,5 +67,37 @@ class RegisterScreen extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class BuildDropdownButton extends StatefulWidget {
+  const BuildDropdownButton({
+    super.key,
+  });
+
+  @override
+  State<BuildDropdownButton> createState() => _BuildDropdownButtonState();
+}
+
+class _BuildDropdownButtonState extends State<BuildDropdownButton> {
+  late List list = [];
+  @override
+  void initState() {
+    super.initState();
+    final db = FirebaseFirestore.instance;
+    db.collection('groups').get().then((event) {
+      for (var doc in event.docs) {
+        list.add(doc.data()['name']);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+        items: list.map<DropdownMenuItem>((e) {
+          return DropdownMenuItem(child: Text(e));
+        }).toList(),
+        onChanged: (v) {});
   }
 }

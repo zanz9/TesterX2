@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:testerx2/router/router.dart';
 import 'package:testerx2/ui/widgets/index.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class TestsDb extends StatefulWidget {
   const TestsDb({
@@ -18,13 +19,15 @@ class _TestsDbState extends State<TestsDb> {
   List files = [];
 
   void listofFiles() async {
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
-    }
-    var status2 = await Permission.manageExternalStorage.status;
-    if (!status2.isGranted) {
-      await Permission.manageExternalStorage.request();
+    if (!kIsWeb) {
+      var status = await Permission.storage.status;
+      if (!status.isGranted) {
+        await Permission.storage.request();
+      }
+      var status2 = await Permission.manageExternalStorage.status;
+      if (!status2.isGranted) {
+        await Permission.manageExternalStorage.request();
+      }
     }
 
     FirebaseFirestore db = FirebaseFirestore.instance;

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:testerx2/presentation/main/widgets/tests_db.dart';
 import 'package:testerx2/presentation/main/widgets/tests_local.dart';
 import 'package:testerx2/utils/shared_preferences/index.dart';
@@ -13,26 +14,14 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  bool isLocalFiles = false;
-  @override
-  void initState() {
-    super.initState();
-    getLocalTxFiles().then((value) {
-      setState(() {
-        isLocalFiles = value;
-      });
-    });
-  }
+  final localTxFiles = GetIt.I<LocalTxFiles>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          var a = await getLocalTxFiles();
-          setState(() {
-            isLocalFiles = a;
-          });
+          setState(() {});
         },
         child: CustomScrollView(
           slivers: [
@@ -40,8 +29,8 @@ class _MainScreenState extends State<MainScreen> {
               title: Text('TesterX'),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 12)),
-            if (isLocalFiles) const TestsList(),
-            if (!isLocalFiles) const TestsDb()
+            if (localTxFiles.isUse) const TestsList(),
+            if (!localTxFiles.isUse) const TestsDb(),
           ],
         ),
       ),
