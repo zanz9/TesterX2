@@ -32,12 +32,10 @@ class AppRouter extends _$AppRouter {
           AutoRoute(
             path: 'history',
             page: HistoryRoute.page,
-            initial: false,
           ),
           AutoRoute(
             path: 'settings',
             page: SettingsRoute.page,
-            initial: false,
           ),
         ], guards: [
           AuthGuard()

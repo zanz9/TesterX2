@@ -17,14 +17,15 @@ class TestPreviewScreen extends StatelessWidget {
     required this.testName,
     required this.file,
     required this.qBackup,
+    required this.testId,
   });
   final String testName;
   final File? file;
   final String? qBackup;
+  final String testId;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     // ignore: prefer_typing_uninitialized_variables
     var temp2;
     if (file != null) {
@@ -41,12 +42,14 @@ class TestPreviewScreen extends StatelessWidget {
         title: Text(testName),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            height: 200,
-            color: theme.hintColor.withOpacity(0.15),
-            child: const Center(child: Text('РЕКЛАМА')),
-          ),
+          // Container(
+          //   height: 200,
+          //   color: theme.hintColor.withOpacity(0.15),
+          //   child: const Center(child: Text('РЕКЛАМА')),
+          // ),
+          // const SizedBox(height: 12),
           const SizedBox(height: 12),
           BlocProvider(
             create: (context) => TestLengthCubit(),
@@ -56,7 +59,11 @@ class TestPreviewScreen extends StatelessWidget {
                   sliderLength: length.toDouble(),
                 ),
                 const SizedBox(height: 16),
-                TestChoose(data: data, testName: testName),
+                TestChoose(
+                  data: data,
+                  testName: testName,
+                  testId: testId,
+                ),
               ],
             ),
           ),
@@ -71,10 +78,12 @@ class TestChoose extends StatelessWidget {
     super.key,
     required this.data,
     required this.testName,
+    required this.testId,
   });
 
   final TX data;
   final String testName;
+  final String testId;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +108,7 @@ class TestChoose extends StatelessWidget {
                 icon: const Icon(
                   Icons.check_circle,
                   size: 80,
-                  color: Colors.greenAccent,
+                  color: Colors.lightGreen,
                 ),
                 onTap: () {
                   String qBackup =
@@ -115,6 +124,7 @@ class TestChoose extends StatelessWidget {
                       testName: testName,
                       questions: data.questions!,
                       qBackup: qBackup,
+                      testId: testId,
                     ),
                   );
                 },

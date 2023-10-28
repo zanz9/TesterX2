@@ -16,10 +16,12 @@ class TestPageScreen extends StatelessWidget {
     required this.questions,
     required this.testName,
     required this.qBackup,
+    required this.testId,
   });
   final List<Question> questions;
   final String testName;
   final String qBackup;
+  final String testId;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +65,7 @@ class TestPageScreen extends StatelessWidget {
                               questions: questions,
                               testName: testName,
                               qBackup: qBackup,
+                              testId: testId,
                             ));
                           },
                           child: Text(

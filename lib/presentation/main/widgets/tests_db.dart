@@ -38,7 +38,8 @@ class _TestsDbState extends State<TestsDb> {
           for (var docSnapshot in querySnapshot.docs) {
             final testName = docSnapshot.data()['name'];
             final qBackup = docSnapshot.data()['tx'];
-            files.add([testName, qBackup]);
+            final testId = docSnapshot.id;
+            files.add([testName, qBackup, testId]);
           }
         });
       },
@@ -60,6 +61,7 @@ class _TestsDbState extends State<TestsDb> {
       itemBuilder: (BuildContext context, int index) {
         final file = files[index];
         final fileName = file[0].replaceFirst('.TX', '');
+        final testId = file[2];
         return ListContainer(
           bodyText: fileName,
           rightSide:
@@ -69,6 +71,7 @@ class _TestsDbState extends State<TestsDb> {
               testName: fileName,
               file: null,
               qBackup: file[1],
+              testId: testId,
             ));
           },
         );

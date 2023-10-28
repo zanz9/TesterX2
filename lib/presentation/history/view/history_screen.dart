@@ -1,10 +1,33 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+
+import 'package:testerx2/router/router.dart';
 import 'package:testerx2/ui/widgets/index.dart';
+import 'package:testerx2/utils/firestore/history.dart';
 
 @RoutePage()
-class HistoryScreen extends StatelessWidget {
-  const HistoryScreen({super.key});
+class HistoryScreen extends StatefulWidget {
+  const HistoryScreen({
+    Key? key,
+  }) : super(key: key);
+  @override
+  State<HistoryScreen> createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> {
+  List history = [];
+  @override
+  void initState() {
+    getAllHistory();
+    super.initState();
+  }
+
+  getAllHistory() async {
+    final historyList = await History().getAllHistory();
+    setState(() {
+      history = historyList;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +40,24 @@ class HistoryScreen extends StatelessWidget {
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
           SliverList.separated(
-            itemCount: 20,
+            itemCount: history.length,
             separatorBuilder: (context, index) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
+              final testName = history[index]['testName'];
+              final testId = history[index]['testId'];
+              final tx = history[index]['tx'];
               return ListContainer(
-                bodyText: 'Тест $index',
+                bodyText: history[index]['testName'],
                 secondaryText: 'Пройдено на 100%',
                 rightSide: Icon(Icons.replay, color: theme.hintColor),
-                onTap: () {},
+                onTap: () {
+                  context.router.push(TestPreviewRoute(
+                    testName: testName,
+                    file: null,
+                    qBackup: tx,
+                    testId: testId,
+                  ));
+                },
               );
             },
           ),

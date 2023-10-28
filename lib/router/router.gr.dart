@@ -67,6 +67,7 @@ abstract class _$AppRouter extends RootStackRouter {
           progressMap: args.progressMap,
           testName: args.testName,
           qBackup: args.qBackup,
+          testId: args.testId,
         ),
       );
     },
@@ -79,6 +80,7 @@ abstract class _$AppRouter extends RootStackRouter {
           questions: args.questions,
           testName: args.testName,
           qBackup: args.qBackup,
+          testId: args.testId,
         ),
       );
     },
@@ -91,6 +93,7 @@ abstract class _$AppRouter extends RootStackRouter {
           testName: args.testName,
           file: args.file,
           qBackup: args.qBackup,
+          testId: args.testId,
         ),
       );
     },
@@ -204,6 +207,7 @@ class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
     required Map<int, Progress> progressMap,
     required String testName,
     required String qBackup,
+    required String testId,
     List<PageRouteInfo>? children,
   }) : super(
           TestFinishRoute.name,
@@ -213,6 +217,7 @@ class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
             progressMap: progressMap,
             testName: testName,
             qBackup: qBackup,
+            testId: testId,
           ),
           initialChildren: children,
         );
@@ -230,6 +235,7 @@ class TestFinishRouteArgs {
     required this.progressMap,
     required this.testName,
     required this.qBackup,
+    required this.testId,
   });
 
   final Key? key;
@@ -242,9 +248,11 @@ class TestFinishRouteArgs {
 
   final String qBackup;
 
+  final String testId;
+
   @override
   String toString() {
-    return 'TestFinishRouteArgs{key: $key, questions: $questions, progressMap: $progressMap, testName: $testName, qBackup: $qBackup}';
+    return 'TestFinishRouteArgs{key: $key, questions: $questions, progressMap: $progressMap, testName: $testName, qBackup: $qBackup, testId: $testId}';
   }
 }
 
@@ -256,6 +264,7 @@ class TestPageRoute extends PageRouteInfo<TestPageRouteArgs> {
     required List<Question> questions,
     required String testName,
     required String qBackup,
+    required String testId,
     List<PageRouteInfo>? children,
   }) : super(
           TestPageRoute.name,
@@ -264,6 +273,7 @@ class TestPageRoute extends PageRouteInfo<TestPageRouteArgs> {
             questions: questions,
             testName: testName,
             qBackup: qBackup,
+            testId: testId,
           ),
           initialChildren: children,
         );
@@ -280,6 +290,7 @@ class TestPageRouteArgs {
     required this.questions,
     required this.testName,
     required this.qBackup,
+    required this.testId,
   });
 
   final Key? key;
@@ -290,9 +301,11 @@ class TestPageRouteArgs {
 
   final String qBackup;
 
+  final String testId;
+
   @override
   String toString() {
-    return 'TestPageRouteArgs{key: $key, questions: $questions, testName: $testName, qBackup: $qBackup}';
+    return 'TestPageRouteArgs{key: $key, questions: $questions, testName: $testName, qBackup: $qBackup, testId: $testId}';
   }
 }
 
@@ -304,6 +317,7 @@ class TestPreviewRoute extends PageRouteInfo<TestPreviewRouteArgs> {
     required String testName,
     required File? file,
     required String? qBackup,
+    required String testId,
     List<PageRouteInfo>? children,
   }) : super(
           TestPreviewRoute.name,
@@ -312,6 +326,7 @@ class TestPreviewRoute extends PageRouteInfo<TestPreviewRouteArgs> {
             testName: testName,
             file: file,
             qBackup: qBackup,
+            testId: testId,
           ),
           initialChildren: children,
         );
@@ -328,6 +343,7 @@ class TestPreviewRouteArgs {
     required this.testName,
     required this.file,
     required this.qBackup,
+    required this.testId,
   });
 
   final Key? key;
@@ -338,8 +354,10 @@ class TestPreviewRouteArgs {
 
   final String? qBackup;
 
+  final String testId;
+
   @override
   String toString() {
-    return 'TestPreviewRouteArgs{key: $key, testName: $testName, file: $file, qBackup: $qBackup}';
+    return 'TestPreviewRouteArgs{key: $key, testName: $testName, file: $file, qBackup: $qBackup, testId: $testId}';
   }
 }

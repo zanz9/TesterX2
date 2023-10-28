@@ -4,17 +4,22 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:testerx2/router/router.dart';
 
 @RoutePage()
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
   });
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return ResponsiveBuilder(
       builder: (context, sizingInformation) {
-        // Check the sizing information here and return your UI
+        //? Check the sizing information here and return your UI
         if (sizingInformation.deviceScreenType == DeviceScreenType.desktop) {
           return Container(color: Colors.blue);
         }
@@ -33,7 +38,7 @@ class HomeScreen extends StatelessWidget {
             HistoryRoute(),
             SettingsRoute(),
           ],
-          builder: (context, child, _) {
+          builder: (context, child, controller) {
             final tabsRouter = AutoTabsRouter.of(context);
             return Scaffold(
               body: child,

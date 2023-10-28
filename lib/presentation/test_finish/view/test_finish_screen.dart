@@ -4,6 +4,7 @@ import 'package:testerx2/models/index.dart';
 import 'package:testerx2/presentation/test/models/progress.dart';
 import 'package:testerx2/router/router.dart';
 import 'package:testerx2/ui/ui.dart';
+import 'package:testerx2/utils/utils.dart';
 
 @RoutePage()
 class TestFinishScreen extends StatelessWidget {
@@ -13,11 +14,13 @@ class TestFinishScreen extends StatelessWidget {
     required this.progressMap,
     required this.testName,
     required this.qBackup,
+    required this.testId,
   });
   final List<Question> questions;
   final Map<int, Progress> progressMap;
   final String testName;
   final String qBackup;
+  final String testId;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,8 @@ class TestFinishScreen extends StatelessWidget {
     final wrong = (Map.from(progressMap)
           ..removeWhere((key, value) => value.isRight))
         .length;
+    History().addToHistory(testId, testName);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Результаты'),
@@ -45,6 +50,7 @@ class TestFinishScreen extends StatelessWidget {
                 testName: testName,
                 file: null,
                 qBackup: qBackup,
+                testId: testId,
               ));
             },
           ),
