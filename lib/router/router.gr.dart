@@ -63,11 +63,14 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: TestFinishScreen(
           key: args.key,
-          questions: args.questions,
-          progressMap: args.progressMap,
           testName: args.testName,
           qBackup: args.qBackup,
           testId: args.testId,
+          questions: args.questions,
+          progressMap: args.progressMap,
+          correct: args.correct,
+          wrong: args.wrong,
+          length: args.length,
         ),
       );
     },
@@ -203,21 +206,27 @@ class TestEditorRoute extends PageRouteInfo<void> {
 class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
   TestFinishRoute({
     Key? key,
-    required List<Question> questions,
-    required Map<int, Progress> progressMap,
     required String testName,
     required String qBackup,
     required String testId,
+    List<Question>? questions,
+    Map<int, Progress>? progressMap,
+    int? correct,
+    int? wrong,
+    int? length,
     List<PageRouteInfo>? children,
   }) : super(
           TestFinishRoute.name,
           args: TestFinishRouteArgs(
             key: key,
-            questions: questions,
-            progressMap: progressMap,
             testName: testName,
             qBackup: qBackup,
             testId: testId,
+            questions: questions,
+            progressMap: progressMap,
+            correct: correct,
+            wrong: wrong,
+            length: length,
           ),
           initialChildren: children,
         );
@@ -231,18 +240,17 @@ class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
 class TestFinishRouteArgs {
   const TestFinishRouteArgs({
     this.key,
-    required this.questions,
-    required this.progressMap,
     required this.testName,
     required this.qBackup,
     required this.testId,
+    this.questions,
+    this.progressMap,
+    this.correct,
+    this.wrong,
+    this.length,
   });
 
   final Key? key;
-
-  final List<Question> questions;
-
-  final Map<int, Progress> progressMap;
 
   final String testName;
 
@@ -250,9 +258,19 @@ class TestFinishRouteArgs {
 
   final String testId;
 
+  final List<Question>? questions;
+
+  final Map<int, Progress>? progressMap;
+
+  final int? correct;
+
+  final int? wrong;
+
+  final int? length;
+
   @override
   String toString() {
-    return 'TestFinishRouteArgs{key: $key, questions: $questions, progressMap: $progressMap, testName: $testName, qBackup: $qBackup, testId: $testId}';
+    return 'TestFinishRouteArgs{key: $key, testName: $testName, qBackup: $qBackup, testId: $testId, questions: $questions, progressMap: $progressMap, correct: $correct, wrong: $wrong, length: $length}';
   }
 }
 

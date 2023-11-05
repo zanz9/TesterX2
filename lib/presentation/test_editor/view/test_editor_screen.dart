@@ -31,7 +31,10 @@ class TestEditorScreen extends StatelessWidget {
               'Вопрос',
               style: theme.textTheme.bodyLarge,
             ),
-            CupertinoTextField(controller: titleController),
+            CupertinoTextField(
+              controller: titleController,
+              style: theme.textTheme.bodyLarge,
+            ),
             const SizedBox(height: 12),
             for (int counter = 0; counter < 5; counter++)
               AnswerFlied(
@@ -41,11 +44,13 @@ class TestEditorScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const SizedBox(
-        height: 120,
+      bottomNavigationBar: SizedBox(
+        height: 100,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            
+            CupertinoButton.filled(child: const Text('<<'), onPressed: () {}),
+            CupertinoButton.filled(child: const Text('>>'), onPressed: () {})
           ],
         ),
       ),
@@ -70,7 +75,6 @@ class _AnswerFliedState extends State<AnswerFlied> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -90,6 +94,7 @@ class _AnswerFliedState extends State<AnswerFlied> {
             ),
             Flexible(
               child: CupertinoTextField(
+                style: theme.textTheme.bodyMedium,
                 controller: widget.controller,
               ),
             ),

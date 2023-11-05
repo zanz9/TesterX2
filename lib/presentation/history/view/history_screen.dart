@@ -17,6 +17,12 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   List history = [];
 
+  @override
+  void initState() {
+    super.initState();
+    getAllHistory();
+  }
+
   getAllHistory() async {
     final historyList = await History().getAllHistory();
     setState(() {
@@ -27,10 +33,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    getAllHistory();
     return RefreshIndicator(
       onRefresh: () async {
-        setState(() {});
+        await getAllHistory();
       },
       child: Scaffold(
         body: CustomScrollView(
@@ -46,16 +51,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 final testName = history[index]['testName'];
                 final testId = history[index]['testId'];
                 final tx = history[index]['tx'];
+                final correct = history[index]['correct'];
+                final wrong = history[index]['wrong'];
+                final length = history[index]['length'];
+                final percent = correct / length * 100;
                 return ListContainer(
                   bodyText: history[index]['testName'],
-                  secondaryText: 'Пройдено на 100%',
+                  secondaryText: 'Пройдено на $percent%',
                   rightSide: Icon(Icons.replay, color: theme.hintColor),
                   onTap: () {
-                    context.router.push(TestPreviewRoute(
+                    context.router.push(TestFinishRoute(
                       testName: testName,
-                      file: null,
                       qBackup: tx,
                       testId: testId,
+                      correct: correct,
+                      wrong: wrong,
+                      length: length,
                     ));
                   },
                 );

@@ -10,28 +10,38 @@ import 'package:testerx2/utils/utils.dart';
 class TestFinishScreen extends StatelessWidget {
   const TestFinishScreen({
     super.key,
-    required this.questions,
-    required this.progressMap,
     required this.testName,
     required this.qBackup,
     required this.testId,
+    this.questions,
+    this.progressMap,
+    this.correct,
+    this.wrong,
+    this.length,
   });
-  final List<Question> questions;
-  final Map<int, Progress> progressMap;
-  final String testName;
-  final String qBackup;
-  final String testId;
+  final List<Question>? questions;
+  final Map<int, Progress>? progressMap;
+  final int? correct, wrong, length;
+  final String testName, qBackup, testId;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final correct = (Map.from(progressMap)
-          ..removeWhere((key, value) => !value.isRight))
-        .length;
-    final wrong = (Map.from(progressMap)
-          ..removeWhere((key, value) => value.isRight))
-        .length;
-    History().addToHistory(testId, testName);
+    int qCorrect, qWrong, qLength;
+    if (questions != null && progressMap != null) {
+      qCorrect = (Map.from(progressMap!)
+            ..removeWhere((key, value) => !value.isRight))
+          .length;
+      qWrong = (Map.from(progressMap!)
+            ..removeWhere((key, value) => value.isRight))
+          .length;
+      qLength = questions!.length;
+      History().addToHistory(testId, testName, qCorrect, qWrong, qLength);
+    } else {
+      qCorrect = correct!;
+      qWrong = wrong!;
+      qLength = length!;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -72,9 +82,9 @@ class TestFinishScreen extends StatelessWidget {
             FinishListContainer(
               child: Column(
                 children: [
-                  Text('Всего ${questions.length} вопросов'),
-                  Text('Правильных $correct'),
-                  Text('Не правильных $wrong'),
+                  Text('Всего $qLength вопросов'),
+                  Text('Правильных $qCorrect'),
+                  Text('Не правильных $qWrong'),
                 ],
               ),
             ),
