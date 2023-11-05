@@ -16,14 +16,9 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool isAdmin = false;
-  @override
-  void initState() {
-    isAdminCheck();
-    super.initState();
-  }
 
   isAdminCheck() async {
-    var isAdminTemp = await AuthService().isAdmin();
+    bool isAdminTemp = await AuthService().isAdmin();
     setState(() {
       isAdmin = isAdminTemp;
     });
@@ -31,23 +26,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          const SliverAppBar(title: Text('Настройки')),
-          const SliverToBoxAdapter(child: SizedBox(height: 12)),
-          const BuildChangeTheme(),
-          const SliverToBoxAdapter(child: SizedBox(height: 12)),
-          const BuildUseFilesFromFolder(),
-          const SliverToBoxAdapter(child: SizedBox(height: 12)),
-          const BuildChangeLocalFolder(),
-          const SliverToBoxAdapter(child: SizedBox(height: 12)),
-          if (isAdmin) const BuildSendTestToDB(),
-          const SliverToBoxAdapter(child: SizedBox(height: 12)),
-          const BuildChangeUserGroup(),
-          const SliverToBoxAdapter(child: SizedBox(height: 12)),
-          const BuildExitFromAccount(),
-        ],
+    isAdminCheck();
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {});
+      },
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            const SliverAppBar(title: Text('Настройки')),
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            const BuildChangeTheme(),
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            const BuildUseFilesFromFolder(),
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            const BuildChangeLocalFolder(),
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            if (isAdmin) const BuildSendTestToDB(),
+            if (isAdmin) const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            if (isAdmin) const BuildTestEditor(),
+            if (isAdmin) const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            const BuildChangeUserGroup(),
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            const BuildExitFromAccount(),
+          ],
+        ),
       ),
     );
   }

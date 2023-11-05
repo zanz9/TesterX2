@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testerx2/utils/utils.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';
@@ -12,6 +13,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           email: event.email,
           password: event.password,
         );
+        AuthService().setUser();
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           emit(RegisterPasswordWeak());

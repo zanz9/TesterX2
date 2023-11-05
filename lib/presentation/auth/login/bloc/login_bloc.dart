@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testerx2/presentation/auth/models/user.dart';
+import 'package:get_it/get_it.dart';
+import 'package:testerx2/router/router.dart';
 import 'package:testerx2/utils/firestore/auth_service.dart';
 
 part 'login_event.dart';
@@ -10,10 +11,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial()) {
     on<OnLogin>((event, emit) async {
       try {
-        final data = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: event.email, password: event.password);
-        final user = CustomUser(uid: data.user!.uid);
-        AuthService().setUser(user);
+        AuthService().setUser();
+        GetIt.I<AppRouter>().replace(const MainRoute());
       } on FirebaseAuthException catch (e) {
         if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
           emit(LoginUserNotFound());

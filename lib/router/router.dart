@@ -57,6 +57,7 @@ class AppRouter extends _$AppRouter {
         ),
         AutoRoute(
           page: LoginRoute.page,
+          keepHistory: false,
         ),
         AutoRoute(
           page: RegisterRoute.page,

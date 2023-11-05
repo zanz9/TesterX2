@@ -1,4 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:testerx2/router/router.dart';
 import 'package:testerx2/utils/firestore/auth_service.dart';
 import 'package:testerx2/ui/ui.dart';
 
@@ -21,7 +23,7 @@ class BuildExitFromAccount extends StatelessWidget {
           color: theme.hintColor,
         ),
         onTap: () {
-          signOut();
+          signOut().then((value) => context.router.replace(const LoginRoute()));
         },
       ),
     );

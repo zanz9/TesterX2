@@ -16,11 +16,6 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   List history = [];
-  @override
-  void initState() {
-    getAllHistory();
-    super.initState();
-  }
 
   getAllHistory() async {
     final historyList = await History().getAllHistory();
@@ -32,36 +27,42 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          const SliverAppBar(
-            title: Text('История'),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 12)),
-          SliverList.separated(
-            itemCount: history.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              final testName = history[index]['testName'];
-              final testId = history[index]['testId'];
-              final tx = history[index]['tx'];
-              return ListContainer(
-                bodyText: history[index]['testName'],
-                secondaryText: 'Пройдено на 100%',
-                rightSide: Icon(Icons.replay, color: theme.hintColor),
-                onTap: () {
-                  context.router.push(TestPreviewRoute(
-                    testName: testName,
-                    file: null,
-                    qBackup: tx,
-                    testId: testId,
-                  ));
-                },
-              );
-            },
-          ),
-        ],
+    getAllHistory();
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {});
+      },
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            const SliverAppBar(
+              title: Text('История'),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            SliverList.separated(
+              itemCount: history.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                final testName = history[index]['testName'];
+                final testId = history[index]['testId'];
+                final tx = history[index]['tx'];
+                return ListContainer(
+                  bodyText: history[index]['testName'],
+                  secondaryText: 'Пройдено на 100%',
+                  rightSide: Icon(Icons.replay, color: theme.hintColor),
+                  onTap: () {
+                    context.router.push(TestPreviewRoute(
+                      testName: testName,
+                      file: null,
+                      qBackup: tx,
+                      testId: testId,
+                    ));
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

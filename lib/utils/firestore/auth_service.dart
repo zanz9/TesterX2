@@ -1,14 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:testerx2/presentation/auth/models/user.dart';
 
 class AuthService {
   final db = FirebaseFirestore.instance;
-  Future<void> setUser(CustomUser customUser) async {
-    final user = {
-      "uid": customUser.uid,
-    };
-    db.collection("users").doc(customUser.uid).set(user);
+
+  static bool isAuth() {
+    final user = FirebaseAuth.instance.currentUser;
+    return user != null;
+  }
+
+  Future<void> setUser() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    final user = await db.collection('users').doc(uid).get();
+    if (user.data() == null) {
+      db.collection("users").doc(uid).set({"uid": uid});
+      return;
+    }
+    user.data()?.addAll({"uid": uid});
+    db.collection("users").doc(uid).set(user.data()!);
   }
 
   Future<Map<String, dynamic>> getGroups() async {
@@ -24,7 +33,8 @@ class AuthService {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     final data =
         await db.collection('users').where("uid", isEqualTo: uid).get();
-    String groupId = data.docs.first.data()['group'];
+    String? groupId = data.docs.first.data()['group'];
+    if (groupId == null) return null;
     final group = await db.collection('groups').doc(groupId).get();
     return group.data()?['name'];
   }

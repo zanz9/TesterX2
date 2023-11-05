@@ -7,24 +7,34 @@ import 'package:testerx2/presentation/main/widgets/tests_local.dart';
 import 'package:testerx2/utils/shared_preferences/index.dart';
 
 @RoutePage()
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({
     super.key,
   });
 
   @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  @override
   Widget build(BuildContext context) {
     final LocalTxFiles localTxFiles = GetIt.I<LocalTxFiles>();
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          const SliverAppBar(
-            title: Text('TesterX'),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 12)),
-          if (localTxFiles.isUse) const TestsList(),
-          if (!localTxFiles.isUse) const TestsDb(),
-        ],
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {});
+      },
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            const SliverAppBar(
+              title: Text('TesterX'),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            if (localTxFiles.isUse) const TestsList(),
+            if (!localTxFiles.isUse) const TestsDb(),
+          ],
+        ),
       ),
     );
   }
