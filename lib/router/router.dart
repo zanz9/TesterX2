@@ -56,10 +56,12 @@ class AppRouter extends _$AppRouter {
           page: TestEditorRoute.page,
         ),
         AutoRoute(
+          path: '/login',
           page: LoginRoute.page,
           keepHistory: false,
         ),
         AutoRoute(
+          path: '/register',
           page: RegisterRoute.page,
         )
       ];
