@@ -17,6 +17,7 @@ class TestsDb extends StatefulWidget {
 
 class _TestsDbState extends State<TestsDb> {
   List files = [];
+  bool loaded = false;
 
   void listofFiles() async {
     if (!kIsWeb) {
@@ -31,7 +32,7 @@ class _TestsDbState extends State<TestsDb> {
     }
 
     FirebaseFirestore db = FirebaseFirestore.instance;
-
+    loaded = false;
     db.collection("tests").get().then(
       (querySnapshot) {
         setState(() {
@@ -41,6 +42,7 @@ class _TestsDbState extends State<TestsDb> {
             final testId = docSnapshot.id;
             files.add([testName, qBackup, testId]);
           }
+          loaded = true;
         });
       },
     );
@@ -56,24 +58,36 @@ class _TestsDbState extends State<TestsDb> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return SliverList.separated(
-      itemCount: files.length,
+      itemCount: loaded ? files.length : 100,
       separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (BuildContext context, int index) {
-        final file = files[index];
-        final fileName = file[0].replaceFirst('.TX', '');
-        final testId = file[2];
-        return ListContainer(
-          bodyText: fileName,
-          rightSide:
-              Icon(Icons.arrow_forward_ios_rounded, color: theme.hintColor),
-          onTap: () {
-            context.router.push(TestPreviewRoute(
-              testName: fileName,
-              file: null,
-              qBackup: file[1],
-              testId: testId,
-            ));
-          },
+        if (loaded) {
+          final file = files[index];
+          final fileName = file[0].replaceFirst('.TX', '');
+          final testId = file[2];
+          return ListContainer(
+            bodyText: fileName,
+            rightSide:
+                Icon(Icons.arrow_forward_ios_rounded, color: theme.hintColor),
+            onTap: () {
+              context.router.push(
+                TestPreviewRoute(
+                  testName: fileName,
+                  file: null,
+                  qBackup: file[1],
+                  testId: testId,
+                ),
+              );
+            },
+          );
+        }
+        return Container(
+          height: 50,
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: theme.shadowColor,
+          ),
         );
       },
     );

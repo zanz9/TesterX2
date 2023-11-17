@@ -20,21 +20,29 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final LocalTxFiles localTxFiles = GetIt.I<LocalTxFiles>();
+    final indicator = GlobalKey<RefreshIndicatorState>();
     return RefreshIndicator(
+      key: indicator,
       onRefresh: () async {
         setState(() {});
       },
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            const SliverAppBar(
-              title: Text('TesterX'),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 12)),
-            if (localTxFiles.isUse) const TestsList(),
-            if (!localTxFiles.isUse) const TestsDb(),
-          ],
-        ),
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            title: const Text('TesterX'),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  indicator.currentState!.show();
+                },
+                icon: const Icon(Icons.refresh),
+              )
+            ],
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 12)),
+          if (localTxFiles.isUse) const TestsList(),
+          if (!localTxFiles.isUse) const TestsDb(),
+        ],
       ),
     );
   }
