@@ -6,10 +6,12 @@ class PasswordInput extends StatefulWidget {
     required this.labelHide,
     required this.controller,
     this.isSecond = false,
+    this.onSubmitted,
   });
   final bool labelHide;
   final bool isSecond;
   final TextEditingController controller;
+  final Function(String)? onSubmitted;
 
   @override
   State<PasswordInput> createState() => _PasswordLabelState();
@@ -38,6 +40,8 @@ class _PasswordLabelState extends State<PasswordInput> {
             ],
           ),
           child: TextField(
+            textInputAction: TextInputAction.go,
+            onSubmitted: widget.onSubmitted,
             controller: widget.controller,
             obscureText: isHide,
             keyboardType: TextInputType.visiblePassword,

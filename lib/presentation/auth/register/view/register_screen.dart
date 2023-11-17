@@ -16,6 +16,14 @@ class RegisterScreen extends StatelessWidget {
     final bloc = RegisterBloc();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
+
+    register() {
+      bloc.add(OnRegister(
+        email: emailController.text,
+        password: passwordController.text,
+      ));
+    }
+
     return BlocBuilder<RegisterBloc, RegisterState>(
       bloc: bloc,
       builder: (context, state) {
@@ -38,18 +46,17 @@ class RegisterScreen extends StatelessWidget {
                 PasswordInput(
                   labelHide: true,
                   controller: passwordController,
+                  onSubmitted: (value) {
+                    register();
+                  },
                 ),
                 const SizedBox(height: 24),
                 const BuildDropdownButton(),
                 const SizedBox(height: 48),
                 SignButton(
+                  loading: state is RegisterLoading,
                   text: 'Зарегистрироваться',
-                  onTap: () {
-                    bloc.add(OnRegister(
-                      email: emailController.text,
-                      password: passwordController.text,
-                    ));
-                  },
+                  onTap: register,
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 12),

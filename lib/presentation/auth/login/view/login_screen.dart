@@ -15,6 +15,16 @@ class LoginScreen extends StatelessWidget {
     final bloc = LoginBloc();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
+
+    login() {
+      bloc.add(
+        OnLogin(
+          email: emailController.text,
+          password: passwordController.text,
+        ),
+      );
+    }
+
     return BlocBuilder<LoginBloc, LoginState>(
       bloc: bloc,
       builder: (context, state) {
@@ -37,6 +47,9 @@ class LoginScreen extends StatelessWidget {
                 PasswordInput(
                   labelHide: true,
                   controller: passwordController,
+                  onSubmitted: (value) {
+                    login();
+                  },
                 ),
                 const SizedBox(height: 12),
                 if (state is LoginWrongPassword)
@@ -51,15 +64,9 @@ class LoginScreen extends StatelessWidget {
                   ),
                 const SizedBox(height: 36),
                 SignButton(
+                  loading: state is LoginLoading,
                   text: 'Войти',
-                  onTap: () {
-                    bloc.add(
-                      OnLogin(
-                        email: emailController.text,
-                        password: passwordController.text,
-                      ),
-                    );
-                  },
+                  onTap: login,
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 12),

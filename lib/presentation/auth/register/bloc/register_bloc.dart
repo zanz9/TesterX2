@@ -8,6 +8,7 @@ part 'register_state.dart';
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterBloc() : super(RegisterInitial()) {
     on<OnRegister>((event, emit) async {
+      emit(RegisterLoading());
       try {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: event.email,
@@ -21,6 +22,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           emit(RegisterEmailAlreadyInUse());
         }
       }
+      emit(RegisterInitial());
     });
   }
 }

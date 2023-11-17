@@ -10,6 +10,7 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial()) {
     on<OnLogin>((event, emit) async {
+      emit(LoginLoading());
       try {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: event.email, password: event.password);
@@ -22,6 +23,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(LoginWrongPassword());
         }
       }
+      emit(LoginInitial());
     });
   }
 }

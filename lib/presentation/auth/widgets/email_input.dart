@@ -28,6 +28,7 @@ class EmailInput extends StatelessWidget {
             ],
           ),
           child: TextField(
+            textInputAction: TextInputAction.go,
             controller: controller,
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(

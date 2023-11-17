@@ -5,9 +5,11 @@ class SignButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onTap,
+    required this.loading,
   });
   final String text;
   final Function() onTap;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +28,15 @@ class SignButton extends StatelessWidget {
             vertical: 12,
             horizontal: 60,
           ),
-          child: Text(
-            text,
-            style: theme.textTheme.bodyLarge!.copyWith(
-              color: Colors.black,
-              fontSize: 18,
-            ),
-          ),
+          child: loading
+              ? const CircularProgressIndicator()
+              : Text(
+                  text,
+                  style: theme.textTheme.bodyLarge!.copyWith(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
         ),
       ),
     );
