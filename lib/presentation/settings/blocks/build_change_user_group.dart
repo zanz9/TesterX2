@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testerx2/ui/ui.dart';
 import 'package:testerx2/utils/utils.dart';
@@ -13,11 +14,15 @@ class BuildChangeUserGroup extends StatefulWidget {
 
 class _BuildChangeUserGroupState extends State<BuildChangeUserGroup> {
   String? userGroup;
+  List<String>? groups;
   @override
   void initState() {
-    AuthService().getUserGroup().then((value) {
+    groups = [];
+    AuthService().getGroups().then((value) {
       setState(() {
-        userGroup = value;
+        for (var v in value.values) {
+          groups!.add(v.toString());
+        }
       });
     });
     super.initState();
@@ -40,7 +45,25 @@ class _BuildChangeUserGroupState extends State<BuildChangeUserGroup> {
           color: theme.hintColor,
         ),
         onTap: () {
-          setUserGroup();
+          showCupertinoModalPopup(
+            context: context,
+            builder: (context) => CupertinoActionSheet(
+              title: const Text('Сменить группу'),
+              message: DropdownMenu(
+                initialSelection: groups!.first,
+                dropdownMenuEntries:
+                    groups!.map<DropdownMenuEntry<String>>((value) {
+                  return DropdownMenuEntry<String>(value: value, label: value);
+                }).toList(),
+              ),
+              actions: [
+                CupertinoActionSheetAction(
+                  onPressed: () {},
+                  child: const Text('Сменить'),
+                )
+              ],
+            ),
+          );
         },
       ),
     );

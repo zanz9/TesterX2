@@ -25,5 +25,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
       emit(LoginInitial());
     });
+
+    on<OnAnonymous>(
+      (event, emit) async {
+        emit(LoginLoading());
+
+        await FirebaseAuth.instance.signInAnonymously();
+        AuthService().setUser();
+        GetIt.I<AppRouter>().replace(const MainRoute());
+
+        emit(LoginInitial());
+      },
+    );
   }
 }

@@ -8,3 +8,5 @@ final class OnLogin extends LoginEvent {
 
   OnLogin({required this.email, required this.password});
 }
+
+final class OnAnonymous extends LoginEvent {}

@@ -9,3 +9,5 @@ final class LoginLoading extends LoginState {}
 final class LoginUserNotFound extends LoginState {}
 
 final class LoginWrongPassword extends LoginState {}
+
+final class LoginAnonymous extends LoginState {}

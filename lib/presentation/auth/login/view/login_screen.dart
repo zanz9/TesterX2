@@ -77,6 +77,13 @@ class LoginScreen extends StatelessWidget {
                     context.router.replace(const RegisterRoute());
                   },
                   child: const Text('Нет аккаунта? Зарегистрироваться'),
+                ),
+                const SizedBox(height: 16),
+                GestureDetector(
+                  onTap: () {
+                    bloc.add(OnAnonymous());
+                  },
+                  child: const Text('Войти анонимно'),
                 )
               ],
             ),
