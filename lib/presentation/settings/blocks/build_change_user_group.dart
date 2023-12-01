@@ -28,13 +28,13 @@ class _BuildChangeUserGroupState extends State<BuildChangeUserGroup> {
     super.initState();
   }
 
+  setUserGroup() {
+    AuthService().setUserGroup('FCnDKpk25VR0J1GgfqGY');
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    setUserGroup() {
-      AuthService().setUserGroup('FCnDKpk25VR0J1GgfqGY');
-    }
 
     return SliverToBoxAdapter(
       child: ListContainer(

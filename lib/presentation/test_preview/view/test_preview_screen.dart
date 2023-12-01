@@ -44,12 +44,6 @@ class TestPreviewScreen extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Container(
-          //   height: 200,
-          //   color: theme.hintColor.withOpacity(0.15),
-          //   child: const Center(child: Text('РЕКЛАМА')),
-          // ),
-          // const SizedBox(height: 12),
           const SizedBox(height: 12),
           BlocProvider(
             create: (context) => TestLengthCubit(),
@@ -111,8 +105,7 @@ class TestChoose extends StatelessWidget {
                   color: Colors.lightGreen,
                 ),
                 onTap: () {
-                  String qBackup =
-                      jsonEncode(data.toJson()); //! shared_preference
+                  String qBackup = jsonEncode(data.toJson());
 
                   // final bool multiple = data.multiple!;
                   List<Question> questions = data.questions!;

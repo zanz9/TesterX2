@@ -10,6 +10,9 @@ class TestLengthSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    if (sliderLength < 25) {
+      context.read<TestLengthCubit>().changeValue(1);
+    }
     return BlocBuilder<TestLengthCubit, double>(
       builder: (context, state) {
         return Container(
