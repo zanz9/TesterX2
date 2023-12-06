@@ -42,6 +42,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           slivers: [
             const SliverAppBar(
               title: Text('История'),
+              automaticallyImplyLeading: false,
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 12)),
             SliverList.separated(

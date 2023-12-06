@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:testerx2/router/router.dart';
-import 'package:testerx2/utils/firestore/auth_service.dart';
+import 'package:testerx2/utils/firestore/auth.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

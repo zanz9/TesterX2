@@ -26,8 +26,7 @@ class TestPreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: prefer_typing_uninitialized_variables
-    var temp2;
+    Map<String, dynamic> temp2;
     if (file != null) {
       final temp = file!.readAsStringSync();
       temp2 = jsonDecode(temp);

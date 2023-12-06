@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:testerx2/router/router.dart';
-import 'package:testerx2/utils/firestore/auth_service.dart';
+import 'package:testerx2/utils/firestore/auth.dart';
 
 class AuthGuard extends AutoRouteGuard {
   @override

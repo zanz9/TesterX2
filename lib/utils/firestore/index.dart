@@ -1,2 +1,3 @@
-export 'auth_service.dart';
+export 'auth.dart';
+export 'groups.dart';
 export 'history.dart';
