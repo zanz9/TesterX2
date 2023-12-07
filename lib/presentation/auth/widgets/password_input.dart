@@ -9,8 +9,8 @@ class PasswordInput extends StatefulWidget {
     this.onSubmitted,
   });
   final bool labelHide;
-  final bool isSecond;
   final TextEditingController controller;
+  final bool isSecond;
   final Function(String)? onSubmitted;
 
   @override
@@ -19,6 +19,8 @@ class PasswordInput extends StatefulWidget {
 
 class _PasswordLabelState extends State<PasswordInput> {
   bool isHide = true;
+  var focus = FocusNode(skipTraversal: true);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -40,6 +42,7 @@ class _PasswordLabelState extends State<PasswordInput> {
             ],
           ),
           child: TextField(
+            focusNode: focus,
             textInputAction: TextInputAction.go,
             onSubmitted: widget.onSubmitted,
             controller: widget.controller,
@@ -48,13 +51,16 @@ class _PasswordLabelState extends State<PasswordInput> {
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.lock),
               hintText: !widget.isSecond ? 'Пароль' : 'Повторите пароль',
-              suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    isHide = !isHide;
-                  });
-                },
-                icon: const Icon(Icons.remove_red_eye),
+              suffixIcon: Focus(
+                focusNode: focus,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isHide = !isHide;
+                    });
+                  },
+                  icon: const Icon(Icons.remove_red_eye),
+                ),
               ),
             ),
           ),

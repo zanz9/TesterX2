@@ -19,8 +19,8 @@ class SignButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(18),
       color: Colors.white,
       child: InkWell(
-        highlightColor: Colors.black12,
-        splashColor: Colors.black12,
+        highlightColor: theme.splashColor,
+        splashColor: theme.splashColor,
         borderRadius: BorderRadius.circular(18),
         onTap: onTap,
         child: Padding(

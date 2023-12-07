@@ -6,6 +6,10 @@ final class RegisterInitial extends RegisterState {}
 
 final class RegisterLoading extends RegisterState {}
 
-final class RegisterPasswordWeak extends RegisterState {}
+final class RegisterInvalidEmail extends RegisterState {}
+
+final class RegisterMissingPassword extends RegisterState {}
 
 final class RegisterEmailAlreadyInUse extends RegisterState {}
+
+final class RegisterSomethingElse extends RegisterState {}

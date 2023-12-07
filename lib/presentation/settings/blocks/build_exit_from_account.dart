@@ -8,7 +8,7 @@ class BuildExitFromAccount extends StatelessWidget {
   const BuildExitFromAccount({super.key});
 
   Future<void> signOut() async {
-    await AuthService.logout();
+    await AuthService().logout();
   }
 
   @override

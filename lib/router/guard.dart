@@ -5,7 +5,7 @@ import 'package:testerx2/utils/firestore/auth.dart';
 class AuthGuard extends AutoRouteGuard {
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
-    if (AuthService.isAuth()) {
+    if (AuthService().isAuth()) {
       resolver.next(true);
     } else {
       resolver.redirect(const LoginRoute());

@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/presentation/auth/auth.dart';
@@ -16,17 +15,36 @@ class RegisterScreen extends StatelessWidget {
     final bloc = RegisterBloc();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
+    final TextEditingController passwordController2 = TextEditingController();
 
     register() {
-      bloc.add(OnRegister(
-        email: emailController.text,
-        password: passwordController.text,
-      ));
+      if (passwordController.text == passwordController2.text) {
+        bloc.add(OnRegister(
+          email: emailController.text,
+          password: passwordController.text,
+        ));
+      }
     }
 
     return BlocBuilder<RegisterBloc, RegisterState>(
       bloc: bloc,
       builder: (context, state) {
+        String errorText = '';
+        switch (state.runtimeType) {
+          case RegisterInvalidEmail:
+            errorText = 'Введенные данные некоректны';
+            break;
+          case RegisterMissingPassword:
+            errorText = 'Введенные данные некоректны';
+            break;
+          case RegisterEmailAlreadyInUse:
+            errorText = 'Соединение с сервером потеряна';
+            break;
+          case RegisterSomethingElse:
+            errorText = 'Что-то пошло не так';
+            break;
+        }
+
         return Scaffold(
           body: Padding(
             padding: const EdgeInsets.all(12),
@@ -46,13 +64,22 @@ class RegisterScreen extends StatelessWidget {
                 PasswordInput(
                   labelHide: true,
                   controller: passwordController,
+                ),
+                const SizedBox(height: 24),
+                PasswordInput(
+                  isSecond: true,
+                  labelHide: true,
+                  controller: passwordController2,
                   onSubmitted: (value) {
                     register();
                   },
                 ),
-                const SizedBox(height: 24),
-                const BuildDropdownButton(),
-                const SizedBox(height: 48),
+                const SizedBox(height: 12),
+                Text(
+                  errorText,
+                  style: const TextStyle(color: Colors.red),
+                ),
+                const SizedBox(height: 36),
                 SignButton(
                   loading: state is RegisterLoading,
                   text: 'Зарегистрироваться',
@@ -74,37 +101,5 @@ class RegisterScreen extends StatelessWidget {
         );
       },
     );
-  }
-}
-
-class BuildDropdownButton extends StatefulWidget {
-  const BuildDropdownButton({
-    super.key,
-  });
-
-  @override
-  State<BuildDropdownButton> createState() => _BuildDropdownButtonState();
-}
-
-class _BuildDropdownButtonState extends State<BuildDropdownButton> {
-  late List list = [];
-  @override
-  void initState() {
-    super.initState();
-    final db = FirebaseFirestore.instance;
-    db.collection('groups').get().then((event) {
-      for (var doc in event.docs) {
-        list.add(doc.data()['name']);
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton(
-        items: list.map<DropdownMenuItem>((e) {
-          return DropdownMenuItem(child: Text(e));
-        }).toList(),
-        onChanged: (v) {});
   }
 }

@@ -12,19 +12,18 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<OnRegister>((event, emit) async {
       emit(RegisterLoading());
       try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: event.email,
-          password: event.password,
-        );
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: event.email, password: event.password);
-        AuthService().setUser();
+        await AuthService().register(event.email, event.password);
+        await AuthService().login(email: event.email, password: event.password);
         GetIt.I<AppRouter>().replace(const MainRoute());
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          emit(RegisterPasswordWeak());
-        } else if (e.code == 'email-already-in-use') {
+        if (e.code == "invalid-email") {
+          emit(RegisterInvalidEmail());
+        } else if (e.code == "missing-password") {
+          emit(RegisterMissingPassword());
+        } else if (e.code == "email-already-in-use") {
           emit(RegisterEmailAlreadyInUse());
+        } else {
+          emit(RegisterSomethingElse());
         }
       }
       emit(RegisterInitial());
