@@ -4,15 +4,18 @@ import 'package:testerx2/utils/firestore/index.dart';
 class TestService {
   final db = FirebaseFirestore.instance;
 
-  Future<List> getAllTests({bool isAdmin = false}) async {
+  Future<List?> getAllTests({bool isAdmin = false}) async {
     final testsDB = db.collection('tests');
     final group = await GroupService().getUserGroup();
-    QuerySnapshot<Map<String, dynamic>> data;
+    if (group == null) {
+      return null;
+    }
+    QuerySnapshot<Map<String, dynamic>?> data;
     if (isAdmin) {
       data = await testsDB.orderBy('name', descending: false).get();
     } else {
       data = await testsDB
-          .where('group', isGreaterThanOrEqualTo: group![0])
+          .where('group', isGreaterThanOrEqualTo: group[0])
           .orderBy('group')
           .orderBy('name', descending: false)
           .get();

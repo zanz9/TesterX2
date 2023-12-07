@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/models/question.dart';
 import 'package:testerx2/presentation/test/cubit/answer_cubit.dart';
@@ -27,6 +28,7 @@ class TestPageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     PageController pageController = PageController(initialPage: 0);
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -38,105 +40,123 @@ class TestPageScreen extends StatelessWidget {
       ],
       child: BlocBuilder<TestCurrentPageCubit, int>(
         builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('${state + 1}/${questions.length}'),
-              centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(Icons.exit_to_app),
-                onPressed: () {
-                  final remained = questions.length -
-                      context.read<AnswerCubit>().state.length;
-                  final progressMap = context.read<AnswerCubit>().state;
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (context) => CupertinoAlertDialog(
-                      title:
-                          const Text('Вы действительно хотите закончить тест?'),
-                      content: remained != 0
-                          ? const Text('У вас есть не отвеченные вопросы')
-                          : null,
-                      actions: [
-                        CupertinoDialogAction(
-                          onPressed: () {
-                            context.router.pop(context);
-                            context.router.replace(TestFinishRoute(
-                              progressMap: progressMap,
-                              questions: questions,
-                              testName: testName,
-                              qBackup: qBackup,
-                              testId: testId,
-                            ));
-                          },
-                          child: Text(
-                            'Закончить',
-                            style: TextStyle(color: theme.primaryColor),
-                          ),
+          return CallbackShortcuts(
+            bindings: <ShortcutActivator, VoidCallback>{
+              const SingleActivator(LogicalKeyboardKey.keyA): () {
+                pageController.previousPage(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
+              },
+              const SingleActivator(LogicalKeyboardKey.keyD): () {
+                pageController.nextPage(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
+              }
+            },
+            child: Focus(
+              autofocus: true,
+              child: Scaffold(
+                appBar: AppBar(
+                  title: Text('${state + 1}/${questions.length}'),
+                  centerTitle: true,
+                  leading: IconButton(
+                    icon: const Icon(Icons.exit_to_app),
+                    onPressed: () {
+                      final remained = questions.length -
+                          context.read<AnswerCubit>().state.length;
+                      final progressMap = context.read<AnswerCubit>().state;
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (context) => CupertinoAlertDialog(
+                          title: const Text(
+                              'Вы действительно хотите закончить тест?'),
+                          content: remained != 0
+                              ? const Text('У вас есть не отвеченные вопросы')
+                              : null,
+                          actions: [
+                            CupertinoDialogAction(
+                              onPressed: () {
+                                context.router.pop(context);
+                                context.router.replace(TestFinishRoute(
+                                  progressMap: progressMap,
+                                  questions: questions,
+                                  testName: testName,
+                                  qBackup: qBackup,
+                                  testId: testId,
+                                ));
+                              },
+                              child: Text(
+                                'Закончить',
+                                style: TextStyle(color: theme.primaryColor),
+                              ),
+                            ),
+                            CupertinoDialogAction(
+                              onPressed: () {
+                                context.router.pop(context);
+                              },
+                              child: Text(
+                                'Отмена',
+                                style: TextStyle(color: theme.primaryColor),
+                              ),
+                            ),
+                          ],
                         ),
-                        CupertinoDialogAction(
-                          onPressed: () {
-                            context.router.pop(context);
-                          },
-                          child: Text(
-                            'Отмена',
-                            style: TextStyle(color: theme.primaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-              // automaticallyImplyLeading: false,
-            ),
-            endDrawer: BlocBuilder<AnswerCubit, Map<int, Progress>>(
-              builder: (context, state) {
-                return Drawer(
-                  width: 100,
-                  child: ListView.separated(
-                    itemCount: questions.length,
-                    separatorBuilder: (context, index) => const Divider(),
-                    itemBuilder: (context, index) {
-                      final isRight = state[index]?.isRight;
-                      Color color = Colors.black;
-                      if (isRight != null) {
-                        if (isRight) {
-                          color = Colors.greenAccent;
-                        } else {
-                          color = Colors.redAccent;
-                        }
-                      }
-                      return ListTile(
-                        title: Text(
-                          (index + 1).toString(),
-                          style: TextStyle(
-                            color: color,
-                          ),
-                        ),
-                        onTap: () {
-                          pageController.animateToPage(
-                            index,
-                            duration: const Duration(seconds: 1),
-                            curve: Curves.ease,
-                          );
-                        },
                       );
                     },
                   ),
-                );
-              },
-            ),
-            body: PageView.builder(
-              controller: pageController,
-              onPageChanged: (page) {
-                context.read<TestCurrentPageCubit>().changePage(page);
-              },
-              itemCount: questions.length,
-              itemBuilder: (context, index) => KeepAlivePage(
-                child: TestBody(
-                  indexPage: index,
-                  question: questions[index],
-                  pageController: pageController,
+                ),
+                endDrawer: BlocBuilder<AnswerCubit, Map<int, Progress>>(
+                  builder: (context, state) {
+                    return Drawer(
+                      width: 100,
+                      child: ListView.separated(
+                        itemCount: questions.length,
+                        separatorBuilder: (context, index) => const Divider(),
+                        itemBuilder: (context, index) {
+                          final isRight = state[index]?.isRight;
+                          Color? color = theme.textTheme.bodyMedium!.color;
+                          if (isRight != null) {
+                            if (isRight) {
+                              color = Colors.greenAccent;
+                            } else {
+                              color = Colors.redAccent;
+                            }
+                          }
+                          return ListTile(
+                            title: Text(
+                              (index + 1).toString(),
+                              style: TextStyle(
+                                color: color,
+                              ),
+                            ),
+                            onTap: () {
+                              pageController.animateToPage(
+                                index,
+                                duration: const Duration(seconds: 1),
+                                curve: Curves.ease,
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+                body: PageView.builder(
+                  controller: pageController,
+                  onPageChanged: (page) {
+                    context.read<TestCurrentPageCubit>().changePage(page);
+                  },
+                  itemCount: questions.length,
+                  itemBuilder: (context, index) => KeepAlivePage(
+                    child: TestBody(
+                      indexPage: index,
+                      question: questions[index],
+                      pageController: pageController,
+                    ),
+                  ),
                 ),
               ),
             ),

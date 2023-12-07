@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:provider/provider.dart';
 import 'package:testerx2/models/index.dart';
 import 'package:testerx2/presentation/test/cubit/answer_cubit.dart';
 import 'package:testerx2/presentation/test/models/progress.dart';
+import 'package:testerx2/ui/theme/provider.dart';
 
 class AnswerButton extends StatefulWidget {
   const AnswerButton({
@@ -34,19 +36,20 @@ class _AnswerButtonState extends State<AnswerButton> {
       itemBuilder: (context, index) {
         bool isRight =
             widget.question.answers![index] == widget.question.rights!.first;
-        Color bgColor = theme.cardColor;
-
+        Color? bgColor = theme.cardColor;
+        bool isDarkMode =
+            Provider.of<ThemeSettings>(context).currentTheme == ThemeMode.dark;
         if (isPressed) {
           if (context.read<AnswerCubit>().state[widget.indexPage]!.selected ==
               index) {
             if (isRight) {
-              bgColor = Colors.greenAccent;
+              bgColor = isDarkMode ? Colors.green[800] : Colors.greenAccent;
             } else {
-              bgColor = Colors.redAccent;
+              bgColor = isDarkMode ? Colors.red[700] : Colors.red;
             }
           } else {
             if (isRight) {
-              bgColor = Colors.greenAccent;
+              bgColor = isDarkMode ? Colors.green[800] : Colors.greenAccent;
             }
           }
         }

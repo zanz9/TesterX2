@@ -17,13 +17,18 @@ class TestsDb extends StatefulWidget {
 class _TestsDbState extends State<TestsDb> {
   List tests = [];
   bool loaded = false;
+  bool groupNull = false;
 
   @override
   void initState() {
     loaded = false;
     TestService().getAllTests(isAdmin: widget.allTests).then((value) {
       setState(() {
-        tests = value;
+        if (value == null) {
+          groupNull = true;
+        } else {
+          tests = value;
+        }
         loaded = true;
       });
     });
@@ -33,6 +38,17 @@ class _TestsDbState extends State<TestsDb> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    if (groupNull) {
+      return SliverToBoxAdapter(
+        child: Center(
+          child: Text(
+            'Выберите группу в настройках',
+            style: theme.textTheme.bodyLarge?.copyWith(fontSize: 24),
+          ),
+        ),
+      );
+    }
+
     return SliverList.separated(
       itemCount: loaded ? tests.length : 100,
       separatorBuilder: (context, index) => const SizedBox(height: 12),
