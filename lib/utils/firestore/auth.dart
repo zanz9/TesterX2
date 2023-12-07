@@ -13,17 +13,18 @@ class AuthService {
       user = await authInstance.signInWithEmailAndPassword(
           email: email, password: password);
     }
-    AuthService().setUser();
+    await AuthService().setUser();
     return user;
   }
 
-  Future<UserCredential> register(String email, String password) async =>
-      await authInstance.createUserWithEmailAndPassword(
-          email: email, password: password);
+  Future<void> register(String email, String password) async {
+    await authInstance.createUserWithEmailAndPassword(
+        email: email, password: password);
+  }
 
   Future<void> logout() async => await authInstance.signOut();
 
-  bool isAuth() => authInstance.currentUser == null;
+  bool isAuth() => authInstance.currentUser != null;
 
   Future<Map<String, dynamic>?> getUser() async {
     final uid = authInstance.currentUser?.uid;
@@ -32,7 +33,7 @@ class AuthService {
     return userData;
   }
 
-  setUser({Map<String, dynamic>? data}) async {
+  Future<void> setUser({Map<String, dynamic>? data}) async {
     data ??= {};
     final uid = authInstance.currentUser?.uid;
     Map<String, dynamic> userData = await getUser() ?? {};

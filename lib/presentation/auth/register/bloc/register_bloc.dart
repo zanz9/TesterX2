@@ -26,7 +26,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           emit(RegisterSomethingElse());
         }
       }
-      emit(RegisterInitial());
     });
   }
 }

@@ -32,13 +32,11 @@ class RegisterScreen extends StatelessWidget {
         String errorText = '';
         switch (state.runtimeType) {
           case RegisterInvalidEmail:
-            errorText = 'Введенные данные некоректны';
-            break;
           case RegisterMissingPassword:
             errorText = 'Введенные данные некоректны';
             break;
           case RegisterEmailAlreadyInUse:
-            errorText = 'Соединение с сервером потеряна';
+            errorText = 'Этот Email уже используется';
             break;
           case RegisterSomethingElse:
             errorText = 'Что-то пошло не так';
