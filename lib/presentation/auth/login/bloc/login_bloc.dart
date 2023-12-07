@@ -12,29 +12,34 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<OnLogin>((event, emit) async {
       emit(LoginLoading());
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: event.email, password: event.password);
-        AuthService().setUser();
+        await AuthService().login(email: event.email, password: event.password);
         GetIt.I<AppRouter>().replace(const MainRoute());
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+        if (e.code == 'invalid-email') {
           emit(LoginUserNotFound());
-        } else if (e.code == 'wrong-password') {
+        } else if (e.code == "invalid-login-credentials") {
           emit(LoginWrongPassword());
+        } else if (e.code == "network-request-failed") {
+          emit(LoginConnectionWrong());
+        } else {
+          emit(LoginSomethingElse());
         }
       }
-      emit(LoginInitial());
     });
 
     on<OnAnonymous>(
       (event, emit) async {
         emit(LoginLoading());
-
-        await FirebaseAuth.instance.signInAnonymously();
-        AuthService().setUser();
-        GetIt.I<AppRouter>().replace(const MainRoute());
-
-        emit(LoginInitial());
+        try {
+          await AuthService().login();
+          GetIt.I<AppRouter>().replace(const MainRoute());
+        } on FirebaseAuthException catch (e) {
+          if (e.code == "network-request-failed") {
+            emit(LoginConnectionWrong());
+          } else {
+            emit(LoginSomethingElse());
+          }
+        }
       },
     );
   }

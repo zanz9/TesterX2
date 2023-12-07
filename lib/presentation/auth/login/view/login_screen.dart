@@ -28,6 +28,20 @@ class LoginScreen extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       bloc: bloc,
       builder: (context, state) {
+        String errorText = '';
+        switch (state.runtimeType) {
+          case LoginWrongPassword:
+          case LoginUserNotFound:
+            errorText = 'Введенные данные некоректны';
+            break;
+          case LoginConnectionWrong:
+            errorText = 'Соединение с сервером потеряна';
+            break;
+          case LoginSomethingElse:
+            errorText = 'Что-то пошло не так';
+            break;
+        }
+
         return Scaffold(
           body: Padding(
             padding: const EdgeInsets.all(12),
@@ -52,16 +66,10 @@ class LoginScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 12),
-                if (state is LoginWrongPassword)
-                  const Text(
-                    'Пароль неверный',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                if (state is LoginUserNotFound)
-                  const Text(
-                    'Пользователь не найден',
-                    style: TextStyle(color: Colors.red),
-                  ),
+                Text(
+                  errorText,
+                  style: const TextStyle(color: Colors.red),
+                ),
                 const SizedBox(height: 36),
                 SignButton(
                   loading: state is LoginLoading,

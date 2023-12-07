@@ -30,5 +30,17 @@ class AuthService {
     return user!['isAdmin'] ?? false;
   }
 
+  Future<UserCredential> login({String? email, String? password}) async {
+    UserCredential user;
+    if (email == null || password == null) {
+      user = await FirebaseAuth.instance.signInAnonymously();
+    } else {
+      user = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+    }
+    AuthService().setUser();
+    return user;
+  }
+
   static Future<void> logout() async => await FirebaseAuth.instance.signOut();
 }
