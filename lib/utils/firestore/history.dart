@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class History {
   final db = FirebaseFirestore.instance;
+
   Future<void> addToHistory(
     String testId,
     String testName,
@@ -29,6 +30,7 @@ class History {
         .collection('history')
         .where('uid', isEqualTo: uid)
         .orderBy('timestamp', descending: true)
+        .limit(10)
         .get();
     List history = [];
     for (var d in data.docs) {

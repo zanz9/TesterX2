@@ -34,6 +34,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final LocalTxFiles localTxFiles = GetIt.I<LocalTxFiles>();
     final indicator = GlobalKey<RefreshIndicatorState>();
+
     return RefreshIndicator(
       key: indicator,
       onRefresh: () async {

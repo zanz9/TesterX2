@@ -57,19 +57,22 @@ class _TestsDbState extends State<TestsDb> {
           final test = tests[index];
           final fileName = test['name'].replaceFirst('.TX', '');
           final testId = test['id'];
+
           return ListContainer(
             bodyText: fileName,
             rightSide:
                 Icon(Icons.arrow_forward_ios_rounded, color: theme.hintColor),
             onTap: () {
-              context.router.push(
-                TestPreviewRoute(
-                  testName: fileName,
-                  file: null,
-                  qBackup: test['tx'],
-                  testId: testId,
-                ),
-              );
+              if (test['tx'] != null) {
+                context.router.push(
+                  TestPreviewRoute(
+                    testName: fileName,
+                    file: null,
+                    qBackup: test['tx'],
+                    testId: testId,
+                  ),
+                );
+              }
             },
           );
         }

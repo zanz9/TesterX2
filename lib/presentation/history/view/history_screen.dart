@@ -33,48 +33,56 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final indicator = GlobalKey<RefreshIndicatorState>();
     return RefreshIndicator(
+      key: indicator,
       onRefresh: () async {
         await getAllHistory();
       },
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            const SliverAppBar(
-              title: Text('История'),
-              automaticallyImplyLeading: false,
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 12)),
-            SliverList.separated(
-              itemCount: history.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final testName = history[index]['testName'];
-                final testId = history[index]['testId'];
-                final tx = history[index]['tx'];
-                final correct = history[index]['correct'];
-                final wrong = history[index]['wrong'];
-                final length = history[index]['length'];
-                final percent = correct / length * 100;
-                return ListContainer(
-                  bodyText: history[index]['testName'],
-                  secondaryText: 'Пройдено на $percent%',
-                  rightSide: Icon(Icons.replay, color: theme.hintColor),
-                  onTap: () {
-                    context.router.push(TestFinishRoute(
-                      testName: testName,
-                      qBackup: tx,
-                      testId: testId,
-                      correct: correct,
-                      wrong: wrong,
-                      length: length,
-                    ));
-                  },
-                );
-              },
-            ),
-          ],
-        ),
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            title: const Text('История'),
+            automaticallyImplyLeading: false,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  indicator.currentState!.show();
+                },
+                icon: const Icon(Icons.refresh),
+              )
+            ],
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 12)),
+          SliverList.separated(
+            itemCount: history.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 12),
+            itemBuilder: (context, index) {
+              final testName = history[index]['testName'];
+              final testId = history[index]['testId'];
+              final tx = history[index]['tx'];
+              final correct = history[index]['correct'];
+              final wrong = history[index]['wrong'];
+              final length = history[index]['length'];
+              final percent = correct / length * 100;
+              return ListContainer(
+                bodyText: history[index]['testName'],
+                secondaryText: 'Пройдено на $percent%',
+                rightSide: Icon(Icons.replay, color: theme.hintColor),
+                onTap: () {
+                  context.router.push(TestFinishRoute(
+                    testName: testName,
+                    qBackup: tx,
+                    testId: testId,
+                    correct: correct,
+                    wrong: wrong,
+                    length: length,
+                  ));
+                },
+              );
+            },
+          ),
+        ],
       ),
     );
   }
