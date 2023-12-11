@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:testerx2/models/index.dart';
 import 'package:testerx2/utils/firestore/index.dart';
 import 'package:testerx2/utils/firestore/storage.dart';
 
@@ -22,14 +25,35 @@ class TestService {
     for (QueryDocumentSnapshot documentSnapshot in data.docs) {
       Map<String, dynamic> data =
           documentSnapshot.data() as Map<String, dynamic>;
-      String? tx = await StorageService().readFileFromStorage(data['tx']);
+      bool isExists = await StorageService().isFileExists(data['tx']);
       tests.add({
         'id': documentSnapshot.id,
         'name': data['name'],
         'group': data['group'],
-        'tx': tx,
+        'isExists': isExists,
       });
     }
     return tests;
+  }
+
+  Future<TX?> getTXDataByPath(String path) async {
+    String? data = await StorageService().readFileFromStorage(path);
+    if (data == null) {
+      return null;
+    }
+    TX txData = TX.fromJson(jsonDecode(data));
+    return txData;
+  }
+
+  Future<Map?> getTestById(String id) async {
+    final test = await db.collection('tests').doc(id).get();
+    final data = test.data();
+    if (data == null) return null;
+
+    String path = data['tx'];
+    TX? txData = await getTXDataByPath(path);
+    if (txData == null) return null;
+
+    return {...data, 'txData': txData};
   }
 }

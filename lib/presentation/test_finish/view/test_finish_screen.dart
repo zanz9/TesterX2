@@ -11,18 +11,19 @@ class TestFinishScreen extends StatelessWidget {
   const TestFinishScreen({
     super.key,
     required this.testName,
-    required this.qBackup,
-    required this.testId,
+    this.testId,
     this.questions,
     this.progressMap,
     this.correct,
     this.wrong,
     this.length,
+    this.path,
   });
   final List<Question>? questions;
   final Map<int, Progress>? progressMap;
   final int? correct, wrong, length;
-  final String testName, qBackup, testId;
+  final String testName;
+  final String? testId, path;
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +37,14 @@ class TestFinishScreen extends StatelessWidget {
             ..removeWhere((key, value) => value.isRight))
           .length;
       qLength = questions!.length;
-      History().addToHistory(testId, testName, qCorrect, qWrong, qLength);
     } else {
       qCorrect = correct!;
       qWrong = wrong!;
       qLength = length!;
+    }
+
+    if (testId != null) {
+      History().addToHistory(testId!, testName, qCorrect, qWrong, qLength);
     }
 
     return Scaffold(
@@ -58,8 +62,6 @@ class TestFinishScreen extends StatelessWidget {
             onTap: () {
               context.router.replace(TestPreviewRoute(
                 testName: testName,
-                file: null,
-                qBackup: qBackup,
                 testId: testId,
               ));
             },

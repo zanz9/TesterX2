@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:testerx2/utils/firestore/storage.dart';
 
 class History {
   final db = FirebaseFirestore.instance;
@@ -26,24 +27,22 @@ class History {
 
   Future<List> getAllHistory() async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
-    final data = await db
+    final dataHistories = await db
         .collection('history')
         .where('uid', isEqualTo: uid)
         .orderBy('timestamp', descending: true)
         .limit(10)
         .get();
     List history = [];
-    for (var d in data.docs) {
-      final da = d.data();
-      final test = await db.collection('tests').doc(da['testId']).get();
+    for (var dataHistory in dataHistories.docs) {
+      final data = dataHistory.data();
+      final test = await db.collection('tests').doc(data['testId']).get();
+      String path = test.get('tx');
+      bool isExists = await StorageService().isFileExists(path);
       history.add({
-        'testId': da['testId'],
-        'testName': da['testName'],
-        'timestamp': da['timestamp'],
-        'correct': da['correct'],
-        'wrong': da['wrong'],
-        'length': da['length'],
-        'tx': test.data()!['tx'],
+        ...data,
+        'tx': path,
+        'isExists': isExists,
       });
     }
     return history;

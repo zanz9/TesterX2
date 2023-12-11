@@ -16,7 +16,9 @@ class BuildChangeUserGroup extends StatefulWidget {
 class _BuildChangeUserGroupState extends State<BuildChangeUserGroup> {
   String? userGroup;
   String? userGroupID;
-  List groups = [];
+  List groups = [
+    ['0', 'Выберите группу']
+  ];
 
   @override
   void initState() {

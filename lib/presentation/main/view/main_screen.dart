@@ -1,9 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:testerx2/presentation/main/main.dart';
 
-import 'package:testerx2/presentation/main/widgets/tests_db.dart';
-import 'package:testerx2/presentation/main/widgets/tests_local.dart';
 import 'package:testerx2/utils/firestore/index.dart';
 import 'package:testerx2/utils/shared_preferences/index.dart';
 

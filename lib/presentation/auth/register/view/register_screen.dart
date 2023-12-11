@@ -1,8 +1,7 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/presentation/auth/auth.dart';
-import 'package:testerx2/presentation/auth/register/bloc/register_bloc.dart';
 import 'package:testerx2/router/router.dart';
 
 @RoutePage()
@@ -92,7 +91,7 @@ class RegisterScreen extends StatelessWidget {
                     context.router.replace(const LoginRoute());
                   },
                   child: const Text('Уже зарегистрировались? Войти'),
-                )
+                ),
               ],
             ),
           ),

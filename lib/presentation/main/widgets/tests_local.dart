@@ -63,8 +63,6 @@ class _TestsListState extends State<TestsList> {
             context.router.push(TestPreviewRoute(
               testName: fileName,
               file: file,
-              qBackup: null,
-              testId: '',
             ));
           },
         );

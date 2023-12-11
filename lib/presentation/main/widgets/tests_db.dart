@@ -63,12 +63,10 @@ class _TestsDbState extends State<TestsDb> {
             rightSide:
                 Icon(Icons.arrow_forward_ios_rounded, color: theme.hintColor),
             onTap: () {
-              if (test['tx'] != null) {
+              if (test['isExists']) {
                 context.router.push(
                   TestPreviewRoute(
                     testName: fileName,
-                    file: null,
-                    qBackup: test['tx'],
                     testId: testId,
                   ),
                 );

@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/models/question.dart';
 import 'package:testerx2/presentation/test/cubit/answer_cubit.dart';
 import 'package:testerx2/presentation/test/cubit/test_current_page_cubit.dart';
-import 'package:testerx2/presentation/test/models/progress.dart';
 import 'package:testerx2/presentation/test/test.dart';
 import 'package:testerx2/router/router.dart';
 
@@ -16,13 +15,11 @@ class TestPageScreen extends StatelessWidget {
     super.key,
     required this.questions,
     required this.testName,
-    required this.qBackup,
     required this.testId,
   });
   final List<Question> questions;
   final String testName;
-  final String qBackup;
-  final String testId;
+  final String? testId;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +80,6 @@ class TestPageScreen extends StatelessWidget {
                                   progressMap: progressMap,
                                   questions: questions,
                                   testName: testName,
-                                  qBackup: qBackup,
                                   testId: testId,
                                 ));
                               },
