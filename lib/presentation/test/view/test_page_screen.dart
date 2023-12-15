@@ -37,6 +37,47 @@ class TestPageScreen extends StatelessWidget {
       ],
       child: BlocBuilder<TestCurrentPageCubit, int>(
         builder: (context, state) {
+          willPop() {
+            final remained =
+                questions.length - context.read<AnswerCubit>().state.length;
+            final progressMap = context.read<AnswerCubit>().state;
+            showCupertinoDialog(
+              context: context,
+              builder: (context) => CupertinoAlertDialog(
+                title: const Text('Вы действительно хотите закончить тест?'),
+                content: remained != 0
+                    ? const Text('У вас есть не отвеченные вопросы')
+                    : null,
+                actions: [
+                  CupertinoDialogAction(
+                    onPressed: () {
+                      context.router.pop(context);
+                      context.router.replace(TestFinishRoute(
+                        progressMap: progressMap,
+                        questions: questions,
+                        testName: testName,
+                        testId: testId,
+                      ));
+                    },
+                    child: Text(
+                      'Закончить',
+                      style: TextStyle(color: theme.primaryColor),
+                    ),
+                  ),
+                  CupertinoDialogAction(
+                    onPressed: () {
+                      context.router.pop(context);
+                    },
+                    child: Text(
+                      'Отмена',
+                      style: TextStyle(color: theme.primaryColor),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
           return CallbackShortcuts(
             bindings: <ShortcutActivator, VoidCallback>{
               const SingleActivator(LogicalKeyboardKey.keyA): () {
@@ -50,107 +91,74 @@ class TestPageScreen extends StatelessWidget {
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.ease,
                 );
-              }
+              },
+              const SingleActivator(LogicalKeyboardKey.escape): willPop
             },
             child: Focus(
               autofocus: true,
-              child: Scaffold(
-                appBar: AppBar(
-                  title: Text('${state + 1}/${questions.length}'),
-                  centerTitle: true,
-                  leading: IconButton(
-                    icon: const Icon(Icons.exit_to_app),
-                    onPressed: () {
-                      final remained = questions.length -
-                          context.read<AnswerCubit>().state.length;
-                      final progressMap = context.read<AnswerCubit>().state;
-                      showCupertinoDialog(
-                        context: context,
-                        builder: (context) => CupertinoAlertDialog(
-                          title: const Text(
-                              'Вы действительно хотите закончить тест?'),
-                          content: remained != 0
-                              ? const Text('У вас есть не отвеченные вопросы')
-                              : null,
-                          actions: [
-                            CupertinoDialogAction(
-                              onPressed: () {
-                                context.router.pop(context);
-                                context.router.replace(TestFinishRoute(
-                                  progressMap: progressMap,
-                                  questions: questions,
-                                  testName: testName,
-                                  testId: testId,
-                                ));
-                              },
-                              child: Text(
-                                'Закончить',
-                                style: TextStyle(color: theme.primaryColor),
+              child: WillPopScope(
+                onWillPop: () {
+                  willPop();
+                  return Future.value(true);
+                },
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Text('${state + 1}/${questions.length}'),
+                    centerTitle: true,
+                    leading: IconButton(
+                      icon: const Icon(Icons.exit_to_app),
+                      onPressed: willPop,
+                    ),
+                  ),
+                  endDrawer: BlocBuilder<AnswerCubit, Map<int, Progress>>(
+                    builder: (context, state) {
+                      return Drawer(
+                        width: 100,
+                        child: ListView.separated(
+                          itemCount: questions.length,
+                          separatorBuilder: (context, index) => const Divider(),
+                          itemBuilder: (context, index) {
+                            final isRight = state[index]?.isRight;
+                            Color? color = theme.textTheme.bodyMedium!.color;
+                            if (isRight != null) {
+                              if (isRight) {
+                                color = Colors.greenAccent;
+                              } else {
+                                color = Colors.redAccent;
+                              }
+                            }
+                            return ListTile(
+                              title: Text(
+                                (index + 1).toString(),
+                                style: TextStyle(
+                                  color: color,
+                                ),
                               ),
-                            ),
-                            CupertinoDialogAction(
-                              onPressed: () {
-                                context.router.pop(context);
+                              onTap: () {
+                                pageController.animateToPage(
+                                  index,
+                                  duration: const Duration(seconds: 1),
+                                  curve: Curves.ease,
+                                );
                               },
-                              child: Text(
-                                'Отмена',
-                                style: TextStyle(color: theme.primaryColor),
-                              ),
-                            ),
-                          ],
+                            );
+                          },
                         ),
                       );
                     },
                   ),
-                ),
-                endDrawer: BlocBuilder<AnswerCubit, Map<int, Progress>>(
-                  builder: (context, state) {
-                    return Drawer(
-                      width: 100,
-                      child: ListView.separated(
-                        itemCount: questions.length,
-                        separatorBuilder: (context, index) => const Divider(),
-                        itemBuilder: (context, index) {
-                          final isRight = state[index]?.isRight;
-                          Color? color = theme.textTheme.bodyMedium!.color;
-                          if (isRight != null) {
-                            if (isRight) {
-                              color = Colors.greenAccent;
-                            } else {
-                              color = Colors.redAccent;
-                            }
-                          }
-                          return ListTile(
-                            title: Text(
-                              (index + 1).toString(),
-                              style: TextStyle(
-                                color: color,
-                              ),
-                            ),
-                            onTap: () {
-                              pageController.animateToPage(
-                                index,
-                                duration: const Duration(seconds: 1),
-                                curve: Curves.ease,
-                              );
-                            },
-                          );
-                        },
+                  body: PageView.builder(
+                    controller: pageController,
+                    onPageChanged: (page) {
+                      context.read<TestCurrentPageCubit>().changePage(page);
+                    },
+                    itemCount: questions.length,
+                    itemBuilder: (context, index) => KeepAlivePage(
+                      child: TestBody(
+                        indexPage: index,
+                        question: questions[index],
+                        pageController: pageController,
                       ),
-                    );
-                  },
-                ),
-                body: PageView.builder(
-                  controller: pageController,
-                  onPageChanged: (page) {
-                    context.read<TestCurrentPageCubit>().changePage(page);
-                  },
-                  itemCount: questions.length,
-                  itemBuilder: (context, index) => KeepAlivePage(
-                    child: TestBody(
-                      indexPage: index,
-                      question: questions[index],
-                      pageController: pageController,
                     ),
                   ),
                 ),

@@ -29,7 +29,6 @@ class TestPreviewScreen extends StatefulWidget {
 class _TestPreviewScreenState extends State<TestPreviewScreen> {
   Map? test;
   TX? txData;
-  bool loaded = false;
 
   @override
   void initState() {
@@ -43,7 +42,6 @@ class _TestPreviewScreenState extends State<TestPreviewScreen> {
         setState(() {
           test = value;
           txData = value!['txData'];
-          loaded = true;
         });
       });
     }
@@ -52,37 +50,33 @@ class _TestPreviewScreenState extends State<TestPreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!loaded) {
-      return const Center(child: CircularProgressIndicator());
-    } else {
-      int length = txData!.questions!.length;
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.testName),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 12),
-            BlocProvider(
-              create: (context) => TestLengthCubit(),
-              child: Column(
-                children: [
-                  TestLengthSlider(
-                    sliderLength: length.toDouble(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.testName),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          (txData == null)
+              ? const Center(child: CircularProgressIndicator())
+              : BlocProvider(
+                  create: (context) => TestLengthCubit(),
+                  child: Column(
+                    children: [
+                      TestLengthSlider(
+                        sliderLength: txData!.questions!.length.toDouble(),
+                      ),
+                      const SizedBox(height: 16),
+                      TestChoose(
+                        data: txData!,
+                        testName: widget.testName,
+                        testId: widget.testId,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  TestChoose(
-                    data: txData!,
-                    testName: widget.testName,
-                    testId: widget.testId,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+                ),
+        ],
+      ),
+    );
   }
 }

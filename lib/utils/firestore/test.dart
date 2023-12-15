@@ -14,25 +14,31 @@ class TestService {
     if (group == null) {
       return null;
     }
-    QuerySnapshot<Map<String, dynamic>?> data;
+    QuerySnapshot<Map<String, dynamic>?> testData;
     if (isAdmin) {
-      data = await testsDB.orderBy('name', descending: false).get();
+      testData = await testsDB.orderBy('name', descending: false).get();
     } else {
-      data = await testsDB.where('group', isEqualTo: group[0]).get();
+      testData = await testsDB.where('group', isEqualTo: group[0]).get();
     }
 
     List tests = [];
-    for (QueryDocumentSnapshot documentSnapshot in data.docs) {
-      Map<String, dynamic> data =
-          documentSnapshot.data() as Map<String, dynamic>;
+    List<Future> futures = [];
+    Future<void> getTest(test, tests) async {
+      Map<String, dynamic> data = test.data();
       bool isExists = await StorageService().isFileExists(data['tx']);
       tests.add({
-        'id': documentSnapshot.id,
+        'id': test.id,
         'name': data['name'],
         'group': data['group'],
         'isExists': isExists,
       });
     }
+
+    for (var test in testData.docs) {
+      futures.add(getTest(test, tests));
+    }
+
+    await Future.wait(futures);
     return tests;
   }
 

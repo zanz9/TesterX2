@@ -34,17 +34,22 @@ class History {
         .limit(10)
         .get();
     List history = [];
-    for (var dataHistory in dataHistories.docs) {
+    List<Future> futures = [];
+
+    Future<void> getHistoryData(dataHistory, history) async {
       final data = dataHistory.data();
       final test = await db.collection('tests').doc(data['testId']).get();
-      String path = test.get('tx');
-      bool isExists = await StorageService().isFileExists(path);
+      bool isExists = await StorageService().isFileExists(test.get('tx'));
       history.add({
         ...data,
-        'tx': path,
         'isExists': isExists,
       });
     }
+
+    for (var dataHistory in dataHistories.docs) {
+      futures.add(getHistoryData(dataHistory, history));
+    }
+    await Future.wait(futures);
     return history;
   }
 }

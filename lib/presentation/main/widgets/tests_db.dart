@@ -18,7 +18,7 @@ class _TestsDbState extends State<TestsDb> {
   List tests = [];
   bool loaded = false;
   bool groupNull = false;
-
+  var w = Stopwatch()..start();
   @override
   void initState() {
     loaded = false;

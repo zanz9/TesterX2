@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +16,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseFirestore.instance.enablePersistence();
+  if (kIsWeb) {
+    await FirebaseFirestore.instance.enablePersistence();
+  }
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isDark = prefs.getBool('isDark') ?? false;
   bool isUseLocalTxFiles = prefs.getBool('useLocalTxFiles') ?? false;
