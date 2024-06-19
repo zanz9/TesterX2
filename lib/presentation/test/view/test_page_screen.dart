@@ -103,7 +103,14 @@ class TestPageScreen extends StatelessWidget {
                 },
                 child: Scaffold(
                   appBar: AppBar(
-                    title: Text('${state + 1}/${questions.length}'),
+                    title: GestureDetector(
+                        onTap: () {
+                          pageController.previousPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.ease,
+                          );
+                        },
+                        child: Text('${state + 1}/${questions.length}')),
                     centerTitle: true,
                     leading: IconButton(
                       icon: const Icon(Icons.exit_to_app),

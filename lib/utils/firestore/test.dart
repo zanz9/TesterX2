@@ -26,6 +26,10 @@ class TestService {
     Future<void> getTest(test, tests) async {
       Map<String, dynamic> data = test.data();
       bool isExists = await StorageService().isFileExists(data['tx']);
+
+      if (data['name'].length > 25) {
+        data['name'] = '${(data['name'] as String).substring(0, 25)}...';
+      }
       tests.add({
         'id': test.id,
         'name': data['name'],
@@ -59,6 +63,10 @@ class TestService {
     String path = data['tx'];
     TX? txData = await getTXDataByPath(path);
     if (txData == null) return null;
+
+    if (data['name'].length > 25) {
+      data['name'] = '${(data['name'] as String).substring(0, 25)}...';
+    }
 
     return {...data, 'txData': txData};
   }
