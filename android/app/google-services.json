@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "479952288215",
+    "firebase_url": "https://tester-x2-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "tester-x2",
     "storage_bucket": "tester-x2.appspot.com"
   },

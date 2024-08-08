@@ -10,6 +10,13 @@
       "type": "dart"
     },
     {
+      "name": "testerx2 web-HOST",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": ["-d", "web-server", "--web-port 8080"]
+    },
+    {
       "name": "testerx2 (profile mode)",
       "request": "launch",
       "type": "dart",

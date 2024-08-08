@@ -51,7 +51,7 @@ class TestPageScreen extends StatelessWidget {
                 actions: [
                   CupertinoDialogAction(
                     onPressed: () {
-                      context.router.pop(context);
+                      // context.router.pop(context);
                       context.router.replace(TestFinishRoute(
                         progressMap: progressMap,
                         questions: questions,
@@ -66,7 +66,7 @@ class TestPageScreen extends StatelessWidget {
                   ),
                   CupertinoDialogAction(
                     onPressed: () {
-                      context.router.pop(context);
+                      // context.router.pop(context);
                     },
                     child: Text(
                       'Отмена',

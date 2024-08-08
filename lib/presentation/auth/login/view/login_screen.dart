@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/presentation/auth/auth.dart';
-import 'package:testerx2/router/router.dart';
+import 'package:testerx2/presentation/auth/widgets/mybutton.dart';
+import 'package:testerx2/presentation/auth/widgets/mytextfield.dart';
+
+import 'package:flutter_shakemywidget/flutter_shakemywidget.dart';
 
 @RoutePage()
 class LoginScreen extends StatelessWidget {
@@ -14,12 +17,13 @@ class LoginScreen extends StatelessWidget {
     final bloc = LoginBloc();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-
+    final shakeKey = GlobalKey<ShakeWidgetState>();
     login() {
       bloc.add(
         OnLogin(
           email: emailController.text,
           password: passwordController.text,
+          shakeKey: shakeKey,
         ),
       );
     }
@@ -27,72 +31,144 @@ class LoginScreen extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       bloc: bloc,
       builder: (context, state) {
-        String errorText = '';
-        switch (state.runtimeType) {
-          case LoginWrongPassword:
-          case LoginUserNotFound:
-            errorText = 'Введенные данные некоректны';
-            break;
-          case LoginConnectionWrong:
-            errorText = 'Соединение с сервером потеряна';
-            break;
-          case LoginSomethingElse:
-            errorText = 'Что-то пошло не так';
-            break;
+        String errorText = 'Добро пожаловать в TesterX';
+        if (state.runtimeType == LoginWrongPassword ||
+            state.runtimeType == LoginUserNotFound) {
+          errorText = 'Введенные данные некоректны';
+        } else if (state.runtimeType == LoginConnectionWrong) {
+          errorText = 'Соединение с сервером потеряна';
+        } else if (state.runtimeType == LoginSomethingElse) {
+          errorText = 'Что-то пошло не так';
         }
-
         return Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Вход',
-                  style: theme.textTheme.headlineLarge?.copyWith(fontSize: 60),
-                ),
-                const SizedBox(height: 28),
-                EmailInput(
-                  labelHide: true,
-                  controller: emailController,
-                ),
-                const SizedBox(height: 24),
-                PasswordInput(
-                  labelHide: true,
-                  controller: passwordController,
-                  onSubmitted: (value) {
-                    login();
-                  },
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  errorText,
-                  style: const TextStyle(color: Colors.red),
-                ),
-                const SizedBox(height: 36),
-                SignButton(
-                  loading: state is LoginLoading,
-                  text: 'Войти',
-                  onTap: login,
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  child: Text('-'),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    context.router.replace(const RegisterRoute());
-                  },
-                  child: const Text('Нет аккаунта? Зарегистрироваться'),
-                ),
-                const SizedBox(height: 16),
-                GestureDetector(
-                  onTap: () {
-                    bloc.add(OnAnonymous());
-                  },
-                  child: const Text('Войти анонимно'),
-                )
-              ],
+          body: SafeArea(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 50),
+                  ShakeMe(
+                    key: shakeKey,
+                    shakeCount: 3,
+                    shakeOffset: 10,
+                    shakeDuration: const Duration(milliseconds: 500),
+                    child: Icon(
+                      Icons.lock,
+                      color: errorText == 'Добро пожаловать в TesterX'
+                          ? Colors.black
+                          : Colors.red,
+                      size: 100,
+                    ),
+                  ),
+                  const SizedBox(height: 50),
+                  Text(
+                    errorText,
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                      fontSize: 16,
+                    ),
+                  ),
+
+                  const SizedBox(height: 25),
+                  MyTextField(
+                    controller: emailController,
+                    hintText: 'Email',
+                    obscureText: false,
+                  ),
+                  const SizedBox(height: 10),
+                  MyTextField(
+                    controller: passwordController,
+                    hintText: 'Password',
+                    obscureText: true,
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Forgot Password?',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  MyButton(
+                    onTap: login,
+                  ),
+
+                  const SizedBox(height: 50),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            thickness: 0.5,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Text(
+                            'Или продолжить с помощью',
+                            style: TextStyle(color: Colors.grey[700]),
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            thickness: 0.5,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 50),
+
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // // google button
+                      // SquareTile(imagePath: 'lib/images/google.png'),
+
+                      // SizedBox(width: 25),
+
+                      // // apple button
+                      // SquareTile(imagePath: 'lib/images/apple.png')
+                    ],
+                  ),
+
+                  const SizedBox(height: 50),
+
+                  // not a member? register now
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Not a member?',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                      const SizedBox(width: 4),
+                      const Text(
+                        'Register now',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         );

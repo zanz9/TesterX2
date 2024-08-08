@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '479952288215',
     projectId: 'tester-x2',
     authDomain: 'tester-x2.firebaseapp.com',
+    databaseURL: 'https://tester-x2-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'tester-x2.appspot.com',
     measurementId: 'G-0ZHKCT9910',
   );
@@ -58,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:479952288215:android:04068e718922363e8c3392',
     messagingSenderId: '479952288215',
     projectId: 'tester-x2',
+    databaseURL: 'https://tester-x2-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'tester-x2.appspot.com',
   );
 
@@ -66,6 +68,7 @@ class DefaultFirebaseOptions {
     appId: '1:479952288215:ios:f8b879f88ce687248c3392',
     messagingSenderId: '479952288215',
     projectId: 'tester-x2',
+    databaseURL: 'https://tester-x2-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'tester-x2.appspot.com',
     iosBundleId: 'com.example.testerx2',
   );
@@ -75,6 +78,7 @@ class DefaultFirebaseOptions {
     appId: '1:479952288215:ios:63903ae5e7e04ead8c3392',
     messagingSenderId: '479952288215',
     projectId: 'tester-x2',
+    databaseURL: 'https://tester-x2-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'tester-x2.appspot.com',
     iosBundleId: 'com.example.testerx2.RunnerTests',
   );

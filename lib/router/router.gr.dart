@@ -9,92 +9,6 @@
 
 part of 'router.dart';
 
-abstract class _$AppRouter extends RootStackRouter {
-  // ignore: unused_element
-  _$AppRouter({super.navigatorKey});
-
-  @override
-  final Map<String, PageFactory> pagesMap = {
-    HistoryRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const HistoryScreen(),
-      );
-    },
-    HomeRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const HomeScreen(),
-      );
-    },
-    LoginRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const LoginScreen(),
-      );
-    },
-    MainRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const MainScreen(),
-      );
-    },
-    RegisterRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const RegisterScreen(),
-      );
-    },
-    SettingsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SettingsScreen(),
-      );
-    },
-    TestFinishRoute.name: (routeData) {
-      final args = routeData.argsAs<TestFinishRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: TestFinishScreen(
-          key: args.key,
-          testName: args.testName,
-          testId: args.testId,
-          questions: args.questions,
-          progressMap: args.progressMap,
-          correct: args.correct,
-          wrong: args.wrong,
-          length: args.length,
-          path: args.path,
-        ),
-      );
-    },
-    TestPageRoute.name: (routeData) {
-      final args = routeData.argsAs<TestPageRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: TestPageScreen(
-          key: args.key,
-          questions: args.questions,
-          testName: args.testName,
-          testId: args.testId,
-        ),
-      );
-    },
-    TestPreviewRoute.name: (routeData) {
-      final args = routeData.argsAs<TestPreviewRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: TestPreviewScreen(
-          key: args.key,
-          testName: args.testName,
-          file: args.file,
-          testId: args.testId,
-        ),
-      );
-    },
-  };
-}
-
 /// generated route for
 /// [HistoryScreen]
 class HistoryRoute extends PageRouteInfo<void> {
@@ -106,7 +20,12 @@ class HistoryRoute extends PageRouteInfo<void> {
 
   static const String name = 'HistoryRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HistoryScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -120,7 +39,12 @@ class HomeRoute extends PageRouteInfo<void> {
 
   static const String name = 'HomeRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HomeScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -134,7 +58,12 @@ class LoginRoute extends PageRouteInfo<void> {
 
   static const String name = 'LoginRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const LoginScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -148,7 +77,12 @@ class MainRoute extends PageRouteInfo<void> {
 
   static const String name = 'MainRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MainScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -162,7 +96,12 @@ class RegisterRoute extends PageRouteInfo<void> {
 
   static const String name = 'RegisterRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RegisterScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -176,7 +115,12 @@ class SettingsRoute extends PageRouteInfo<void> {
 
   static const String name = 'SettingsRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SettingsScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -211,8 +155,23 @@ class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
 
   static const String name = 'TestFinishRoute';
 
-  static const PageInfo<TestFinishRouteArgs> page =
-      PageInfo<TestFinishRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TestFinishRouteArgs>();
+      return TestFinishScreen(
+        key: args.key,
+        testName: args.testName,
+        testId: args.testId,
+        questions: args.questions,
+        progressMap: args.progressMap,
+        correct: args.correct,
+        wrong: args.wrong,
+        length: args.length,
+        path: args.path,
+      );
+    },
+  );
 }
 
 class TestFinishRouteArgs {
@@ -274,8 +233,18 @@ class TestPageRoute extends PageRouteInfo<TestPageRouteArgs> {
 
   static const String name = 'TestPageRoute';
 
-  static const PageInfo<TestPageRouteArgs> page =
-      PageInfo<TestPageRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TestPageRouteArgs>();
+      return TestPageScreen(
+        key: args.key,
+        questions: args.questions,
+        testName: args.testName,
+        testId: args.testId,
+      );
+    },
+  );
 }
 
 class TestPageRouteArgs {
@@ -322,8 +291,18 @@ class TestPreviewRoute extends PageRouteInfo<TestPreviewRouteArgs> {
 
   static const String name = 'TestPreviewRoute';
 
-  static const PageInfo<TestPreviewRouteArgs> page =
-      PageInfo<TestPreviewRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TestPreviewRouteArgs>();
+      return TestPreviewScreen(
+        key: args.key,
+        testName: args.testName,
+        file: args.file,
+        testId: args.testId,
+      );
+    },
+  );
 }
 
 class TestPreviewRouteArgs {
