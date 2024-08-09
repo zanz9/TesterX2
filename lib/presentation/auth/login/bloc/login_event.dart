@@ -7,8 +7,13 @@ final class OnLogin extends LoginEvent {
   final String password;
   final GlobalKey<ShakeWidgetState> shakeKey;
 
-  OnLogin(
-      {required this.email, required this.password, required this.shakeKey});
+  OnLogin({
+    required this.email,
+    required this.password,
+    required this.shakeKey,
+  });
 }
 
 final class OnAnonymous extends LoginEvent {}
+
+final class OnUpdateState extends LoginEvent {}

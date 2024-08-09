@@ -13,11 +13,11 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final bloc = LoginBloc();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final shakeKey = GlobalKey<ShakeWidgetState>();
+
     login() {
       bloc.add(
         OnLogin(
@@ -41,8 +41,8 @@ class LoginScreen extends StatelessWidget {
           errorText = 'Что-то пошло не так';
         }
         return Scaffold(
-          body: SafeArea(
-            child: Center(
+          body: Center(
+            child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -100,7 +100,13 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 25),
 
                   MyButton(
-                    onTap: login,
+                    text: 'Войти',
+                    isLoading: state.runtimeType == LoginLoading,
+                    onTapInside: login,
+                    onTapOutside: () {
+                      errorText = 'Добро пожаловать в TesterX';
+                      bloc.add(OnUpdateState());
+                    },
                   ),
 
                   const SizedBox(height: 50),
@@ -154,12 +160,12 @@ class LoginScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Not a member?',
+                        'Еще не зарегистрованы?',
                         style: TextStyle(color: Colors.grey[700]),
                       ),
                       const SizedBox(width: 4),
                       const Text(
-                        'Register now',
+                        'Зарегистрироваться',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
