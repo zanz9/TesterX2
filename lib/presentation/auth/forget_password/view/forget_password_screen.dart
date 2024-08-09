@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gif_view/gif_view.dart';
 import 'package:testerx2/presentation/auth/auth.dart';
-import 'package:testerx2/presentation/auth/forget_password/bloc/forget_password_bloc.dart';
 
 @RoutePage()
 class ForgetPasswordScreen extends StatelessWidget {

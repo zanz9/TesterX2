@@ -5,6 +5,7 @@ export 'auth/auth.dart';
 export 'history/history.dart';
 export 'home/home.dart';
 export 'main/main.dart';
+export 'new_home/new_home.dart';
 export 'settings/settings.dart';
 export 'test/test.dart';
 export 'test_finish/test_finish.dart';

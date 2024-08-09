@@ -12,11 +12,15 @@ part 'router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
+        AutoRoute(
+          path: '/',
+          page: NewHomeRoute.page,
+          initial: true,
+        ),
         AutoRoute(page: HomeRoute.page, path: '/', children: [
           AutoRoute(
-            path: '',
+            path: 'old_home',
             page: MainRoute.page,
-            initial: true,
           ),
           AutoRoute(
             path: 'history',
