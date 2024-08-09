@@ -16,4 +16,4 @@ final class OnLogin extends LoginEvent {
 
 final class OnAnonymous extends LoginEvent {}
 
-final class OnUpdateState extends LoginEvent {}
+final class OnUpdateLogin extends LoginEvent {}

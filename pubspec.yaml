@@ -29,6 +29,7 @@ dependencies:
   firebase_core_platform_interface: ^5.2.0
   rename_app: ^1.6.1
   flutter_shakemywidget: ^1.0.5+1
+  gif_view: ^0.4.4
 
 dev_dependencies:
   flutter_test:
@@ -41,8 +42,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - images/icons/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

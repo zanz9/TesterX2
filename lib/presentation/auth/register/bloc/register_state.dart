@@ -13,3 +13,5 @@ final class RegisterMissingPassword extends RegisterState {}
 final class RegisterEmailAlreadyInUse extends RegisterState {}
 
 final class RegisterSomethingElse extends RegisterState {}
+
+final class RegisterPasswordNotTheSame extends RegisterState {}

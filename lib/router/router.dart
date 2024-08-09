@@ -41,14 +41,23 @@ class AppRouter extends RootStackRouter {
           path: '/test_finish',
           page: TestFinishRoute.page,
         ),
-        AutoRoute(
+        CustomRoute(
           path: '/login',
           page: LoginRoute.page,
-          keepHistory: false,
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 150,
         ),
-        AutoRoute(
+        CustomRoute(
           path: '/register',
           page: RegisterRoute.page,
-        )
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 150,
+        ),
+        CustomRoute(
+          path: '/forget_password',
+          page: ForgetPasswordRoute.page,
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 300,
+        ),
       ];
 }

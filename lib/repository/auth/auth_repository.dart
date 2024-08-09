@@ -22,6 +22,10 @@ class AuthRepository {
         email: email, password: password);
   }
 
+  Future<void> resetPassword(String email) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
+
   Future<void> logout() async => await authInstance.signOut();
 
   bool isAuth() => authInstance.currentUser != null;

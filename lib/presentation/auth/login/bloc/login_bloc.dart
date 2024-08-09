@@ -11,7 +11,7 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial()) {
-    on<OnUpdateState>((event, emit) => emit(LoginInitial()));
+    on<OnUpdateLogin>((event, emit) => emit(LoginInitial()));
 
     on<OnLogin>((event, emit) async {
       emit(LoginLoading());
