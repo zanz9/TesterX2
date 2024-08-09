@@ -16,7 +16,7 @@ class ForgetPasswordBloc
     on<OnForgetPassword>((event, emit) async {
       emit(ForgetPasswordLoading());
       try {
-        await AuthRepository().resetPassword(event.email);
+        await AuthRepository().resetPassword(event.email.trim().toLowerCase());
         GetIt.I<AppRouter>().replace(const MainRoute());
       } catch (e) {
         emit(ForgetPasswordFail());

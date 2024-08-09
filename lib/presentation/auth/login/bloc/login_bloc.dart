@@ -16,8 +16,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<OnLogin>((event, emit) async {
       emit(LoginLoading());
       try {
-        await AuthRepository()
-            .login(email: event.email, password: event.password);
+        await AuthRepository().login(
+          email: event.email.trim().toLowerCase(),
+          password: event.password.trim(),
+        );
         GetIt.I<AppRouter>().replace(const MainRoute());
       } on FirebaseAuthException catch (e) {
         if (e.code == 'invalid-email') {

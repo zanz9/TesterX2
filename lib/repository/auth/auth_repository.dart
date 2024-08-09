@@ -11,7 +11,9 @@ class AuthRepository {
       user = await authInstance.signInAnonymously();
     } else {
       user = await authInstance.signInWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
     }
     await setUser();
     return user;
