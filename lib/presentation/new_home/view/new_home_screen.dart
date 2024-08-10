@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:testerx2/router/router.dart';
+import 'package:testerx2/presentation/new_home/new_home.dart';
 
 @RoutePage()
 class NewHomeScreen extends StatelessWidget {
@@ -8,52 +8,11 @@ class NewHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            floating: true,
-            snap: false,
-            pinned: false,
-            backgroundColor: theme.scaffoldBackgroundColor,
-            surfaceTintColor: theme.scaffoldBackgroundColor,
-            title: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Добро пожаловать,',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                      const Text(
-                        'Бауыржан',
-                        style: TextStyle(
-                          fontSize: 24,
-                        ),
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      context.router.push(const MainRoute());
-                    },
-                    icon: const Icon(
-                      Icons.person,
-                      size: 36,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          const HomeSliverAppBar(),
+          const SliverToBoxAdapter(child: SizedBox(height: 30)),
           SliverList.builder(
             itemCount: 20,
             itemBuilder: (context, index) {
