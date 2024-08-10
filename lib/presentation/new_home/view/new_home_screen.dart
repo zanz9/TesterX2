@@ -20,10 +20,13 @@ class NewHomeScreen extends StatelessWidget {
           SliverList.builder(
             itemCount: 20,
             itemBuilder: (context, index) {
+              var testName = 'Тест ${index + 1}';
               return OpenContainer(
                 transitionType: ContainerTransitionType.fadeThrough,
                 transitionDuration: const Duration(milliseconds: 350),
-                openBuilder: (context, _) => const NewTestScreen(),
+                openBuilder: (context, _) => NewTestScreen(
+                  testName: testName,
+                ),
                 openColor: theme.scaffoldBackgroundColor,
                 middleColor: theme.scaffoldBackgroundColor,
                 closedColor: theme.scaffoldBackgroundColor,
@@ -32,39 +35,13 @@ class NewHomeScreen extends StatelessWidget {
                 ),
                 tappable: true,
                 closedElevation: 0,
-                routeSettings: const RouteSettings(name: '/new_test'),
-                useRootNavigator: true,
                 closedShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 closedBuilder: (context, openContainer) => GestureDetector(
                   onTap: openContainer,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 16,
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: const BorderRadius.all(Radius.circular(15)),
-                    ),
-                    height: 54,
-                    child: const Row(
-                      children: [
-                        Text(
-                          'Название теста 54',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        Spacer(),
-                        Icon(
-                          Icons.chevron_right_rounded,
-                          color: Colors.black,
-                          size: 36,
-                        ),
-                      ],
-                    ),
+                  child: TestListWidget(
+                    text: testName,
                   ),
                 ),
               );

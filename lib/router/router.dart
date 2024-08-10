@@ -17,10 +17,6 @@ class AppRouter extends RootStackRouter {
           page: NewHomeRoute.page,
           initial: true,
         ),
-        AutoRoute(
-          path: '/new_test',
-          page: NewTestRoute.page,
-        ),
         AutoRoute(page: HomeRoute.page, path: '/', children: [
           AutoRoute(
             path: 'old_home',

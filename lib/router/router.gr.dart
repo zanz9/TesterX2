@@ -124,25 +124,6 @@ class NewHomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [NewTestScreen]
-class NewTestRoute extends PageRouteInfo<void> {
-  const NewTestRoute({List<PageRouteInfo>? children})
-      : super(
-          NewTestRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'NewTestRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const NewTestScreen();
-    },
-  );
-}
-
-/// generated route for
 /// [RegisterScreen]
 class RegisterRoute extends PageRouteInfo<void> {
   const RegisterRoute({List<PageRouteInfo>? children})

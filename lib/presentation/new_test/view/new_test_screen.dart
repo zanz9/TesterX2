@@ -1,22 +1,21 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-@RoutePage()
 class NewTestScreen extends StatelessWidget {
-  const NewTestScreen({super.key});
+  const NewTestScreen({super.key, required this.testName});
+  final String testName;
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Text(
-                'Название теста',
-                style: TextStyle(fontSize: 36),
+                testName,
+                style: const TextStyle(fontSize: 36),
               ),
             ],
           ),
