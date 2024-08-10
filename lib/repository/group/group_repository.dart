@@ -11,9 +11,9 @@ class GroupRepository {
     await newGroup.set(data);
   }
 
-  Future<Object?> getAllGroup() async {
+  Future getAllGroup() async {
     final group = await db.ref('group').get();
-    return group.value;
+    return (group.value as Map).entries;
   }
 
   Future<String?> getGroup(String id) async {

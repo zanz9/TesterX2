@@ -47,10 +47,6 @@ class AuthRepository {
     data ??= {"group": "-O3vPyf1nH4OqYIx-dlP"};
     final uid = authInstance.currentUser?.uid;
     await database.ref('users/$uid').set(data);
-    // Map<String, dynamic> userData = await getUser() ?? {};
-
-    // Map<String, dynamic> newData = {...userData, ...data, "uid": uid};
-    // await db.collection("users").doc(uid).set(newData);
   }
 
   Future<bool> isAdmin() async {
