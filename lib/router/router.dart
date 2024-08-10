@@ -15,17 +15,18 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           path: '/',
           page: NewHomeRoute.page,
-          initial: true,
+          guards: [AuthGuard()],
         ),
         CustomRoute(
           page: ProfileRoute.page,
           path: '/profile',
           transitionsBuilder: TransitionsBuilders.slideLeft,
           durationInMilliseconds: 300,
+          guards: [AuthGuard()],
         ),
-        AutoRoute(page: HomeRoute.page, path: '/', children: [
+        AutoRoute(page: HomeRoute.page, path: '/old', children: [
           AutoRoute(
-            path: 'old_home',
+            path: '',
             page: MainRoute.page,
           ),
           AutoRoute(

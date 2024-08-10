@@ -19,7 +19,7 @@ class _UserGroupWidgetState extends State<UserGroupWidget> {
   void initState() {
     AuthRepository().getUser().then((v) {
       if (v != null) {
-        GroupRepository().getGroup(v.groupId).then((value) {
+        GroupRepository().getGroup(v.groupId!).then((value) {
           setState(() {
             userGroup = value!;
           });

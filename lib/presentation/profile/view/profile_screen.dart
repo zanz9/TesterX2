@@ -1,7 +1,9 @@
-import 'package:animations/animations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:testerx2/presentation/profile/profile.dart';
+import 'package:testerx2/repository/auth/auth_repository.dart';
+import 'package:testerx2/router/router.dart';
 
 @RoutePage()
 class ProfileScreen extends StatelessWidget {
@@ -9,7 +11,30 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        actions: [
+          GestureDetector(
+            onTap: () async {
+              await AuthRepository().logout();
+              GetIt.I<AppRouter>().replace(LoginRoute());
+            },
+            child: const Row(
+              children: [
+                Icon(Icons.logout_rounded, color: Colors.black),
+                SizedBox(width: 4),
+                Text(
+                  'Выйти с аккаунта',
+                  style: TextStyle(color: Colors.black),
+                ),
+                SizedBox(width: 16),
+              ],
+            ),
+          )
+        ],
+      ),
       body: SafeArea(
         child: Center(
           child: Padding(

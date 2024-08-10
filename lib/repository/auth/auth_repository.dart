@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:testerx2/repository/auth/auth_model.dart';
-import 'package:testerx2/repository/group/group_repository.dart';
 
 class AuthRepository {
   final db = FirebaseFirestore.instance;
@@ -43,15 +42,14 @@ class AuthRepository {
     return user;
   }
 
-  Future<void> setUser({Map<String, dynamic>? data}) async {
-    data ??= {"group": "-O3vPyf1nH4OqYIx-dlP"};
+  Future<void> setUser({AuthModel? data}) async {
+    data ??= AuthModel();
     final uid = authInstance.currentUser?.uid;
-    await database.ref('users/$uid').set(data);
+    await database.ref('users/$uid').set(data.toJson());
   }
 
   Future<bool> isAdmin() async {
     final user = await getUser();
-    // return user!['isAdmin'] ?? false;
-    return false;
+    return user!.isAdmin;
   }
 }
