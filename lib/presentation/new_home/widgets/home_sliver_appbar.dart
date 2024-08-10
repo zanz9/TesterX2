@@ -41,7 +41,7 @@ class HomeSliverAppBar extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                context.router.push(const MainRoute());
+                context.router.push(const ProfileRoute());
               },
               icon: const Icon(
                 Icons.person,
