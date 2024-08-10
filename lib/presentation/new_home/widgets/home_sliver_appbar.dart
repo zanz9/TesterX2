@@ -11,7 +11,7 @@ class HomeSliverAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return SliverAppBar(
-      floating: true,
+      floating: false,
       snap: false,
       pinned: false,
       backgroundColor: theme.scaffoldBackgroundColor,

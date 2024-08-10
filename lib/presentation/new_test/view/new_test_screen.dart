@@ -8,8 +8,19 @@ class NewTestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(
-        child: Text('Новый тест'),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              SizedBox(height: 30),
+              Text(
+                'Название теста',
+                style: TextStyle(fontSize: 36),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
