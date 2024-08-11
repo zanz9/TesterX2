@@ -22,27 +22,31 @@ class NewHomeScreen extends StatelessWidget {
             itemCount: 20,
             itemBuilder: (context, index) {
               var testName = 'Тест ${index + 1}';
-              return OpenContainer(
-                transitionType: ContainerTransitionType.fadeThrough,
-                transitionDuration: const Duration(milliseconds: 350),
-                openBuilder: (context, _) => NewTestScreen(
-                  testName: testName,
-                ),
-                openColor: theme.scaffoldBackgroundColor,
-                middleColor: theme.scaffoldBackgroundColor,
-                closedColor: theme.scaffoldBackgroundColor,
-                openShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                tappable: true,
-                closedElevation: 0,
-                closedShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                closedBuilder: (context, openContainer) => GestureDetector(
-                  onTap: openContainer,
-                  child: PrimaryListWidget(
-                    text: testName,
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                child: OpenContainer(
+                  transitionType: ContainerTransitionType.fadeThrough,
+                  transitionDuration: const Duration(milliseconds: 350),
+                  openBuilder: (context, _) => NewTestScreen(
+                    testName: testName,
+                  ),
+                  openColor: theme.scaffoldBackgroundColor,
+                  middleColor: theme.scaffoldBackgroundColor,
+                  closedColor: theme.scaffoldBackgroundColor,
+                  openShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  tappable: true,
+                  closedElevation: 0,
+                  closedShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  closedBuilder: (context, openContainer) => GestureDetector(
+                    onTap: openContainer,
+                    child: PrimaryListWidget(
+                      text: testName,
+                    ),
                   ),
                 ),
               );

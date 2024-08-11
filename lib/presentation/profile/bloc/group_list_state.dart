@@ -6,7 +6,7 @@ sealed class GroupListState {}
 final class GroupListInitial extends GroupListState {}
 
 final class GroupListLoaded extends GroupListState {
-  final List list;
+  final List<GroupModel> list;
 
   GroupListLoaded({required this.list});
 }

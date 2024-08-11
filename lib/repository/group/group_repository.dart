@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:testerx2/repository/repository.dart';
 
 class GroupRepository {
   final db = FirebaseDatabase.instance;
@@ -11,9 +12,21 @@ class GroupRepository {
     await newGroup.set(data);
   }
 
-  Future getAllGroup() async {
-    final group = await db.ref('group').get();
-    return (group.value as Map).entries;
+  Future<List<GroupModel>> getAllGroup(
+      {bool orderBy = false, int limit = 10}) async {
+    DataSnapshot group;
+    if (orderBy) {
+      group =
+          await db.ref('group').orderByChild('name').limitToFirst(limit).get();
+    } else {
+      group = await db.ref('group').get();
+    }
+    List<GroupModel> list = [];
+    for (var element in (group.value as Map).entries) {
+      list.add(GroupModel(name: element.value['name'], id: element.key));
+    }
+    list.sort((a, b) => a.name.compareTo(b.name));
+    return list;
   }
 
   Future<String?> getGroup(String id) async {

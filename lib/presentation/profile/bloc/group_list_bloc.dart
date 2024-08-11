@@ -8,15 +8,10 @@ part 'group_list_state.dart';
 class GroupListBloc extends Bloc<GroupListEvent, GroupListState> {
   GroupListBloc() : super(GroupListInitial()) {
     on<OnGroupList>((event, emit) async {
-      var groups = await GroupRepository().getAllGroup();
-      var list = [];
-      for (var element in groups) {
-        list.add({
-          'id': element.key,
-          'name': element.value['name'],
-        });
-      }
-      emit(GroupListLoaded(list: list));
+      var groupRepo = GroupRepository();
+
+      var groups = await groupRepo.getAllGroup();
+      emit(GroupListLoaded(list: groups));
     });
   }
 }

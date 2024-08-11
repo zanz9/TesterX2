@@ -7,10 +7,9 @@ class AdminWidgets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = AdminBloc();
-    bloc.add(OnAdmin());
-    return BlocProvider.value(
-      value: bloc,
+    return BlocProvider(
+      lazy: false,
+      create: (context) => AdminBloc()..add(OnAdmin()),
       child: BlocBuilder<AdminBloc, AdminState>(
         builder: (context, state) {
           if (state is AdminLoaded) {

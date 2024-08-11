@@ -9,39 +9,63 @@ class AddGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final groupNameController = TextEditingController();
     return GestureDetector(
       onTap: () {
-        context.read<AdminBloc>();
         showCupertinoModalBottomSheet(
           duration: const Duration(milliseconds: 300),
           context: context,
-          builder: (context) => Material(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              height: 300,
-              child: Column(
-                children: [
-                  const SizedBox(height: 30),
-                  const Text(
-                    'Добавить группу',
-                    style: TextStyle(fontSize: 24),
+          builder: (context) {
+            var bloc = AddGroupBloc();
+            return BlocBuilder<AddGroupBloc, AddGroupState>(
+              bloc: bloc,
+              builder: (context, state) {
+                String text = 'Добавить группу';
+                if (state is AddGroupInitial) {
+                  text = 'Добавить группу';
+                }
+                if (state is AddGroupFail) {
+                  text = 'Произошла ошибка';
+                } else if (state is AddGroupSuccess) {
+                  Navigator.pop(context);
+                  groupNameController.clear();
+                }
+                return Material(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    height: 300 + MediaQuery.of(context).viewInsets.bottom,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 30),
+                        Text(
+                          text,
+                          style: const TextStyle(fontSize: 24),
+                        ),
+                        const SizedBox(height: 30),
+                        PrimaryInput(
+                          controller: groupNameController,
+                          hintText: 'Название группы',
+                          obscureText: false,
+                        ),
+                        const SizedBox(height: 30),
+                        PrimaryButton(
+                          isLoading: state is AddGroupLoading,
+                          onTap: () {
+                            bloc.add(
+                                OnAddGroup(name: groupNameController.text));
+                          },
+                          onTapOutside: () {
+                            bloc.add(OnUpdateAddGroup());
+                          },
+                          text: 'Добавить',
+                        )
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 30),
-                  PrimaryInput(
-                    controller: TextEditingController(),
-                    hintText: 'Название группы',
-                    obscureText: false,
-                  ),
-                  const SizedBox(height: 30),
-                  PrimaryButton(
-                    isLoading: false,
-                    onTap: () {},
-                    text: 'Добавить',
-                  )
-                ],
-              ),
-            ),
-          ),
+                );
+              },
+            );
+          },
         );
       },
       child: const PrimaryListWidget(

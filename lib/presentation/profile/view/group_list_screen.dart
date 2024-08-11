@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/presentation/profile/bloc/group_list_bloc.dart';
+import 'package:testerx2/ui/ui.dart';
 
 class GroupListScreen extends StatelessWidget {
   const GroupListScreen({super.key});
@@ -16,15 +17,18 @@ class GroupListScreen extends StatelessWidget {
         if (state is GroupListLoaded) {
           return Scaffold(
             body: SafeArea(
-              child: ListView.separated(
+              child: ListView.builder(
                 itemCount: state.list.length,
                 itemBuilder: (context, index) {
                   var item = state.list[index];
-                  return ListTile(
-                    title: Text(item['name']),
+                  return Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    child: PrimaryListWidget(
+                      text: item.name,
+                    ),
                   );
                 },
-                separatorBuilder: (context, index) => const Divider(),
               ),
             ),
           );
