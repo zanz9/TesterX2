@@ -4,12 +4,14 @@ class PrimaryInput extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
+  final Widget? prefixIcon;
 
   const PrimaryInput({
     super.key,
     required this.controller,
     required this.hintText,
-    required this.obscureText,
+    this.obscureText = false,
+    this.prefixIcon,
   });
 
   @override
@@ -32,31 +34,29 @@ class _PrimaryInputState extends State<PrimaryInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: TextField(
-        controller: widget.controller,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade400),
-          ),
-          fillColor: Colors.grey.shade200,
-          filled: true,
-          hintText: widget.hintText,
-          hintStyle: TextStyle(color: Colors.grey[500]),
-          suffixIcon: widget.obscureText
-              ? IconButton(
-                  onPressed: toggleObscure,
-                  icon: obscureText
-                      ? const Icon(Icons.visibility)
-                      : const Icon(Icons.visibility_off),
-                )
-              : null,
+    return TextField(
+      controller: widget.controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey.shade400),
+        ),
+        fillColor: Colors.grey.shade200,
+        filled: true,
+        hintText: widget.hintText,
+        hintStyle: TextStyle(color: Colors.grey.shade500),
+        suffixIcon: widget.obscureText
+            ? IconButton(
+                onPressed: toggleObscure,
+                icon: obscureText
+                    ? const Icon(Icons.visibility)
+                    : const Icon(Icons.visibility_off),
+              )
+            : null,
+        prefixIcon: widget.prefixIcon,
       ),
     );
   }

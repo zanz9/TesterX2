@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shakemywidget/flutter_shakemywidget.dart';
 import 'package:testerx2/presentation/auth/auth.dart';
 import 'package:testerx2/router/router.dart';
+import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
 class RegisterScreen extends StatelessWidget {
@@ -46,85 +47,70 @@ class RegisterScreen extends StatelessWidget {
         return Scaffold(
           body: Center(
             child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 50),
-                  ShakeMe(
-                    key: shakeKey,
-                    shakeCount: 3,
-                    shakeOffset: 10,
-                    shakeDuration: const Duration(milliseconds: 500),
-                    child: Icon(
-                      Icons.lock,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    LockIconWithAnimation(
+                      shakeKey: shakeKey,
                       color: errorText == 'Добро пожаловать в TesterX'
                           ? Colors.black
                           : Colors.red,
-                      size: 100,
                     ),
-                  ),
-                  const SizedBox(height: 50),
-                  Text(
-                    errorText,
-                    style: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 25),
-                  PrimaryInput(
-                    controller: emailController,
-                    hintText: 'Почта',
-                    obscureText: false,
-                  ),
-                  const SizedBox(height: 10),
-                  PrimaryInput(
-                    controller: passwordController,
-                    hintText: 'Пароль',
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 10),
-                  PrimaryInput(
-                    controller: passwordController2,
-                    hintText: 'Подтвердите пароль',
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 25),
-                  PrimaryButton(
-                    text: 'Зарегистрироваться',
-                    isLoading: state.runtimeType == RegisterLoading,
-                    onTap: register,
-                    onTapOutside: () {
-                      errorText = 'Добро пожаловать в TesterX';
-                      bloc.add(OnUpdateRegister());
-                    },
-                  ),
-                  const SizedBox(height: 50),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Уже есть аккаунт?',
-                        style: TextStyle(color: Colors.grey[700]),
+                    const SizedBox(height: 50),
+                    Text(
+                      errorText,
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                        fontSize: 24,
                       ),
-                      const SizedBox(width: 4),
-                      GestureDetector(
-                        onTap: () =>
-                            context.router.replaceAll([const LoginRoute()]),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                          child: Text(
-                            'Войти',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(height: 25),
+                    EmailInput(emailController: emailController),
+                    const SizedBox(height: 10),
+                    PasswordInput(passwordController: passwordController),
+                    const SizedBox(height: 10),
+                    PasswordInput(
+                        passwordController: passwordController2,
+                        isSecond: true),
+                    const SizedBox(height: 30),
+                    PrimaryButton(
+                      text: 'Зарегистрироваться',
+                      isLoading: state.runtimeType == RegisterLoading,
+                      onTap: register,
+                      onTapOutside: () {
+                        errorText = 'Добро пожаловать в TesterX';
+                        bloc.add(OnUpdateRegister());
+                      },
+                    ),
+                    const SizedBox(height: 50),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Уже есть аккаунт?',
+                          style: TextStyle(color: Colors.grey[700]),
+                        ),
+                        const SizedBox(width: 4),
+                        GestureDetector(
+                          onTap: () =>
+                              context.router.replaceAll([const LoginRoute()]),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            child: Text(
+                              'Войти',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),

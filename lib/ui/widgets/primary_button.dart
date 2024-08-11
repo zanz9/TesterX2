@@ -5,6 +5,9 @@ class PrimaryButton extends StatelessWidget {
   final Function()? onTapOutside;
   final String text;
   final bool isLoading;
+  final double fontSize;
+  final double borderRadius;
+  final EdgeInsets padding;
 
   const PrimaryButton({
     super.key,
@@ -12,39 +15,41 @@ class PrimaryButton extends StatelessWidget {
     this.onTapOutside,
     required this.text,
     required this.isLoading,
+    this.fontSize = 16,
+    this.borderRadius = 8,
+    this.padding = const EdgeInsets.symmetric(vertical: 20),
   });
 
   @override
   Widget build(BuildContext context) {
     return TapRegion(
       onTapInside: (event) {
-        onTap();
+        if (!isLoading) onTap();
       },
       onTapOutside: (event) {
-        if (onTapOutside != null) onTapOutside!();
+        if (onTapOutside != null) if (!isLoading) onTapOutside!();
       },
       child: Container(
-        padding: const EdgeInsets.all(25),
-        margin: const EdgeInsets.symmetric(horizontal: 25),
+        padding: padding,
         decoration: BoxDecoration(
           color: Colors.black,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Center(
           child: isLoading
-              ? const SizedBox(
-                  height: 21,
-                  width: 21,
-                  child: CircularProgressIndicator(
+              ? SizedBox(
+                  height: fontSize + 5,
+                  width: fontSize + 5,
+                  child: const CircularProgressIndicator(
                     strokeWidth: 3,
                   ),
                 )
               : Text(
                   text,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: fontSize,
                   ),
                 ),
         ),

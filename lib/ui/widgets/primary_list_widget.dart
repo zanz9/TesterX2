@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TestListWidget extends StatelessWidget {
-  const TestListWidget({
+class PrimaryListWidget extends StatelessWidget {
+  const PrimaryListWidget({
     super.key,
     required this.text,
   });

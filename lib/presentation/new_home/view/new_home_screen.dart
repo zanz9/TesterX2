@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:testerx2/presentation/new_home/new_home.dart';
 import 'package:testerx2/presentation/new_test/view/new_test_screen.dart';
+import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
 class NewHomeScreen extends StatelessWidget {
@@ -40,7 +41,7 @@ class NewHomeScreen extends StatelessWidget {
                 ),
                 closedBuilder: (context, openContainer) => GestureDetector(
                   onTap: openContainer,
-                  child: TestListWidget(
+                  child: PrimaryListWidget(
                     text: testName,
                   ),
                 ),
