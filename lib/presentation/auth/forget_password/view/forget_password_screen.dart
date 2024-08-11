@@ -59,16 +59,16 @@ class ForgetPasswordScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 25),
-                MyTextField(
+                PrimaryInput(
                   controller: emailController,
                   hintText: 'Почта',
                   obscureText: false,
                 ),
                 const SizedBox(height: 25),
-                MyButton(
+                PrimaryButton(
                   text: 'Отправить',
                   isLoading: state.runtimeType == ForgetPasswordLoading,
-                  onTapInside: send,
+                  onTap: send,
                   onTapOutside: () {
                     errorText =
                         'Напишите вашу почту, чтобы мы могли отправить ссылку на сброс пароля';

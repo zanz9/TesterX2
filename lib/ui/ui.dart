@@ -1,2 +1,2 @@
-export 'widgets/index.dart';
-export 'theme/index.dart';
+export 'theme/theme.dart';
+export 'widgets/widgets.dart';

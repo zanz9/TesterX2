@@ -69,13 +69,13 @@ class LoginScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 25),
-                  MyTextField(
+                  PrimaryInput(
                     controller: emailController,
                     hintText: 'Почта',
                     obscureText: false,
                   ),
                   const SizedBox(height: 10),
-                  MyTextField(
+                  PrimaryInput(
                     controller: passwordController,
                     hintText: 'Пароль',
                     obscureText: true,
@@ -108,10 +108,10 @@ class LoginScreen extends StatelessWidget {
 
                   const SizedBox(height: 25),
 
-                  MyButton(
+                  PrimaryButton(
                     text: 'Войти',
                     isLoading: state.runtimeType == LoginLoading,
-                    onTapInside: login,
+                    onTap: login,
                     onTapOutside: () {
                       errorText = 'Добро пожаловать в TesterX';
                       bloc.add(OnUpdateLogin());

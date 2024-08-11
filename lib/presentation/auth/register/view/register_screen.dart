@@ -72,28 +72,28 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 25),
-                  MyTextField(
+                  PrimaryInput(
                     controller: emailController,
                     hintText: 'Почта',
                     obscureText: false,
                   ),
                   const SizedBox(height: 10),
-                  MyTextField(
+                  PrimaryInput(
                     controller: passwordController,
                     hintText: 'Пароль',
                     obscureText: true,
                   ),
                   const SizedBox(height: 10),
-                  MyTextField(
+                  PrimaryInput(
                     controller: passwordController2,
                     hintText: 'Подтвердите пароль',
                     obscureText: true,
                   ),
                   const SizedBox(height: 25),
-                  MyButton(
+                  PrimaryButton(
                     text: 'Зарегистрироваться',
                     isLoading: state.runtimeType == RegisterLoading,
-                    onTapInside: register,
+                    onTap: register,
                     onTapOutside: () {
                       errorText = 'Добро пожаловать в TesterX';
                       bloc.add(OnUpdateRegister());

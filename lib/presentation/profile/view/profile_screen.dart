@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:testerx2/presentation/profile/profile.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:testerx2/presentation/presentation.dart';
 import 'package:testerx2/repository/auth/auth_repository.dart';
 import 'package:testerx2/router/router.dart';
 
@@ -19,18 +20,21 @@ class ProfileScreen extends StatelessWidget {
           GestureDetector(
             onTap: () async {
               await AuthRepository().logout();
-              GetIt.I<AppRouter>().replace(LoginRoute());
+              GetIt.I<AppRouter>().replaceAll([const LoginRoute()]);
             },
-            child: const Row(
-              children: [
-                Icon(Icons.logout_rounded, color: Colors.black),
-                SizedBox(width: 4),
-                Text(
-                  'Выйти с аккаунта',
-                  style: TextStyle(color: Colors.black),
-                ),
-                SizedBox(width: 16),
-              ],
+            child: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              child: Row(
+                children: [
+                  Icon(Icons.logout_rounded, color: Colors.black),
+                  SizedBox(width: 4),
+                  Text(
+                    'Выйти с аккаунта',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  SizedBox(width: 16),
+                ],
+              ),
             ),
           )
         ],
@@ -70,7 +74,51 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     const UserAvatarWithCamera(),
                   ],
-                )
+                ),
+                const SizedBox(height: 30),
+                const Text(
+                  'Админка',
+                  style: TextStyle(fontSize: 24),
+                ),
+                const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {
+                    showCupertinoModalBottomSheet(
+                      duration: const Duration(milliseconds: 300),
+                      context: context,
+                      builder: (context) => Material(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          height: 300,
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 30),
+                              const Text(
+                                'Добавить группу',
+                                style: TextStyle(fontSize: 24),
+                              ),
+                              const SizedBox(height: 30),
+                              PrimaryInput(
+                                controller: TextEditingController(),
+                                hintText: 'Название группы',
+                                obscureText: false,
+                              ),
+                              const SizedBox(height: 30),
+                              PrimaryButton(
+                                isLoading: false,
+                                onTap: () {},
+                                text: 'Добавить',
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: const TestListWidget(
+                    text: 'Добавить группу',
+                  ),
+                ),
               ],
             ),
           ),

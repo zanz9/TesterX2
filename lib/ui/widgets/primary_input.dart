@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class MyTextField extends StatefulWidget {
+class PrimaryInput extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
 
-  const MyTextField({
+  const PrimaryInput({
     super.key,
     required this.controller,
     required this.hintText,
@@ -13,10 +13,10 @@ class MyTextField extends StatefulWidget {
   });
 
   @override
-  State<MyTextField> createState() => _MyTextFieldState();
+  State<PrimaryInput> createState() => _PrimaryInputState();
 }
 
-class _MyTextFieldState extends State<MyTextField> {
+class _PrimaryInputState extends State<PrimaryInput> {
   bool obscureText = false;
   @override
   void initState() {

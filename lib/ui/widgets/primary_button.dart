@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class MyButton extends StatelessWidget {
-  final Function() onTapInside;
-  final Function() onTapOutside;
+class PrimaryButton extends StatelessWidget {
+  final Function() onTap;
+  final Function()? onTapOutside;
   final String text;
   final bool isLoading;
 
-  const MyButton({
+  const PrimaryButton({
     super.key,
-    required this.onTapInside,
-    required this.onTapOutside,
+    required this.onTap,
+    this.onTapOutside,
     required this.text,
     required this.isLoading,
   });
@@ -18,12 +18,11 @@ class MyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TapRegion(
       onTapInside: (event) {
-        onTapInside();
+        onTap();
       },
       onTapOutside: (event) {
-        onTapOutside();
+        if (onTapOutside != null) onTapOutside!();
       },
-      // onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.symmetric(horizontal: 25),
