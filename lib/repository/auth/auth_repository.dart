@@ -18,13 +18,15 @@ class AuthRepository {
         password: password,
       );
     }
-    await setUser();
+    await setUser(data: await getUser());
     return user;
   }
 
   Future<void> register(String email, String password) async {
     await authInstance.createUserWithEmailAndPassword(
-        email: email, password: password);
+      email: email,
+      password: password,
+    );
   }
 
   Future<void> resetPassword(String email) async {
@@ -38,6 +40,7 @@ class AuthRepository {
   Future<AuthModel?> getUser() async {
     final uid = authInstance.currentUser?.uid;
     final userData = await database.ref().child('users/$uid').get();
+    if (userData.value == null) return null;
     final user = AuthModel.fromJson(userData.value as Map);
     return user;
   }

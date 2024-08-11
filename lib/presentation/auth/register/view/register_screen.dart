@@ -30,11 +30,14 @@ class RegisterScreen extends StatelessWidget {
       bloc: bloc,
       builder: (context, state) {
         String errorText = 'Добро пожаловать в TesterX';
-        if (state.runtimeType == LoginWrongPassword ||
-            state.runtimeType == LoginUserNotFound) {
+        if (state.runtimeType == RegisterInvalidEmail) {
           errorText = 'Введенные данные некоректны';
-        } else if (state.runtimeType == LoginConnectionWrong) {
-          errorText = 'Соединение с сервером потеряна';
+        } else if (state.runtimeType == RegisterWeakPassword) {
+          errorText = 'Пароль слишком слабый';
+        } else if (state.runtimeType == RegisterMissingPassword) {
+          errorText = 'Введите пароль';
+        } else if (state.runtimeType == RegisterEmailAlreadyInUse) {
+          errorText = 'Почта уже используется';
         } else if (state.runtimeType == RegisterSomethingElse) {
           errorText = 'Что-то пошло не так';
         } else if (state.runtimeType == RegisterPasswordNotTheSame) {
@@ -89,7 +92,7 @@ class RegisterScreen extends StatelessWidget {
                   const SizedBox(height: 25),
                   MyButton(
                     text: 'Зарегистрироваться',
-                    isLoading: state.runtimeType == LoginLoading,
+                    isLoading: state.runtimeType == RegisterLoading,
                     onTapInside: register,
                     onTapOutside: () {
                       errorText = 'Добро пожаловать в TesterX';

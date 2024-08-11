@@ -21,21 +21,29 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         return;
       }
 
+      if (event.password.trim().isEmpty) {
+        emit(RegisterMissingPassword());
+        event.shakeKey.currentState?.shake();
+        return;
+      }
+
       try {
-        await AuthRepository().register(
+        var authRepo = AuthRepository();
+        await authRepo.register(
           event.email.trim().toLowerCase(),
           event.password.trim(),
         );
-        await AuthRepository().login(
+        await authRepo.login(
           email: event.email.trim().toLowerCase(),
           password: event.password.trim(),
         );
-        GetIt.I<AppRouter>().replace(const MainRoute());
+        GetIt.I<AppRouter>().replace(const NewHomeRoute());
       } on FirebaseAuthException catch (e) {
         if (e.code == "invalid-email") {
           emit(RegisterInvalidEmail());
-        } else if (e.code == "missing-password") {
-          emit(RegisterMissingPassword());
+        }
+        if (e.code == 'weak-password') {
+          emit(RegisterWeakPassword());
         } else if (e.code == "email-already-in-use") {
           emit(RegisterEmailAlreadyInUse());
         } else {
