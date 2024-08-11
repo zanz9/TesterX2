@@ -84,17 +84,22 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         GestureDetector(
-                          onTap: () {
-                            context.router.push(const ForgetPasswordRoute());
-                          },
-                          child: Text(
-                            'Забыли пароль?',
-                            style: TextStyle(color: Colors.grey[600]),
+                          onTap: () =>
+                              context.router.push(const ForgetPasswordRoute()),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
+                            ),
+                            child: Text(
+                              'Забыли пароль?',
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
                           ),
                         ),
                       ],
@@ -172,14 +177,16 @@ class LoginScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       GestureDetector(
-                        onTap: () {
-                          context.router.replace(const RegisterRoute());
-                        },
-                        child: const Text(
-                          'Зарегистрироваться',
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
+                        onTap: () =>
+                            context.router.replaceAll([const RegisterRoute()]),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: Text(
+                            'Зарегистрироваться',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),

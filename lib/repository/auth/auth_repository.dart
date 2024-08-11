@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:testerx2/repository/auth/auth_model.dart';
 
 class AuthRepository {
-  final db = FirebaseFirestore.instance;
   final authInstance = FirebaseAuth.instance;
   FirebaseDatabase database = FirebaseDatabase.instance;
 
@@ -30,7 +28,7 @@ class AuthRepository {
   }
 
   Future<void> resetPassword(String email) async {
-    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    await authInstance.sendPasswordResetEmail(email: email);
   }
 
   Future<void> logout() async => await authInstance.signOut();

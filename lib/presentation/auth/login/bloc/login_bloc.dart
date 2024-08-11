@@ -21,7 +21,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           email: event.email.trim().toLowerCase(),
           password: event.password.trim(),
         );
-        GetIt.I<AppRouter>().replace(const NewHomeRoute());
+        GetIt.I<AppRouter>().replaceAll([const NewHomeRoute()]);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'invalid-email') {
           emit(LoginUserNotFound());

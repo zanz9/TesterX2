@@ -109,14 +109,16 @@ class RegisterScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       GestureDetector(
-                        onTap: () {
-                          context.router.replace(const LoginRoute());
-                        },
-                        child: const Text(
-                          'Войти',
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
+                        onTap: () =>
+                            context.router.replaceAll([const LoginRoute()]),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: Text(
+                            'Войти',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
