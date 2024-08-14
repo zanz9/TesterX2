@@ -19,7 +19,10 @@ Future<void> main() async {
   if (kIsWeb) {
     await FirebaseFirestore.instance.enablePersistence();
   }
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  GetIt.I.registerSingleton<SharedPreferences>(prefs);
+
   bool isDark = prefs.getBool('isDark') ?? false;
   bool isUseLocalTxFiles = prefs.getBool('useLocalTxFiles') ?? false;
   GetIt.I

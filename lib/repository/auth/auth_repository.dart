@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/repository/auth/auth_model.dart';
 
 class AuthRepository {
   final authInstance = FirebaseAuth.instance;
   FirebaseDatabase database = FirebaseDatabase.instance;
+  SharedPreferences prefs = GetIt.I<SharedPreferences>();
 
   Future<UserCredential> login({String? email, String? password}) async {
     UserCredential user;
@@ -36,17 +41,31 @@ class AuthRepository {
   bool isAuth() => authInstance.currentUser != null;
 
   Future<AuthModel?> getUser() async {
-    final uid = authInstance.currentUser?.uid;
-    final userData = await database.ref().child('users/$uid').get();
+    AuthModel user;
+
+    String? userFromStorage = prefs.getString('user');
+    if (userFromStorage != null) {
+      user = AuthModel.fromJson(jsonDecode(prefs.getString('user')!) as Map);
+      return user;
+    }
+
+    String? uid = authInstance.currentUser?.uid;
+    DataSnapshot userData = await database.ref().child('users/$uid').get();
     if (userData.value == null) return null;
-    final user = AuthModel.fromJson(userData.value as Map);
+    user = AuthModel.fromJson(userData.value as Map);
+    await prefs.setString('user', jsonEncode(user.toJson()));
     return user;
   }
 
-  Future<void> updateUser({AuthModel? data}) async {
+  Future<void> updateUser({AuthModel? data, bool lazy = false}) async {
     data ??= AuthModel();
-    final uid = authInstance.currentUser?.uid;
-    await database.ref('users/$uid').set(data.toJson());
+    await prefs.setString('user', jsonEncode(data.toJson()));
+    String? uid = authInstance.currentUser?.uid;
+    if (lazy) {
+      database.ref('users/$uid').set(data.toJson());
+    } else {
+      await database.ref('users/$uid').set(data.toJson());
+    }
   }
 
   Future<bool> isAdmin() async {

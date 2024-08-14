@@ -27,12 +27,13 @@ class GroupRepository {
   }
 
   Future<String?> getMyGroup() async {
-    final user = await AuthRepository().getUser();
+    AuthModel? user = await AuthRepository().getUser();
     if (user == null) return null;
     String? groupId = user.groupId;
     if (groupId == null) return null;
-    final group = await db.ref('group/$groupId').get();
-    return (group.value as Map)['name'];
+    DataSnapshot group = await db.ref('group/$groupId').get();
+    String groupName = (group.value as Map)['name'];
+    return groupName;
   }
 
   Future<void> addGroup({required String name}) async {
