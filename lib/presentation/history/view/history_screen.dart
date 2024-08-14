@@ -8,8 +8,8 @@ import 'package:testerx2/utils/firestore/history.dart';
 @RoutePage()
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
 }

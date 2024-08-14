@@ -1,11 +1,11 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/models/question.dart';
-import 'package:testerx2/presentation/test/cubit/answer_cubit.dart';
-import 'package:testerx2/presentation/test/cubit/test_current_page_cubit.dart';
 import 'package:testerx2/presentation/test/test.dart';
 import 'package:testerx2/router/router.dart';
 
