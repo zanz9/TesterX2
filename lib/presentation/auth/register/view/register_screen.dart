@@ -76,13 +76,21 @@ class RegisterScreen extends StatelessWidget {
                         isSecond: true),
                     const SizedBox(height: 30),
                     PrimaryButton(
-                      text: 'Зарегистрироваться',
-                      isLoading: state.runtimeType == RegisterLoading,
                       onTap: register,
                       onTapOutside: () {
                         errorText = 'Добро пожаловать в TesterX';
                         bloc.add(OnUpdateRegister());
                       },
+                      child: state is! RegisterLoading
+                          ? const Text(
+                              'Зарегистрироваться',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            )
+                          : const CircularProgressIndicator(),
                     ),
                     const SizedBox(height: 50),
                     Row(

@@ -65,14 +65,22 @@ class ForgetPasswordScreen extends StatelessWidget {
                   EmailInput(emailController: emailController),
                   const SizedBox(height: 25),
                   PrimaryButton(
-                    text: 'Отправить',
-                    isLoading: state.runtimeType == ForgetPasswordLoading,
                     onTap: send,
                     onTapOutside: () {
                       errorText =
                           'Напишите вашу почту, чтобы мы могли отправить ссылку на сброс пароля';
                       bloc.add(OnUpdateForgetPassword());
                     },
+                    child: state is! ForgetPasswordLoading
+                        ? const Text(
+                            'Отправить',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          )
+                        : const CircularProgressIndicator(),
                   ),
                   const SizedBox(height: 50),
                   Row(

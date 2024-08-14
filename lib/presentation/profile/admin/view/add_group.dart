@@ -11,6 +11,11 @@ class AddGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     final groupNameController = TextEditingController();
     return GestureDetector(
+      child: const PrimaryListWidget(
+        text: 'Добавить группу',
+        rightWidget:
+            Icon(Icons.group_add_outlined, color: Colors.black, size: 26),
+      ),
       onTap: () {
         showCupertinoModalBottomSheet(
           duration: const Duration(milliseconds: 300),
@@ -49,15 +54,27 @@ class AddGroup extends StatelessWidget {
                         ),
                         const SizedBox(height: 30),
                         PrimaryButton(
-                          isLoading: state is AddGroupLoading,
                           onTap: () {
-                            bloc.add(
-                                OnAddGroup(name: groupNameController.text));
+                            if (state is! AddGroupLoading) {
+                              bloc.add(
+                                  OnAddGroup(name: groupNameController.text));
+                            }
                           },
                           onTapOutside: () {
-                            bloc.add(OnUpdateAddGroup());
+                            if (state is! AddGroupLoading) {
+                              bloc.add(OnUpdateAddGroup());
+                            }
                           },
-                          text: 'Добавить',
+                          child: state is! AddGroupLoading
+                              ? const Text(
+                                  'Добавить',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                )
+                              : const CircularProgressIndicator(),
                         )
                       ],
                     ),
@@ -68,9 +85,6 @@ class AddGroup extends StatelessWidget {
           },
         );
       },
-      child: const PrimaryListWidget(
-        text: 'Добавить группу',
-      ),
     );
   }
 }
