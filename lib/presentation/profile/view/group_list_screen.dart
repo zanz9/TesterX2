@@ -21,11 +21,29 @@ class GroupListScreen extends StatelessWidget {
                 itemCount: state.list.length,
                 itemBuilder: (context, index) {
                   var item = state.list[index];
+                  if (item.name == state.myGroup) {}
                   return Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                     child: PrimaryListWidget(
                       text: item.name,
+                      rightWidget: IconButton(
+                        onPressed: () {
+                          bloc.add(
+                            OnUpdateUserGroupList(
+                              myGroup: item,
+                              list: state.list,
+                            ),
+                          );
+                        },
+                        icon: Icon(
+                          item.name == state.myGroup
+                              ? Icons.circle
+                              : Icons.circle_outlined,
+                          color: Colors.black,
+                          size: 24,
+                        ),
+                      ),
                     ),
                   );
                 },

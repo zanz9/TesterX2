@@ -11,7 +11,17 @@ class GroupListBloc extends Bloc<GroupListEvent, GroupListState> {
       var groupRepo = GroupRepository();
 
       var groups = await groupRepo.getAllGroup();
-      emit(GroupListLoaded(list: groups));
+      var myGroup = await groupRepo.getMyGroup();
+      emit(GroupListLoaded(list: groups, myGroup: myGroup));
+    });
+
+    on<OnUpdateUserGroupList>((event, emit) async {
+      var authRepo = AuthRepository();
+      var user = await authRepo.getUser();
+      if (user == null) return;
+      user.groupId = event.myGroup.id;
+      authRepo.updateUser(data: user);
+      emit(GroupListLoaded(list: event.list, myGroup: event.myGroup.name));
     });
   }
 }

@@ -16,7 +16,7 @@ class AuthRepository {
         password: password,
       );
     }
-    await setUser(data: await getUser());
+    await updateUser(data: await getUser());
     return user;
   }
 
@@ -43,7 +43,7 @@ class AuthRepository {
     return user;
   }
 
-  Future<void> setUser({AuthModel? data}) async {
+  Future<void> updateUser({AuthModel? data}) async {
     data ??= AuthModel();
     final uid = authInstance.currentUser?.uid;
     await database.ref('users/$uid').set(data.toJson());

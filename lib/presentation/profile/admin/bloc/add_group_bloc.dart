@@ -18,7 +18,7 @@ class AddGroupBloc extends Bloc<AddGroupEvent, AddGroupState> {
       }
 
       try {
-        await GroupRepository().setGroup(name: event.name.trim());
+        await GroupRepository().addGroup(name: event.name.trim());
         emit(AddGroupSuccess());
       } catch (e) {
         emit(AddGroupFail());

@@ -4,14 +4,6 @@ import 'package:testerx2/repository/repository.dart';
 class GroupRepository {
   final db = FirebaseDatabase.instance;
 
-  Future<void> setGroup({required String name}) async {
-    var data = {
-      "name": name,
-    };
-    var newGroup = db.ref('group').push();
-    await newGroup.set(data);
-  }
-
   Future<List<GroupModel>> getAllGroup(
       {bool orderBy = false, int limit = 10}) async {
     DataSnapshot group;
@@ -41,5 +33,13 @@ class GroupRepository {
     if (groupId == null) return null;
     final group = await db.ref('group/$groupId').get();
     return (group.value as Map)['name'];
+  }
+
+  Future<void> addGroup({required String name}) async {
+    var data = {
+      "name": name,
+    };
+    var newGroup = db.ref('group').push();
+    await newGroup.set(data);
   }
 }

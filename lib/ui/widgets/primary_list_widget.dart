@@ -4,8 +4,14 @@ class PrimaryListWidget extends StatelessWidget {
   const PrimaryListWidget({
     super.key,
     required this.text,
+    this.rightWidget = const Icon(
+      Icons.chevron_right_rounded,
+      color: Colors.black,
+      size: 36,
+    ),
   });
   final String text;
+  final Widget rightWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +30,7 @@ class PrimaryListWidget extends StatelessWidget {
             style: const TextStyle(fontSize: 18),
           ),
           const Spacer(),
-          const Icon(
-            Icons.chevron_right_rounded,
-            color: Colors.black,
-            size: 36,
-          ),
+          rightWidget,
         ],
       ),
     );

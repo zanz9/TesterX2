@@ -10,7 +10,7 @@ ThemeData lightTheme() {
       primary: Color(0xFF987D9A),
     ),
     scaffoldBackgroundColor: const Color(0xFFE7E7E7),
-    iconTheme: const IconThemeData(color: Colors.red),
+    iconTheme: const IconThemeData(color: Color(0xFF987D9A)),
     shadowColor: Colors.black.withOpacity(0.08),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
