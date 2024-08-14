@@ -33,4 +33,13 @@ class GroupRepository {
     final group = await db.ref('group/$id').get();
     return (group.value as Map)['name'];
   }
+
+  Future<String?> getMyGroup() async {
+    final user = await AuthRepository().getUser();
+    if (user == null) return null;
+    String? groupId = user.groupId;
+    if (groupId == null) return null;
+    final group = await db.ref('group/$groupId').get();
+    return (group.value as Map)['name'];
+  }
 }

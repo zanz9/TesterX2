@@ -15,18 +15,18 @@ class UserGroupWidget extends StatefulWidget {
 class _UserGroupWidgetState extends State<UserGroupWidget> {
   String userGroup = '';
 
+  getMyGroup() {
+    GroupRepository().getMyGroup().then((value) {
+      setState(() {
+        userGroup = value!;
+      });
+    });
+  }
+
   @override
   void initState() {
-    AuthRepository().getUser().then((v) {
-      if (v != null) {
-        GroupRepository().getGroup(v.groupId!).then((value) {
-          setState(() {
-            userGroup = value!;
-          });
-        });
-      }
-    });
     super.initState();
+    getMyGroup();
   }
 
   @override
