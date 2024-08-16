@@ -34,6 +34,11 @@ dependencies:
   firebase_database: ^11.0.4
   modal_bottom_sheet: ^3.0.0
 
+  archive: ^3.3.0
+  path: ^1.8.0
+  convert: ^3.0.0
+  xml: ^6.5.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

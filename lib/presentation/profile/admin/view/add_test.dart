@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:testerx2/ui/ui.dart';
+import 'package:testerx2/utils/docx.dart';
 
 class AddTest extends StatelessWidget {
   const AddTest({super.key});
@@ -37,7 +42,20 @@ class AddTest extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             PrimaryButton(
-                              onTap: () {},
+                              onTap: () async {
+                                FilePickerResult? result =
+                                    await FilePicker.platform.pickFiles();
+                                if (result != null) {
+                                  var dir =
+                                      Directory('/storage/emulated/0/Download');
+                                  if (!await dir.exists()) {
+                                    dir =
+                                        (await getExternalStorageDirectory())!;
+                                  }
+                                  await Docx().convertDocxToText(
+                                      result.files.single.path!);
+                                }
+                              },
                               height: 70,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 45),
