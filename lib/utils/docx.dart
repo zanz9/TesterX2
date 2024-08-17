@@ -10,61 +10,6 @@ class Docx {
   Map<String, String> list = {};
   Map<String, String> imageBase64Map = <String, String>{};
 
-  Future<String> _convertDocxToText(String docxPath) async {
-    final file = File(docxPath);
-    fileName = basename(file.path);
-    final bytes = await file.readAsBytes();
-    final archive = ZipDecoder().decodeBytes(bytes);
-
-    String text = '';
-
-    for (final file in archive) {
-      if (file.isFile) {
-        final fileName = file.name;
-        if (fileName.endsWith('.xml.rels')) {
-          //Process .xml.rels files
-          final content = XmlDocument.parse(utf8.decode(file.content));
-          var elements = content.findAllElements('Relationship');
-          for (var element in elements) {
-            var target = element.getAttribute('Target') ?? '';
-            target = target.replaceAll('media/', '').split('.')[0];
-            var id = element.getAttribute('Id') ?? '';
-            list[id] = target;
-          }
-        }
-      }
-    }
-    for (final file in archive) {
-      if (file.isFile) {
-        final fileName = file.name;
-        if (fileName.startsWith('word/media/')) {
-          // Process image files
-          final imageBytes = file.content;
-          final base64Image = base64Encode(imageBytes);
-          final imageName = basenameWithoutExtension(fileName);
-          var key = list.keys.firstWhere(
-            (el) => list[el] == imageName,
-            orElse: () => '',
-          );
-          imageBase64Map[key] = base64Image;
-        }
-      }
-    }
-
-    for (final file in archive) {
-      if (file.isFile) {
-        final fileName = file.name;
-        if (fileName.endsWith('.xml') && fileName.contains('document')) {
-          // Process XML files for text content
-          final content = utf8.decode(file.content);
-          text += processXmlContent(content);
-        }
-      }
-    }
-    // await convertToData(text);
-    return text;
-  }
-
   Future<File> convertToJson(String docxPath) async {
     String text = await _convertDocxToText(docxPath);
     List<String> questions = text.split('<question>');
@@ -111,6 +56,59 @@ class Docx {
     return file;
   }
 
+  Future<String> _convertDocxToText(String docxPath) async {
+    final file = File(docxPath);
+    fileName = basename(file.path);
+    final bytes = await file.readAsBytes();
+    final archive = ZipDecoder().decodeBytes(bytes);
+
+    String text = '';
+
+    for (final file in archive) {
+      if (file.isFile) {
+        final fileName = file.name;
+        if (fileName.endsWith('.xml.rels')) {
+          //Process .xml.rels files
+          final content = XmlDocument.parse(utf8.decode(file.content));
+          var elements = content.findAllElements('Relationship');
+          for (var element in elements) {
+            var target = element.getAttribute('Target') ?? '';
+            target = target.replaceAll('media/', '').split('.')[0];
+            var id = element.getAttribute('Id') ?? '';
+            list[id] = target;
+          }
+        }
+      }
+    }
+    for (final file in archive) {
+      if (file.isFile) {
+        final fileName = file.name;
+        if (fileName.startsWith('word/media/')) {
+          // Process image files
+          final imageBytes = file.content;
+          final base64Image = base64Encode(imageBytes);
+          final imageName = basenameWithoutExtension(fileName);
+          var key = list.keys.firstWhere(
+            (el) => list[el] == imageName,
+            orElse: () => '',
+          );
+          imageBase64Map[key] = base64Image;
+        }
+      }
+    }
+
+    for (final file in archive) {
+      if (file.isFile) {
+        final fileName = file.name;
+        if (fileName.endsWith('.xml') && fileName.contains('document')) {
+          final content = utf8.decode(file.content);
+          text += processXmlContent(content);
+        }
+      }
+    }
+    return text;
+  }
+
   String processXmlContent(String xmlContent) {
     final document = XmlDocument.parse(xmlContent);
     final buffer = StringBuffer();
@@ -149,6 +147,13 @@ class Docx {
           // Process image placeholder in <w:object>
           var imageId =
               child.findAllElements('v:imagedata').first.getAttribute('r:id');
+          final base64Image = imageBase64Map[imageId];
+          if (base64Image != null) {
+            buffer.write('<testerx_img>TESTERX$base64Image<testerx_img>');
+          }
+        } else if (child.name.toString() == 'w:drawing') {
+          var imageId =
+              child.findAllElements('a:blip').first.getAttribute('r:embed');
           final base64Image = imageBase64Map[imageId];
           if (base64Image != null) {
             buffer.write('<testerx_img>TESTERX$base64Image<testerx_img>');
