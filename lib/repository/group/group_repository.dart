@@ -9,9 +9,9 @@ class GroupRepository {
     DataSnapshot group;
     if (orderBy) {
       group =
-          await db.ref('group').orderByChild('name').limitToFirst(limit).get();
+          await db.ref('groups').orderByChild('name').limitToFirst(limit).get();
     } else {
-      group = await db.ref('group').get();
+      group = await db.ref('groups').get();
     }
     List<GroupModel> list = [];
     for (var element in (group.value as Map).entries) {
@@ -22,7 +22,7 @@ class GroupRepository {
   }
 
   Future<String?> getGroup(String id) async {
-    final group = await db.ref('group/$id').get();
+    final group = await db.ref('groups/$id').get();
     return (group.value as Map)['name'];
   }
 
@@ -31,7 +31,7 @@ class GroupRepository {
     if (user == null) return null;
     String? groupId = user.groupId;
     if (groupId == null) return null;
-    DataSnapshot group = await db.ref('group/$groupId').get();
+    DataSnapshot group = await db.ref('groups/$groupId').get();
     String groupName = (group.value as Map)['name'];
     return groupName;
   }
@@ -40,7 +40,7 @@ class GroupRepository {
     var data = {
       "name": name,
     };
-    var newGroup = db.ref('group').push();
+    var newGroup = db.ref('groups').push();
     await newGroup.set(data);
   }
 }

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:testerx2/repository/repository.dart';
 import 'package:xml/xml.dart';
 
 class Docx {
@@ -11,7 +10,7 @@ class Docx {
   Map<String, String> list = {};
   Map<String, String> imageBase64Map = <String, String>{};
 
-  Future<void> convertDocxToText(String docxPath) async {
+  Future<String> _convertDocxToText(String docxPath) async {
     final file = File(docxPath);
     fileName = basename(file.path);
     final bytes = await file.readAsBytes();
@@ -62,10 +61,12 @@ class Docx {
         }
       }
     }
-    await convertToData(text);
+    // await convertToData(text);
+    return text;
   }
 
-  Future<void> convertToData(String text) async {
+  Future<File> convertToJson(String docxPath) async {
+    String text = await _convertDocxToText(docxPath);
     List<String> questions = text.split('<question>');
     questions.removeAt(0);
 
@@ -107,7 +108,7 @@ class Docx {
     String dir = (await getTemporaryDirectory()).path;
     File file = File('$dir/$fileName.json');
     await file.writeAsString(jsonData);
-    await StorageRepository().uploadFile(file);
+    return file;
   }
 
   String processXmlContent(String xmlContent) {
@@ -115,19 +116,19 @@ class Docx {
     final buffer = StringBuffer();
 
     for (final element in document.findAllElements('w:p')) {
-      buffer.writeln(processParagraph(element));
+      buffer.writeln(_processParagraph(element));
     }
 
     return buffer.toString();
   }
 
-  String processParagraph(XmlElement paragraph) {
+  String _processParagraph(XmlElement paragraph) {
     final buffer = StringBuffer();
 
     for (final child in paragraph.children) {
       if (child is XmlElement) {
         if (child.name.toString() == 'w:r') {
-          buffer.write(processRun(child));
+          buffer.write(_processRun(child));
         }
         // Handle other cases as needed
       }
@@ -136,7 +137,7 @@ class Docx {
     return buffer.toString();
   }
 
-  String processRun(XmlElement run) {
+  String _processRun(XmlElement run) {
     final buffer = StringBuffer();
 
     for (final child in run.children) {

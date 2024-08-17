@@ -6,7 +6,7 @@ class AuthModel {
 
   factory AuthModel.fromJson(Map json) {
     return AuthModel(
-      groupId: json['groupId'] as String,
+      groupId: json['groupId'] as String?,
       isAdmin: json['isAdmin'] ?? false,
     );
   }

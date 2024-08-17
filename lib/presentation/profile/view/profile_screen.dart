@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:testerx2/presentation/presentation.dart';
@@ -76,6 +77,13 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 const AdminWidgets(),
+                if (kDebugMode)
+                  const Column(
+                    children: [
+                      SizedBox(height: 30),
+                      DevWidgets(),
+                    ],
+                  ),
               ],
             ),
           ),
