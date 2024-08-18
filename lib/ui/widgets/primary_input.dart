@@ -5,6 +5,8 @@ class PrimaryInput extends StatefulWidget {
   final String hintText;
   final bool obscureText;
   final Widget? prefixIcon;
+  final Function(String)? onChange;
+  final TextInputType? keyboardType;
 
   const PrimaryInput({
     super.key,
@@ -12,6 +14,8 @@ class PrimaryInput extends StatefulWidget {
     required this.hintText,
     this.obscureText = false,
     this.prefixIcon,
+    this.onChange,
+    this.keyboardType,
   });
 
   @override
@@ -35,6 +39,7 @@ class _PrimaryInputState extends State<PrimaryInput> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      keyboardType: widget.keyboardType,
       controller: widget.controller,
       obscureText: obscureText,
       decoration: InputDecoration(
@@ -58,6 +63,7 @@ class _PrimaryInputState extends State<PrimaryInput> {
             : null,
         prefixIcon: widget.prefixIcon,
       ),
+      onChanged: widget.onChange,
     );
   }
 }

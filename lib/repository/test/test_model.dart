@@ -5,6 +5,7 @@ class TestModel {
   final String path;
   final String groupId;
   late GroupModel group;
+  late List<TestFileModel> tests;
 
   TestModel({
     required this.name,

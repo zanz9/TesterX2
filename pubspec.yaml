@@ -39,6 +39,7 @@ dependencies:
   convert: ^3.0.0
   xml: ^6.5.0
   uuid: ^4.4.2
+  syncfusion_flutter_sliders: ^26.2.9
 
 dev_dependencies:
   flutter_test:

@@ -7,6 +7,7 @@ class PrimaryButton extends StatelessWidget {
   final double borderRadius;
   final EdgeInsets padding;
   final double? height;
+  final bool outlined;
 
   const PrimaryButton({
     super.key,
@@ -16,6 +17,7 @@ class PrimaryButton extends StatelessWidget {
     this.borderRadius = 8,
     this.padding = const EdgeInsets.symmetric(vertical: 20),
     this.height,
+    this.outlined = false,
   });
 
   @override
@@ -31,8 +33,11 @@ class PrimaryButton extends StatelessWidget {
         padding: padding,
         height: height,
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: outlined ? Colors.transparent : Colors.black,
           borderRadius: BorderRadius.circular(borderRadius),
+          border: Border.all(
+            color: outlined ? Colors.black : Colors.transparent,
+          ),
         ),
         child: Center(
           child: child,

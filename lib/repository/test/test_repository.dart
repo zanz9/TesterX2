@@ -6,6 +6,7 @@ import 'package:testerx2/utils/utils.dart';
 
 class TestRepository {
   final db = FirebaseDatabase.instance;
+
   Future<TestModel> addTest(File testFile, String name, String groupId) async {
     String path = testFile.path;
     File jsonFile = await Docx().convertToJson(path);
@@ -14,5 +15,15 @@ class TestRepository {
     DatabaseReference newTest = db.ref('tests').push();
     await newTest.set(test.toJson());
     return test;
+  }
+
+  Future<List<TestModel>> getAllTestByGroupId(String groupId) async {
+    DataSnapshot data =
+        await db.ref('tests').orderByChild('groupId').equalTo(groupId).get();
+    List<TestModel> list = [];
+    for (var element in (data.value as Map).entries) {
+      list.add(TestModel.fromJson(element.value as Map));
+    }
+    return list;
   }
 }
