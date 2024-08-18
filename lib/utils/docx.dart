@@ -21,17 +21,17 @@ class Docx {
       var variants = question.split('<variant>');
       var title = variants.removeAt(0).trim();
       var body = [];
-      double maxScore = 0;
+      int maxScore = 0;
       bool hasScore = false;
       for (var variant in variants) {
         variant = variant.trim();
-        var variantWithScore = variant.split('SCORE_');
-        double score = 0;
+        var variantWithScore = variant.split('<SCORE>');
+        int score = 0;
         if (variantWithScore.length > 1) {
           hasScore = true;
-          variant = variantWithScore[0].trim();
-          score = double.tryParse(variantWithScore[1].trim()) ?? 0;
-          maxScore += score;
+          variant = variantWithScore[1].trim();
+          // score = double.tryParse(variantWithScore[1].trim()) ?? 0;
+          maxScore += 1;
         }
         body.add({
           "text": variant,
@@ -39,7 +39,7 @@ class Docx {
         });
       }
       if (!hasScore) {
-        body[0]["score"] = 1.0;
+        body[0]["score"] = 1;
         maxScore += 1;
       }
       data.add({

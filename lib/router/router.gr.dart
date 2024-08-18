@@ -124,6 +124,52 @@ class NewHomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [NewTestScreen]
+class NewTestRoute extends PageRouteInfo<NewTestRouteArgs> {
+  NewTestRoute({
+    Key? key,
+    required List<TestFileModel> tests,
+    List<PageRouteInfo>? children,
+  }) : super(
+          NewTestRoute.name,
+          args: NewTestRouteArgs(
+            key: key,
+            tests: tests,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'NewTestRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<NewTestRouteArgs>();
+      return NewTestScreen(
+        key: args.key,
+        tests: args.tests,
+      );
+    },
+  );
+}
+
+class NewTestRouteArgs {
+  const NewTestRouteArgs({
+    this.key,
+    required this.tests,
+  });
+
+  final Key? key;
+
+  final List<TestFileModel> tests;
+
+  @override
+  String toString() {
+    return 'NewTestRouteArgs{key: $key, tests: $tests}';
+  }
+}
+
+/// generated route for
 /// [ProfileScreen]
 class ProfileRoute extends PageRouteInfo<void> {
   const ProfileRoute({List<PageRouteInfo>? children})

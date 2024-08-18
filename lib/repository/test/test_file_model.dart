@@ -1,7 +1,11 @@
 class TestFileModel {
   final String title;
-  final double maxScore;
+  final int maxScore;
   final List<TestFileBody> body;
+  // runtime
+  List<int> answers = [];
+  bool answered = false;
+  int receive = 0;
 
   TestFileModel(
       {required this.title, required this.maxScore, required this.body});
@@ -9,7 +13,7 @@ class TestFileModel {
   factory TestFileModel.fromJson(Map json) {
     return TestFileModel(
       title: json['title'] as String,
-      maxScore: json['maxScore'] as double,
+      maxScore: json['maxScore'] as int,
       body: (json['body'] as List).map((el) {
         return TestFileBody.fromJson(el);
       }).toList(),
@@ -27,14 +31,14 @@ class TestFileModel {
 
 class TestFileBody {
   final String text;
-  final double score;
+  final int score;
 
   TestFileBody({required this.text, required this.score});
 
   factory TestFileBody.fromJson(Map json) {
     return TestFileBody(
       text: json['text'] as String,
-      score: json['score'] as double,
+      score: json['score'] as int,
     );
   }
 

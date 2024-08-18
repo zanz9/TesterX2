@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/presentation/new_home/new_home.dart';
 import 'package:testerx2/repository/repository.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:testerx2/router/router.dart';
 import 'package:testerx2/ui/ui.dart';
 
 class NewTestPreview extends StatefulWidget {
@@ -117,7 +119,15 @@ class _NewTestPreviewState extends State<NewTestPreview> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                onTap: () {},
+                                onTap: () {
+                                  List<TestFileModel> tests = widget.test.tests;
+                                  // tests.shuffle();
+                                  tests.length = sliderValue.toInt();
+                                  tests.map((e) => e.body.shuffle()).toList();
+                                  context.router.replace(
+                                    NewTestRoute(tests: tests),
+                                  );
+                                },
                               ),
                             ),
                           ],
