@@ -23,7 +23,7 @@ class GroupRepository {
     return list;
   }
 
-  Future<String?> getGroup(String id) async {
+  Future<String> getGroup(String id) async {
     var prefs = GetIt.I<SharedPreferences>();
     String? myGroupLocal = prefs.getString('groups/$id');
     if (myGroupLocal != null) return myGroupLocal;
