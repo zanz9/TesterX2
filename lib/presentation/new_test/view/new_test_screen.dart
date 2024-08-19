@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:testerx2/presentation/new_test/new_test.dart';
 import 'package:testerx2/repository/repository.dart';
 import 'package:testerx2/router/router.dart';
 import 'package:testerx2/ui/ui.dart';
@@ -31,295 +32,228 @@ class _NewTestScreenState extends State<NewTestScreen> {
         correctCount++;
       }
     }
-    return Scaffold(
-      bottomNavigationBar: Container(
-        height: 82,
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: IconButton(
-                onPressed: () {
-                  if (testIndex > 0) {
-                    setState(() {
-                      testIndex--;
-                    });
-                  }
-                },
-                icon: const Icon(Icons.arrow_back),
+
+    testPrev() {
+      if (testIndex > 0) {
+        setState(() {
+          testIndex--;
+        });
+      }
+    }
+
+    testNext() {
+      if (testIndex < tests.length - 1) {
+        setState(() {
+          testIndex++;
+        });
+      }
+    }
+
+    onSwipe(details) async {
+      int direction = 3;
+      if (details.velocity.pixelsPerSecond.dx > direction) testPrev();
+      if (details.velocity.pixelsPerSecond.dx < -direction) testNext();
+    }
+
+    submit() {
+      if (test.answered) return;
+      if (test.answers.isEmpty) return;
+      setState(() {
+        test.answered = true;
+        test.receive = (correctCount - test.answers.length);
+        test.answers.map((el) {
+          test.receive += test.body[el].score;
+        }).toList();
+        if (test.receive < 0) test.receive = 0;
+      });
+    }
+
+    showMenuQuestionNumberList() {
+      showCupertinoModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return SizedBox(
+            height: 350,
+            child: Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.all(16),
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                  ),
+                  itemCount: tests.length,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            testIndex = index;
+                          });
+                        },
+                        child: Container(
+                          height: 65,
+                          width: 65,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade300,
+                            border: tests[index].answers.isNotEmpty
+                                ? !tests[index].answered
+                                    ? Border.all()
+                                    : null
+                                : null,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${index + 1}',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: tests[index].answered
+                                    ? tests[index].receive ==
+                                            tests[index].maxScore
+                                        ? Colors.green
+                                        : Colors.red
+                                    : Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-            Expanded(
-              child: PrimaryButton(
-                margin: const EdgeInsets.all(10),
-                onTap: () {
-                  setState(() {
-                    if (test.answered) return;
+          );
+        },
+      );
+    }
+
+    finishTestOrNot() {
+      showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: const Text('Вы уверены что хотите закончить тест?'),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text('Да'),
+                onPressed: () {
+                  tests.map((test) {
+                    if (test.answers.isEmpty) return;
                     test.answered = true;
                     test.receive = (correctCount - test.answers.length);
                     test.answers.map((el) {
                       test.receive += test.body[el].score;
                     }).toList();
-                  });
-                },
-                child: const Text(
-                  'Ответить',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: IconButton(
-                onPressed: () {
-                  if (testIndex < tests.length - 1) {
-                    setState(() {
-                      testIndex++;
-                    });
-                  }
-                },
-                icon: const Icon(Icons.arrow_forward),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ListView(
-            children: [
-              const SizedBox(height: 15),
-              Wrap(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          '${testIndex + 1}/${tests.length}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          onPressed: () {
-                            showCupertinoModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return SizedBox(
-                                  height: 350,
-                                  child: Scaffold(
-                                    body: Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: GridView.builder(
-                                        gridDelegate:
-                                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 5,
-                                        ),
-                                        itemCount: tests.length,
-                                        shrinkWrap: true,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return Center(
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  testIndex = index;
-                                                });
-                                              },
-                                              child: Container(
-                                                height: 65,
-                                                width: 65,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  color: Colors.grey.shade300,
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    '${index + 1}',
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: tests[index]
-                                                              .answered
-                                                          ? tests[index]
-                                                                      .receive ==
-                                                                  tests[index]
-                                                                      .maxScore
-                                                              ? Colors.green
-                                                              : Colors.red
-                                                          : Colors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          icon: const Icon(Icons.menu_rounded),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            showCupertinoDialog(
-                              context: context,
-                              builder: (context) {
-                                return CupertinoAlertDialog(
-                                  title: const Text(
-                                      'Вы уверены что хотите закончить тест?'),
-                                  actions: [
-                                    CupertinoDialogAction(
-                                      child: const Text('Да'),
-                                      onPressed: () {
-                                        context.router.replaceAll([
-                                          const NewHomeRoute(),
-                                          NewTestFinishRoute(
-                                            test: widget.testModel,
-                                          ),
-                                        ]);
-                                      },
-                                    ),
-                                    CupertinoDialogAction(
-                                      child: const Text('Нет'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          icon: const Icon(Icons.exit_to_app_rounded),
-                        ),
-                      ],
+                    if (test.receive < 0) test.receive = 0;
+                  }).toList();
+
+                  context.router.replaceAll([
+                    const NewHomeRoute(),
+                    NewTestFinishRoute(
+                      test: widget.testModel,
                     ),
-                  ),
-                  ...test.title.split('<testerx_img>').map((el) {
-                    if (el != el.split('TESTERX').last) {
-                      Uint8List u8 = base64Decode(el.split('TESTERX').last);
-                      return Image.memory(u8);
-                    } else {
-                      return Text(
-                        el,
-                        style: const TextStyle(
-                          fontSize: 24,
-                        ),
-                      );
-                    }
-                  })
-                ],
+                  ]);
+                },
               ),
-              const Divider(),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: test.body.length,
-                itemBuilder: (context, index) {
-                  return TestAnswerWidget(
-                    test: test,
-                    index: index,
-                    correctCount: correctCount,
-                  );
+              CupertinoDialogAction(
+                child: const Text('Нет'),
+                onPressed: () {
+                  Navigator.of(context).pop();
                 },
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+          );
+        },
+      );
+    }
 
-class TestAnswerWidget extends StatefulWidget {
-  const TestAnswerWidget({
-    super.key,
-    required this.test,
-    required this.index,
-    required this.correctCount,
-  });
-
-  final TestFileModel test;
-  final int index;
-  final int correctCount;
-
-  @override
-  State<TestAnswerWidget> createState() => _TestAnswerWidgetState();
-}
-
-class _TestAnswerWidgetState extends State<TestAnswerWidget> {
-  @override
-  Widget build(BuildContext context) {
-    var answered = widget.test.answered;
-    var isPressed = widget.test.answers.contains(widget.index);
-    var isRight = widget.test.body[widget.index].score > 0;
-    return GestureDetector(
-      onTap: () {
-        if (answered) return;
-        setState(() {
-          if (widget.test.answers.contains(widget.index)) {
-            (widget.test.answers as List).remove(widget.index);
-            return;
-          }
-          (widget.test.answers as List).add(widget.index);
-        });
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Wrap(
-          children: [
-            Icon(
-              widget.test.answers.contains(widget.index)
-                  ? Icons.circle
-                  : Icons.circle_outlined,
-              color: answered
-                  ? isRight
-                      ? Colors.green
-                      : isPressed
-                          ? Colors.red
-                          : Colors.black
-                  : Colors.black,
+    return Scaffold(
+      bottomNavigationBar: SizedBox(
+          height: 82,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: IconButton(
+                    onPressed: testPrev, icon: const Icon(Icons.arrow_back))),
+            Expanded(
+                child: PrimaryButton(
+                    margin: const EdgeInsets.all(10),
+                    onTap: submit,
+                    child: const Text('Ответить',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16)))),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: IconButton(
+                    onPressed: testNext, icon: const Icon(Icons.arrow_forward)))
+          ])),
+      body: GestureDetector(
+        onPanEnd: onSwipe,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ListView(
+              children: [
+                const SizedBox(height: 15),
+                Wrap(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '${testIndex + 1}/${tests.length}',
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            onPressed: showMenuQuestionNumberList,
+                            icon: const Icon(Icons.menu_rounded),
+                          ),
+                          IconButton(
+                            onPressed: finishTestOrNot,
+                            icon: const Icon(Icons.exit_to_app_rounded),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ...test.title.split('<testerx_img>').map((el) {
+                      if (el != el.split('TESTERX').last) {
+                        Uint8List u8 = base64Decode(el.split('TESTERX').last);
+                        return Image.memory(u8);
+                      } else {
+                        return Text(
+                          el,
+                          style: const TextStyle(
+                            fontSize: 24,
+                          ),
+                        );
+                      }
+                    })
+                  ],
+                ),
+                const Divider(),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: test.body.length,
+                  itemBuilder: (context, index) {
+                    return TestAnswerWidget(
+                      test: test,
+                      index: index,
+                      correctCount: correctCount,
+                    );
+                  },
+                ),
+              ],
             ),
-            const SizedBox(width: 6),
-            ...widget.test.body[widget.index].text
-                .split('<testerx_img>')
-                .map((el) {
-              if (el != el.split('TESTERX').last) {
-                Uint8List u8 = base64Decode(el.split('TESTERX').last);
-                return Image.memory(u8);
-              } else {
-                return Text(
-                  el,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: answered
-                        ? isRight
-                            ? Colors.green
-                            : isPressed
-                                ? Colors.red
-                                : Colors.black
-                        : Colors.black,
-                  ),
-                );
-              }
-            }),
-          ],
+          ),
         ),
       ),
     );

@@ -1,4 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/repository/repository.dart';
 
 class GroupRepository {
@@ -22,7 +24,11 @@ class GroupRepository {
   }
 
   Future<String?> getGroup(String id) async {
+    var prefs = GetIt.I<SharedPreferences>();
+    String? myGroupLocal = prefs.getString('groups/$id');
+    if (myGroupLocal != null) return myGroupLocal;
     final group = await db.ref('groups/$id').get();
+    await prefs.setString('groups/$id', (group.value as Map)['name']);
     return (group.value as Map)['name'];
   }
 
@@ -31,8 +37,7 @@ class GroupRepository {
     if (user == null) return null;
     String? groupId = user.groupId;
     if (groupId == null) return null;
-    DataSnapshot group = await db.ref('groups/$groupId').get();
-    String groupName = (group.value as Map)['name'];
+    String? groupName = await getGroup(groupId);
     return groupName;
   }
 
