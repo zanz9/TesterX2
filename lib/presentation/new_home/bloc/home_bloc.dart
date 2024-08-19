@@ -13,7 +13,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (groupId == null) return emit(HomeUserNotHaveGroup());
       List<TestModel> tests =
           await TestRepository().getAllTestByGroupId(groupId);
-      emit(HomeTestsLoaded(tests: tests));
+      emit(HomeTestsLoaded(tests: tests, user: user));
     });
   }
 }

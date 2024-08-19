@@ -42,17 +42,23 @@ class AuthRepository {
 
   Future<AuthModel?> getUser() async {
     AuthModel user;
-
+    String? displayName = authInstance.currentUser?.displayName;
     String? userFromStorage = prefs.getString('user');
     if (userFromStorage != null) {
-      user = AuthModel.fromJson(jsonDecode(prefs.getString('user')!) as Map);
+      user = AuthModel.fromJson(
+        jsonDecode(prefs.getString('user')!) as Map,
+        displayName,
+      );
       return user;
     }
 
     String? uid = authInstance.currentUser?.uid;
     DataSnapshot userData = await database.ref().child('users/$uid').get();
     if (userData.value == null) return null;
-    user = AuthModel.fromJson(userData.value as Map);
+    user = AuthModel.fromJson(
+      userData.value as Map,
+      displayName,
+    );
     await prefs.setString('user', jsonEncode(user.toJson()));
     return user;
   }
@@ -71,5 +77,9 @@ class AuthRepository {
   Future<bool> isAdmin() async {
     final user = await getUser();
     return user!.isAdmin;
+  }
+
+  Future<void> setUserDisplayName(String displayName) async {
+    await authInstance.currentUser!.updateDisplayName(displayName);
   }
 }

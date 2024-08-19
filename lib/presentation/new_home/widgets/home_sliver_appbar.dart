@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testerx2/presentation/new_home/new_home.dart';
 import 'package:testerx2/router/router.dart';
 
 class HomeSliverAppBar extends StatelessWidget {
@@ -21,27 +23,35 @@ class HomeSliverAppBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Добро пожаловать,',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey[700],
-                  ),
-                ),
-                const Text(
-                  'Бауыржан',
-                  style: TextStyle(
-                    fontSize: 24,
-                  ),
-                ),
-              ],
+            BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Добро пожаловать,',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    if (state is HomeTestsLoaded)
+                      Text(
+                        state.user.displayName == ''
+                            ? 'Пользователь'
+                            : state.user.displayName ?? 'Пользователь',
+                        style: const TextStyle(
+                          fontSize: 24,
+                        ),
+                      ),
+                  ],
+                );
+              },
             ),
             IconButton(
-              onPressed: () {
-                context.router.push(const ProfileRoute());
+              onPressed: () async {
+                await context.router.push(const ProfileRoute());
+                if (context.mounted) context.read<HomeBloc>().add(OnHome());
               },
               icon: const Icon(
                 Icons.person,
