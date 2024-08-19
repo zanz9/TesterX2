@@ -28,6 +28,13 @@ class AppRouter extends RootStackRouter {
         CustomRoute(
           page: NewTestRoute.page,
           path: '/test',
+          transitionsBuilder: TransitionsBuilders.slideTop,
+          durationInMilliseconds: 300,
+          guards: [AuthGuard()],
+        ),
+        CustomRoute(
+          page: NewTestFinishRoute.page,
+          path: '/test_finish',
           transitionsBuilder: TransitionsBuilders.slideBottom,
           durationInMilliseconds: 300,
           guards: [AuthGuard()],

@@ -11,8 +11,8 @@ import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
 class NewTestScreen extends StatefulWidget {
-  const NewTestScreen({super.key, required this.tests});
-  final List<TestFileModel> tests;
+  const NewTestScreen({super.key, required this.testModel});
+  final TestModel testModel;
 
   @override
   State<NewTestScreen> createState() => _NewTestScreenState();
@@ -23,7 +23,8 @@ class _NewTestScreenState extends State<NewTestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    TestFileModel test = widget.tests[testIndex];
+    List<TestFileModel> tests = widget.testModel.tests;
+    TestFileModel test = tests[testIndex];
     int correctCount = 0;
     for (var el in test.body) {
       if (el.score > 0) {
@@ -77,7 +78,7 @@ class _NewTestScreenState extends State<NewTestScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: IconButton(
                 onPressed: () {
-                  if (testIndex < widget.tests.length - 1) {
+                  if (testIndex < tests.length - 1) {
                     setState(() {
                       testIndex++;
                     });
@@ -103,7 +104,7 @@ class _NewTestScreenState extends State<NewTestScreen> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '${testIndex + 1}/${widget.tests.length}',
+                          '${testIndex + 1}/${tests.length}',
                           style: const TextStyle(
                             fontSize: 18,
                           ),
@@ -124,7 +125,7 @@ class _NewTestScreenState extends State<NewTestScreen> {
                                             const SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 5,
                                         ),
-                                        itemCount: widget.tests.length,
+                                        itemCount: tests.length,
                                         shrinkWrap: true,
                                         itemBuilder:
                                             (BuildContext context, int index) {
@@ -148,13 +149,11 @@ class _NewTestScreenState extends State<NewTestScreen> {
                                                     '${index + 1}',
                                                     style: TextStyle(
                                                       fontSize: 18,
-                                                      color: widget.tests[index]
+                                                      color: tests[index]
                                                               .answered
-                                                          ? widget.tests[index]
+                                                          ? tests[index]
                                                                       .receive ==
-                                                                  widget
-                                                                      .tests[
-                                                                          index]
+                                                                  tests[index]
                                                                       .maxScore
                                                               ? Colors.green
                                                               : Colors.red
@@ -189,6 +188,9 @@ class _NewTestScreenState extends State<NewTestScreen> {
                                       onPressed: () {
                                         context.router.replaceAll([
                                           const NewHomeRoute(),
+                                          NewTestFinishRoute(
+                                            test: widget.testModel,
+                                          ),
                                         ]);
                                       },
                                     ),

@@ -27,6 +27,12 @@ class TestFileModel {
     data['body'] = body.map((v) => v.toJson()).toList();
     return data;
   }
+
+  clear() {
+    answers = [];
+    answered = false;
+    receive = 0;
+  }
 }
 
 class TestFileBody {

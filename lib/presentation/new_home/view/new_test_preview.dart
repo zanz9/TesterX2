@@ -121,11 +121,11 @@ class _NewTestPreviewState extends State<NewTestPreview> {
                                 ),
                                 onTap: () {
                                   List<TestFileModel> tests = widget.test.tests;
-                                  // tests.shuffle();
+                                  tests.shuffle();
                                   tests.length = sliderValue.toInt();
                                   tests.map((e) => e.body.shuffle()).toList();
                                   context.router.replace(
-                                    NewTestRoute(tests: tests),
+                                    NewTestRoute(testModel: widget.test),
                                   );
                                 },
                               ),

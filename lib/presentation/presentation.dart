@@ -4,6 +4,7 @@ export 'home/home.dart';
 export 'main/main.dart';
 export 'new_home/new_home.dart';
 export 'new_test/new_test.dart';
+export 'new_test_finish/new_test_finish.dart';
 export 'profile/profile.dart';
 export 'settings/settings.dart';
 export 'test/test.dart';
