@@ -1,4 +1,4 @@
-package com.example.testerx2
+package com.zanz.testerx2
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -5,7 +5,17 @@ sealed class HomeState {}
 
 final class HomeInitial extends HomeState {}
 
-final class HomeUserNotHaveGroup extends HomeState {}
+final class HomeUserNotHaveGroup extends HomeState {
+  final AuthModel user;
+
+  HomeUserNotHaveGroup({required this.user});
+}
+
+final class HomeUserGroupNotHaveTests extends HomeState {
+  final AuthModel user;
+
+  HomeUserGroupNotHaveTests({required this.user});
+}
 
 final class HomeTestsLoaded extends HomeState {
   final AuthModel user;

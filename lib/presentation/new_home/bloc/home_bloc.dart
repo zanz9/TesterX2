@@ -10,9 +10,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<OnHome>((event, emit) async {
       AuthModel? user = await AuthRepository().getUser();
       String? groupId = user!.groupId;
-      if (groupId == null) return emit(HomeUserNotHaveGroup());
+      if (groupId == null) return emit(HomeUserNotHaveGroup(user: user));
       List<TestModel> tests =
           await TestRepository().getAllTestByGroupId(groupId);
+      if (tests.isEmpty) return emit(HomeUserGroupNotHaveTests(user: user));
       emit(HomeTestsLoaded(tests: tests, user: user));
     });
   }

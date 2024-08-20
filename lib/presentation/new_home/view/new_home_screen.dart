@@ -59,6 +59,18 @@ class NewHomeScreen extends StatelessWidget {
                       );
                     },
                   );
+                } else if (state is HomeUserNotHaveGroup) {
+                  return const SliverToBoxAdapter(
+                      child: Text('Пользователь не состоит в группе'));
+                } else if (state is HomeUserGroupNotHaveTests) {
+                  return const SliverToBoxAdapter(
+                    child: Center(
+                      child: Text(
+                        'В этой группе нет ни одного теста',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  );
                 } else {
                   return const SliverToBoxAdapter(child: SizedBox());
                 }

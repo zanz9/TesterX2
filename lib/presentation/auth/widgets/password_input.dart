@@ -16,6 +16,7 @@ class PasswordInput extends StatelessWidget {
       controller: passwordController,
       hintText: !isSecond ? 'Пароль' : 'Повторите пароль',
       obscureText: true,
+      keyboardType: TextInputType.visiblePassword,
       prefixIcon: const RotatedBox(
         quarterTurns: 1,
         child: Icon(Icons.key_outlined),

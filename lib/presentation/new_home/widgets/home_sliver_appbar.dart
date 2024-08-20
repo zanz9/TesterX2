@@ -25,6 +25,22 @@ class HomeSliverAppBar extends StatelessWidget {
           children: [
             BlocBuilder<HomeBloc, HomeState>(
               builder: (context, state) {
+                String displayName = 'Пользователь';
+                if (state is HomeTestsLoaded) {
+                  displayName = state.user.displayName == ''
+                      ? 'Пользователь'
+                      : state.user.displayName ?? 'Пользователь';
+                }
+                if (state is HomeUserGroupNotHaveTests) {
+                  displayName = state.user.displayName == ''
+                      ? 'Пользователь'
+                      : state.user.displayName ?? 'Пользователь';
+                }
+                if (state is HomeUserNotHaveGroup) {
+                  displayName = state.user.displayName == ''
+                      ? 'Пользователь'
+                      : state.user.displayName ?? 'Пользователь';
+                }
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -35,15 +51,12 @@ class HomeSliverAppBar extends StatelessWidget {
                         color: Colors.grey[700],
                       ),
                     ),
-                    if (state is HomeTestsLoaded)
-                      Text(
-                        state.user.displayName == ''
-                            ? 'Пользователь'
-                            : state.user.displayName ?? 'Пользователь',
-                        style: const TextStyle(
-                          fontSize: 24,
-                        ),
+                    Text(
+                      displayName,
+                      style: const TextStyle(
+                        fontSize: 24,
                       ),
+                    ),
                   ],
                 );
               },
