@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:get_it/get_it.dart';
 import 'package:testerx2/repository/repository.dart';
 import 'package:testerx2/utils/utils.dart';
 
@@ -10,7 +11,7 @@ class TestRepository {
   Future<TestModel> addTest(File testFile, String name, String groupId) async {
     String path = testFile.path;
     File jsonFile = await Docx().convertToJson(path);
-    String url = await StorageRepository().uploadFile(jsonFile);
+    String url = await GetIt.I<StorageRepository>().uploadFile(jsonFile);
     TestModel test = TestModel(path: url, name: name, groupId: groupId);
     DatabaseReference newTest = db.ref('tests').push();
     await newTest.set(test.toJson());
@@ -23,7 +24,8 @@ class TestRepository {
     List<TestModel> list = [];
     for (var element in ((data.value ?? {}) as Map).entries) {
       TestModel test = TestModel.fromJson(element.value as Map);
-      String groupName = await GroupRepository().getGroup(test.groupId);
+      String groupName =
+          await GetIt.I<GroupRepository>().getGroup(test.groupId);
       test.group = GroupModel(id: test.groupId, name: groupName);
       list.add(test);
     }

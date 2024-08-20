@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:testerx2/repository/repository.dart';
 
 part 'test_preview_event.dart';
@@ -10,7 +11,7 @@ class TestPreviewBloc extends Bloc<TestPreviewEvent, TestPreviewState> {
     on<OnTestPreview>((event, emit) async {
       emit(TestPreviewLoading());
       TestModel test = event.test;
-      test.tests = await StorageRepository().downloadTest(test.path);
+      test.tests = await GetIt.I<StorageRepository>().downloadTest(test.path);
       emit(TestPreviewLoaded(test: test));
     });
   }

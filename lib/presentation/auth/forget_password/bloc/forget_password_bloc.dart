@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -13,16 +11,16 @@ class ForgetPasswordBloc
     extends Bloc<ForgetPasswordEvent, ForgetPasswordState> {
   ForgetPasswordBloc() : super(ForgetPasswordInitial()) {
     on<OnUpdateForgetPassword>((event, emit) => emit(ForgetPasswordInitial()));
+
     on<OnForgetPassword>((event, emit) async {
       emit(ForgetPasswordLoading());
       try {
-        var authRepo = AuthRepository();
-        await authRepo.resetPassword(event.email.trim().toLowerCase());
+        await GetIt.I<AuthRepository>()
+            .resetPassword(event.email.trim().toLowerCase());
         await Future.delayed(const Duration(seconds: 2));
         GetIt.I<AppRouter>().replace(const MainRoute());
       } catch (e) {
         emit(ForgetPasswordFail());
-        log(e.toString());
       }
     });
   }

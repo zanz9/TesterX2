@@ -28,7 +28,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       }
 
       try {
-        var authRepo = AuthRepository();
+        var authRepo = GetIt.I<AuthRepository>();
         await authRepo.register(
           event.email.trim().toLowerCase(),
           event.password.trim(),
