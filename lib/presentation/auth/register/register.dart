@@ -1,2 +1,2 @@
-export 'view/index.dart';
-export 'bloc/register_bloc.dart';
+export 'bloc/bloc.dart';
+export 'view/view.dart';

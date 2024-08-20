@@ -1,6 +1,6 @@
-# testerx2
+# TesterX2
 
-A new Flutter project.
+Flutter Project
 
 ## Getting Started
 

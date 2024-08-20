@@ -5,9 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/models/tx.dart';
-import 'package:testerx2/presentation/test_preview/cubit/test_length_cubit.dart';
 import 'package:testerx2/presentation/test_preview/test_preview.dart';
-import 'package:testerx2/presentation/test_preview/widgets/test_choose.dart';
 import 'package:testerx2/utils/firestore/test.dart';
 
 @RoutePage()

@@ -2,12 +2,17 @@
 
 import 'package:flutter/material.dart';
 
-ThemeData lightTheme(MaterialColor primaryColor, ThemeData theme) {
+ThemeData lightTheme() {
+  const primaryColor = Color(0xFF987D9A);
+
   return ThemeData(
-    primaryColor: primaryColor,
     useMaterial3: true,
-    scaffoldBackgroundColor: const Color.fromARGB(255, 231, 231, 231),
-    iconTheme: IconThemeData(color: theme.hintColor.withOpacity(.3)),
+    primaryColor: primaryColor,
+    colorScheme: const ColorScheme.light(
+      primary: primaryColor,
+    ),
+    scaffoldBackgroundColor: const Color(0xFFE7E7E7),
+    iconTheme: const IconThemeData(color: Colors.black),
     shadowColor: Colors.black.withOpacity(0.08),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,

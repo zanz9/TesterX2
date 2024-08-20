@@ -1,3 +1,3 @@
-export 'view/index.dart';
-export 'widgets/index.dart';
-export 'blocks/index.dart';
+export 'blocks/blocks.dart';
+export 'view/view.dart';
+export 'widgets/widgets.dart';

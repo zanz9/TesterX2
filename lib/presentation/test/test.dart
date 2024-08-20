@@ -1,3 +1,4 @@
-export 'view/index.dart';
-export 'widgets/index.dart';
-export 'models/index.dart';
+export 'cubit/cubit.dart';
+export 'models/models.dart';
+export 'view/view.dart';
+export 'widgets/widgets.dart';

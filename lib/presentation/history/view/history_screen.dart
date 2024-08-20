@@ -2,14 +2,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import 'package:testerx2/router/router.dart';
-import 'package:testerx2/ui/widgets/index.dart';
+import 'package:testerx2/ui/ui.dart';
 import 'package:testerx2/utils/firestore/history.dart';
 
 @RoutePage()
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
 }
