@@ -26,6 +26,9 @@ class _NewTestPreviewState extends State<NewTestPreview> {
   double sliderValue = 25;
   TextEditingController textController = TextEditingController()..text = '25';
 
+  bool backButtonLoading = false;
+  bool startButtonLoading = false;
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -95,9 +98,16 @@ class _NewTestPreviewState extends State<NewTestPreview> {
                           children: [
                             Expanded(
                               child: PrimaryButton(
-                                onTap: () {
+                                onTap: () async {
+                                  setState(() {
+                                    backButtonLoading = true;
+                                  });
                                   Navigator.pop(context);
+                                  setState(() {
+                                    backButtonLoading = false;
+                                  });
                                 },
+                                isLoading: backButtonLoading,
                                 outlined: true,
                                 child: const Text(
                                   'Отмена',
@@ -111,6 +121,22 @@ class _NewTestPreviewState extends State<NewTestPreview> {
                             const SizedBox(width: 20),
                             Expanded(
                               child: PrimaryButton(
+                                isLoading: startButtonLoading,
+                                onTap: () {
+                                  setState(() {
+                                    startButtonLoading = true;
+                                  });
+                                  List<TestFileModel> tests = widget.test.tests;
+                                  tests.shuffle();
+                                  tests.length = sliderValue.toInt();
+                                  tests.map((e) => e.body.shuffle()).toList();
+                                  setState(() {
+                                    startButtonLoading = false;
+                                  });
+                                  context.router.replace(
+                                    NewTestRoute(testModel: widget.test),
+                                  );
+                                },
                                 child: const Text(
                                   'Начать тест',
                                   style: TextStyle(
@@ -119,15 +145,6 @@ class _NewTestPreviewState extends State<NewTestPreview> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                onTap: () {
-                                  List<TestFileModel> tests = widget.test.tests;
-                                  tests.shuffle();
-                                  tests.length = sliderValue.toInt();
-                                  tests.map((e) => e.body.shuffle()).toList();
-                                  context.router.replace(
-                                    NewTestRoute(testModel: widget.test),
-                                  );
-                                },
                               ),
                             ),
                           ],

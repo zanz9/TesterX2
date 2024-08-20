@@ -87,22 +87,20 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     PrimaryButton(
-                      onTap: login,
-                      onTapOutside: () {
-                        errorText = 'Добро пожаловать в TesterX';
-                        bloc.add(OnUpdateLogin());
-                      },
-                      child: state is! LoginLoading
-                          ? const Text(
-                              'Войти',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            )
-                          : const CircularProgressIndicator(),
-                    ),
+                        onTap: login,
+                        onTapOutside: () {
+                          errorText = 'Добро пожаловать в TesterX';
+                          bloc.add(OnUpdateLogin());
+                        },
+                        isLoading: state is LoginLoading,
+                        child: const Text(
+                          'Войти',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        )),
                     const SizedBox(height: 50),
                     // Padding(
                     //   padding: const EdgeInsets.symmetric(horizontal: 25.0),

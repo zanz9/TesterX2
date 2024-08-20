@@ -81,6 +81,7 @@ class AddTest extends StatelessWidget {
                               height: 70,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 45),
+                              isLoading: false,
                               child: const Text(
                                 'Вручную',
                                 style: TextStyle(
@@ -91,6 +92,7 @@ class AddTest extends StatelessWidget {
                             ),
                             const SizedBox(width: 30),
                             PrimaryButton(
+                              isLoading: false,
                               onTap: () {
                                 addToDbFromFile(context, groupId);
                               },
@@ -161,7 +163,7 @@ class _AddTestByWordAndAskNameState extends State<AddTestByWordAndAskName> {
             const SizedBox(height: 20),
             PrimaryButton(
               onTap: () async {
-                if (isLoading) return null;
+                if (isLoading) return;
                 setState(() {
                   isLoading = true;
                 });
@@ -173,19 +175,18 @@ class _AddTestByWordAndAskNameState extends State<AddTestByWordAndAskName> {
                 setState(() {
                   isLoading = false;
                 });
-                if (!context.mounted) return false;
+                if (!context.mounted) return;
                 Navigator.of(context).pop();
               },
-              child: !isLoading
-                  ? const Text(
-                      'Добавить',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    )
-                  : const CircularProgressIndicator(),
+              isLoading: isLoading,
+              child: const Text(
+                'Добавить',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
             )
           ]),
         ),

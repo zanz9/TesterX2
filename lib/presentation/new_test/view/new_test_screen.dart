@@ -55,16 +55,21 @@ class _NewTestScreenState extends State<NewTestScreen> {
       if (details.velocity.pixelsPerSecond.dx < -direction) testNext();
     }
 
+    bool submitButtonLoading = false;
     submit() {
       if (test.answered) return;
       if (test.answers.isEmpty) return;
       setState(() {
-        test.answered = true;
-        test.receive = (correctCount - test.answers.length);
-        test.answers.map((el) {
-          test.receive += test.body[el].score;
-        }).toList();
-        if (test.receive < 0) test.receive = 0;
+        submitButtonLoading = true;
+      });
+      test.answered = true;
+      test.receive = (correctCount - test.answers.length);
+      test.answers.map((el) {
+        test.receive += test.body[el].score;
+      }).toList();
+      if (test.receive < 0) test.receive = 0;
+      setState(() {
+        submitButtonLoading = false;
       });
     }
 
@@ -182,6 +187,7 @@ class _NewTestScreenState extends State<NewTestScreen> {
                 child: PrimaryButton(
                     margin: const EdgeInsets.all(10),
                     onTap: submit,
+                    isLoading: submitButtonLoading,
                     child: const Text('Ответить',
                         style: TextStyle(
                             color: Colors.white,

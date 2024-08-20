@@ -51,6 +51,7 @@ class AddGroup extends StatelessWidget {
                           controller: groupNameController,
                           hintText: 'Название группы',
                           obscureText: false,
+                          focusNode: FocusNode(),
                         ),
                         const SizedBox(height: 30),
                         PrimaryButton(
@@ -65,16 +66,15 @@ class AddGroup extends StatelessWidget {
                               bloc.add(OnUpdateAddGroup());
                             }
                           },
-                          child: state is! AddGroupLoading
-                              ? const Text(
-                                  'Добавить',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                )
-                              : const CircularProgressIndicator(),
+                          isLoading: state is AddGroupLoading,
+                          child: const Text(
+                            'Добавить',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
                         )
                       ],
                     ),

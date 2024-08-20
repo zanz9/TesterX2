@@ -20,6 +20,20 @@ class ProfileScreen extends StatelessWidget {
 
     var bloc = ProfileBloc();
     bloc.add(OnProfile());
+
+    editName() async {
+      var result = await showCupertinoModalBottomSheet(
+        duration: const Duration(milliseconds: 300),
+        context: context,
+        builder: (context) {
+          return const EditNameWidget();
+        },
+      );
+      if (result == null) {
+        bloc.add(OnProfile());
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.scaffoldBackgroundColor,
@@ -91,71 +105,7 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                     ),
                                     IconButton(
-                                      onPressed: () async {
-                                        var result =
-                                            await showCupertinoModalBottomSheet(
-                                          duration:
-                                              const Duration(milliseconds: 300),
-                                          context: context,
-                                          builder: (context) {
-                                            var textController =
-                                                TextEditingController();
-                                            return Material(
-                                              child: Container(
-                                                padding: const EdgeInsets.only(
-                                                    left: 16, right: 16),
-                                                height: 300 +
-                                                    MediaQuery.of(context)
-                                                        .viewInsets
-                                                        .bottom,
-                                                child: Column(
-                                                  children: [
-                                                    const SizedBox(height: 30),
-                                                    const Text(
-                                                      'Изменить имя',
-                                                      style: TextStyle(
-                                                          fontSize: 24),
-                                                    ),
-                                                    const SizedBox(height: 30),
-                                                    PrimaryInput(
-                                                      controller:
-                                                          textController,
-                                                      hintText:
-                                                          'Название отображаемого имени',
-                                                      obscureText: false,
-                                                    ),
-                                                    const SizedBox(height: 30),
-                                                    PrimaryButton(
-                                                        onTap: () async {
-                                                          await AuthRepository()
-                                                              .setUserDisplayName(
-                                                                  textController
-                                                                      .text
-                                                                      .trim());
-                                                          if (context.mounted) {
-                                                            Navigator.pop(
-                                                                context);
-                                                          }
-                                                        },
-                                                        child: const Text(
-                                                          'Изменить',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 16,
-                                                          ),
-                                                        ))
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                        if (result == null) {
-                                          bloc.add(OnProfile());
-                                        }
-                                      },
+                                      onPressed: editName,
                                       icon: const Icon(Icons.edit),
                                     )
                                   ],
@@ -183,6 +133,70 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class EditNameWidget extends StatefulWidget {
+  const EditNameWidget({
+    super.key,
+  });
+
+  @override
+  State<EditNameWidget> createState() => _EditNameWidgetState();
+}
+
+class _EditNameWidgetState extends State<EditNameWidget> {
+  var textController = TextEditingController();
+  var buttonLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Container(
+        padding: const EdgeInsets.only(left: 16, right: 16),
+        height: 300 + MediaQuery.of(context).viewInsets.bottom,
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+            const Text(
+              'Изменить имя',
+              style: TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 30),
+            PrimaryInput(
+              controller: textController,
+              hintText: 'Название отображаемого имени',
+              obscureText: false,
+              focusNode: FocusNode(),
+            ),
+            const SizedBox(height: 30),
+            PrimaryButton(
+              onTap: () async {
+                setState(() {
+                  buttonLoading = true;
+                });
+                await AuthRepository()
+                    .setUserDisplayName(textController.text.trim());
+                setState(() {
+                  buttonLoading = false;
+                });
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              },
+              isLoading: buttonLoading,
+              child: const Text(
+                'Изменить',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

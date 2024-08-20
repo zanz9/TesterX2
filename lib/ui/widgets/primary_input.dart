@@ -7,6 +7,7 @@ class PrimaryInput extends StatefulWidget {
   final Widget? prefixIcon;
   final Function(String)? onChange;
   final TextInputType? keyboardType;
+  final FocusNode? focusNode;
 
   const PrimaryInput({
     super.key,
@@ -16,6 +17,7 @@ class PrimaryInput extends StatefulWidget {
     this.prefixIcon,
     this.onChange,
     this.keyboardType,
+    this.focusNode,
   });
 
   @override
@@ -39,6 +41,8 @@ class _PrimaryInputState extends State<PrimaryInput> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      focusNode: widget.focusNode,
+      autofocus: widget.focusNode != null,
       keyboardType: widget.keyboardType,
       controller: widget.controller,
       obscureText: obscureText,

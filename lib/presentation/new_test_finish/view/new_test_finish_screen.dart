@@ -110,6 +110,10 @@ class NewTestFinishScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
           child: PrimaryButton(
+            isLoading: false,
+            onTap: () {
+              Navigator.pop(context);
+            },
             child: const Text(
               'На главный экран',
               style: TextStyle(
@@ -118,9 +122,6 @@ class NewTestFinishScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onTap: () {
-              Navigator.pop(context);
-            },
           ),
         ),
       ),
