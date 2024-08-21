@@ -9,12 +9,10 @@ class TestAnswerWidget extends StatefulWidget {
     super.key,
     required this.test,
     required this.index,
-    required this.correctCount,
   });
 
   final TestFileModel test;
   final int index;
-  final int correctCount;
 
   @override
   State<TestAnswerWidget> createState() => _TestAnswerWidgetState();
