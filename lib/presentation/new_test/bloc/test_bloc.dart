@@ -61,7 +61,7 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
     });
 
-    on<OnTestFinish>((event, emit) {
+    on<OnTestFinish>((event, emit) async {
       tests.map((test) {
         if (test.answers.isEmpty) return;
         test.answered = true;
@@ -71,6 +71,7 @@ class TestBloc extends Bloc<TestEvent, TestState> {
         }).toList();
         if (test.receive < 0) test.receive = 0;
       }).toList();
+      await GetIt.I<HistoryRepository>().addHistory(testModel);
       GetIt.I<AppRouter>().replaceAll([
         const NewHomeRoute(),
         NewTestFinishRoute(

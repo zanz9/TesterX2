@@ -11,10 +11,12 @@ class TestAnswerWidget extends StatelessWidget {
     super.key,
     required this.test,
     required this.index,
+    required this.bloc,
   });
 
   final TestFileModel test;
   final int index;
+  final TestBloc bloc;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class TestAnswerWidget extends StatelessWidget {
     var isPressed = test.answers.contains(index);
     var isRight = test.body[index].score > 0;
     return GestureDetector(
-      onTap: () => context.read<TestBloc>().add(OnTestAnswer(index: index)),
+      onTap: () => bloc.add(OnTestAnswer(index: index)),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5),
         padding: const EdgeInsets.symmetric(vertical: 10),

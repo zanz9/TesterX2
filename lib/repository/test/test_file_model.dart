@@ -11,10 +11,10 @@ class TestFileModel {
     required this.title,
     required this.maxScore,
     required this.body,
-    this.answers = const [],
+    List<int>? answers,
     this.answered = false,
     this.receive = 0,
-  });
+  }) : answers = answers ?? [];
 
   factory TestFileModel.fromJson(Map json) {
     return TestFileModel(

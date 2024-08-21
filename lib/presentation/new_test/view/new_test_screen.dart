@@ -220,6 +220,7 @@ class NewTestScreen extends StatelessWidget {
                             return TestAnswerWidget(
                               test: state.test,
                               index: index,
+                              bloc: bloc,
                             );
                           },
                         );

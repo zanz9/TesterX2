@@ -21,6 +21,10 @@ class StorageRepository {
     String jsonData = jsonEncode(data);
     String dir = (await getTemporaryDirectory()).path;
     String fileName = const Uuid().v4();
+    Directory dirHistory = Directory('$dir/history');
+    if (!await dirHistory.exists()) {
+      dirHistory.createSync(recursive: true);
+    }
     File file = File('$dir/history/$fileName.json');
     await file.writeAsString(jsonData);
 

@@ -13,4 +13,5 @@ registerSingletons() async {
   GetIt.I.registerSingleton<GroupRepository>(GroupRepository());
   GetIt.I.registerSingleton<StorageRepository>(StorageRepository());
   GetIt.I.registerSingleton<TestRepository>(TestRepository());
+  GetIt.I.registerSingleton<HistoryRepository>(HistoryRepository());
 }
