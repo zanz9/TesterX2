@@ -21,12 +21,14 @@ class ProfileScreen extends StatelessWidget {
     var bloc = ProfileBloc();
     bloc.add(OnProfile());
 
-    editName() async {
+    editName(String beforeName) async {
       var result = await showCupertinoModalBottomSheet(
         duration: const Duration(milliseconds: 300),
         context: context,
         builder: (context) {
-          return const EditNameWidget();
+          return EditNameWidget(
+            beforeName: beforeName,
+          );
         },
       );
       if (result == null) {
@@ -105,7 +107,11 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                     ),
                                     IconButton(
-                                      onPressed: editName,
+                                      onPressed: () {
+                                        editName(state is ProfileLoaded
+                                            ? state.user.displayName ?? ''
+                                            : '');
+                                      },
                                       icon: const Icon(Icons.edit),
                                     )
                                   ],
@@ -130,73 +136,40 @@ class ProfileScreen extends StatelessWidget {
                       DevWidgets(),
                     ],
                   ),
+                const SizedBox(height: 30),
+                BlocBuilder<ProfileBloc, ProfileState>(
+                  bloc: bloc,
+                  builder: (context, state) {
+                    if (state is ProfileLoaded) {
+                      return Column(
+                        children: [
+                          const Text(
+                            'История',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          const SizedBox(height: 20),
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: state.history.length,
+                            itemBuilder: (context, index) {
+                              return PrimaryListWidget(
+                                text: state.history[index].test.name,
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: 10),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                ),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class EditNameWidget extends StatefulWidget {
-  const EditNameWidget({
-    super.key,
-  });
-
-  @override
-  State<EditNameWidget> createState() => _EditNameWidgetState();
-}
-
-class _EditNameWidgetState extends State<EditNameWidget> {
-  var textController = TextEditingController();
-  var buttonLoading = false;
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        height: 300 + MediaQuery.of(context).viewInsets.bottom,
-        child: Column(
-          children: [
-            const SizedBox(height: 30),
-            const Text(
-              'Изменить имя',
-              style: TextStyle(fontSize: 24),
-            ),
-            const SizedBox(height: 30),
-            PrimaryInput(
-              controller: textController,
-              hintText: 'Название отображаемого имени',
-              obscureText: false,
-              focusNode: FocusNode(),
-            ),
-            const SizedBox(height: 30),
-            PrimaryButton(
-              onTap: () async {
-                setState(() {
-                  buttonLoading = true;
-                });
-                await AuthRepository()
-                    .setUserDisplayName(textController.text.trim());
-                setState(() {
-                  buttonLoading = false;
-                });
-                if (context.mounted) {
-                  Navigator.pop(context);
-                }
-              },
-              isLoading: buttonLoading,
-              child: const Text(
-                'Изменить',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );

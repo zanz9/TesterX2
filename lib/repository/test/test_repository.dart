@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/repository/repository.dart';
 import 'package:testerx2/utils/utils.dart';
 
@@ -30,5 +32,17 @@ class TestRepository {
       list.add(test);
     }
     return list;
+  }
+
+  Future<TestModel> getTestById(String id) async {
+    var prefs = GetIt.I<SharedPreferences>();
+    var text = prefs.getString('tests/$id');
+    if (text != null) {
+      return TestModel.fromJson(jsonDecode(text) as Map, id);
+    }
+    DataSnapshot data = await db.ref('tests').child(id).get();
+    var test = TestModel.fromJson(data.value as Map, id);
+    await prefs.setString('tests/$id', jsonEncode(test.toJson()));
+    return TestModel.fromJson(data.value as Map, id);
   }
 }

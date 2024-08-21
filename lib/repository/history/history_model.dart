@@ -1,3 +1,5 @@
+import 'package:testerx2/repository/repository.dart';
+
 class HistoryModel {
   final String testId;
   final DateTime timestamp;
@@ -5,6 +7,7 @@ class HistoryModel {
   final int correct;
   final int testLength;
   final String pathHistory;
+  late TestModel test;
 
   HistoryModel({
     required this.testId,

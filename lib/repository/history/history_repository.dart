@@ -24,7 +24,20 @@ class HistoryRepository {
       correct: correct,
       pathHistory: pathHistory,
     );
-    await db.ref('history').push().set(history.toJson());
+    await db.ref('history/$uid').push().set(history.toJson());
     return history;
+  }
+
+  Future<List<HistoryModel>> getAllHistory(String uid) async {
+    DataSnapshot data = await db
+        .ref('history/$uid')
+        .orderByChild('timestamp')
+        .limitToFirst(10)
+        .get();
+    List<HistoryModel> list = [];
+    for (var element in ((data.value ?? {}) as Map).entries) {
+      list.add(HistoryModel.fromJson(element.value as Map));
+    }
+    return list;
   }
 }
