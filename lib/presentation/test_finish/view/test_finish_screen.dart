@@ -4,8 +4,8 @@ import 'package:testerx2/repository/repository.dart';
 import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
-class NewTestFinishScreen extends StatelessWidget {
-  const NewTestFinishScreen({super.key, required this.test});
+class TestFinishScreen extends StatelessWidget {
+  const TestFinishScreen({super.key, required this.test});
   final TestModel test;
 
   @override

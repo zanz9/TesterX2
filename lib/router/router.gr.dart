@@ -48,7 +48,7 @@ class LoginRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [NewHomeScreen]
+/// [HomeScreen]
 class NewHomeRoute extends PageRouteInfo<void> {
   const NewHomeRoute({List<PageRouteInfo>? children})
       : super(
@@ -61,13 +61,13 @@ class NewHomeRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const NewHomeScreen();
+      return const HomeScreen();
     },
   );
 }
 
 /// generated route for
-/// [NewTestFinishScreen]
+/// [TestFinishScreen]
 class NewTestFinishRoute extends PageRouteInfo<NewTestFinishRouteArgs> {
   NewTestFinishRoute({
     Key? key,
@@ -88,7 +88,7 @@ class NewTestFinishRoute extends PageRouteInfo<NewTestFinishRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<NewTestFinishRouteArgs>();
-      return NewTestFinishScreen(
+      return TestFinishScreen(
         key: args.key,
         test: args.test,
       );
@@ -113,7 +113,7 @@ class NewTestFinishRouteArgs {
 }
 
 /// generated route for
-/// [NewTestScreen]
+/// [TestScreen]
 class NewTestRoute extends PageRouteInfo<NewTestRouteArgs> {
   NewTestRoute({
     Key? key,
@@ -134,7 +134,7 @@ class NewTestRoute extends PageRouteInfo<NewTestRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<NewTestRouteArgs>();
-      return NewTestScreen(
+      return TestScreen(
         key: args.key,
         testModel: args.testModel,
       );

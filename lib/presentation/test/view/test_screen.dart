@@ -6,13 +6,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:testerx2/presentation/new_test/new_test.dart';
+import 'package:testerx2/presentation/test/test.dart';
 import 'package:testerx2/repository/repository.dart';
 import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
-class NewTestScreen extends StatelessWidget {
-  const NewTestScreen({super.key, required this.testModel});
+class TestScreen extends StatelessWidget {
+  const TestScreen({super.key, required this.testModel});
   final TestModel testModel;
 
   @override

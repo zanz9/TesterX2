@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testerx2/presentation/new_home/new_home.dart';
+import 'package:testerx2/presentation/home/home.dart';
 import 'package:testerx2/router/router.dart';
 
 class HomeSliverAppBar extends StatelessWidget {

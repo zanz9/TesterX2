@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:testerx2/presentation/new_test/bloc/test_bloc.dart';
+import 'package:testerx2/presentation/test/test.dart';
 import 'package:testerx2/repository/repository.dart';
 
 class TestAnswerWidget extends StatelessWidget {

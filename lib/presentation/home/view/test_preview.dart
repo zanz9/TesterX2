@@ -1,21 +1,21 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testerx2/presentation/new_home/new_home.dart';
+import 'package:testerx2/presentation/home/home.dart';
 import 'package:testerx2/repository/repository.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:testerx2/router/router.dart';
 import 'package:testerx2/ui/ui.dart';
 
-class NewTestPreview extends StatefulWidget {
-  const NewTestPreview({super.key, required this.test});
+class TestPreview extends StatefulWidget {
+  const TestPreview({super.key, required this.test});
   final TestModel test;
 
   @override
-  State<NewTestPreview> createState() => _NewTestPreviewState();
+  State<TestPreview> createState() => _TestPreviewState();
 }
 
-class _NewTestPreviewState extends State<NewTestPreview> {
+class _TestPreviewState extends State<TestPreview> {
   final bloc = TestPreviewBloc();
   @override
   void initState() {
