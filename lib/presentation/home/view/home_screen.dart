@@ -1,10 +1,8 @@
-import 'package:animations/animations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/presentation/home/home.dart';
 import 'package:testerx2/repository/repository.dart';
-import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -12,7 +10,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
     return BlocProvider(
       lazy: false,
       create: (context) => HomeBloc()..add(OnHome()),
@@ -33,46 +30,19 @@ class HomeScreen extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 6),
-                        child: OpenContainer(
-                          openBuilder: (context, _) => TestPreview(
-                            test: test,
-                          ),
-                          closedBuilder: (context, openContainer) =>
-                              GestureDetector(
-                            onTap: openContainer,
-                            child: PrimaryListWidget(
-                              text: test.name,
-                            ),
-                          ),
-                          transitionType: ContainerTransitionType.fadeThrough,
-                          transitionDuration: const Duration(milliseconds: 350),
-                          openColor: theme.scaffoldBackgroundColor,
-                          middleColor: theme.scaffoldBackgroundColor,
-                          closedColor: theme.scaffoldBackgroundColor,
-                          openShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12)),
-                          closedShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12)),
-                          tappable: true,
-                          closedElevation: 0,
-                        ),
+                        child: TestListWidget(test: test),
                       );
                     },
                   );
-                } else if (state is HomeUserNotHaveGroup) {
-                  return const SliverToBoxAdapter(
-                      child: Text('Пользователь не состоит в группе'));
-                } else if (state is HomeUserGroupNotHaveTests) {
-                  return const SliverToBoxAdapter(
-                    child: Center(
-                      child: Text(
-                        'В этой группе нет ни одного теста',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                  );
                 } else {
-                  return const SliverToBoxAdapter(child: SizedBox());
+                  String text = '';
+                  if (state is HomeUserNotHaveGroup) {
+                    text = 'Пользователь не состоит в группе';
+                  } else if (state is HomeUserGroupNotHaveTests) {
+                    text = 'В этой группе нет ни одного теста';
+                  }
+                  return SliverToBoxAdapter(
+                      child: Text(text, style: const TextStyle(fontSize: 18)));
                 }
               },
             )

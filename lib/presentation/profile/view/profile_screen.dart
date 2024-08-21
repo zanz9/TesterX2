@@ -140,27 +140,7 @@ class ProfileScreen extends StatelessWidget {
                   bloc: bloc,
                   builder: (context, state) {
                     if (state is ProfileLoaded) {
-                      return Column(
-                        children: [
-                          const Text(
-                            'История',
-                            style: TextStyle(fontSize: 24),
-                          ),
-                          const SizedBox(height: 20),
-                          ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: state.history.length,
-                            itemBuilder: (context, index) {
-                              return PrimaryListWidget(
-                                text: state.history[index].test.name,
-                              );
-                            },
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 10),
-                          ),
-                        ],
-                      );
+                      return HistoryWidget(history: state.history);
                     } else {
                       return const SizedBox();
                     }
