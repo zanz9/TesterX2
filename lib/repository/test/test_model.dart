@@ -1,6 +1,7 @@
 import 'package:testerx2/repository/repository.dart';
 
 class TestModel {
+  late String id;
   final String name;
   final String path;
   final String groupId;
@@ -13,12 +14,14 @@ class TestModel {
     required this.groupId,
   });
 
-  factory TestModel.fromJson(Map json) {
-    return TestModel(
+  factory TestModel.fromJson(Map json, String id) {
+    var testModel = TestModel(
       name: json['name'] as String,
       path: json['path'] as String,
       groupId: json['groupId'] as String,
     );
+    testModel.id = id;
+    return testModel;
   }
 
   Map<String, dynamic> toJson() {

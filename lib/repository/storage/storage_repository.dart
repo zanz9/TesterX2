@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:testerx2/repository/repository.dart';
 import 'package:uuid/uuid.dart';
 
@@ -13,6 +14,20 @@ class StorageRepository {
     Reference testsRef = storageRef.child('tests/$fileName.json');
     await testsRef.putFile(file);
     String url = await testsRef.getDownloadURL();
+    return url;
+  }
+
+  Future<String> uploadHistory(Object data) async {
+    String jsonData = jsonEncode(data);
+    String dir = (await getTemporaryDirectory()).path;
+    String fileName = const Uuid().v4();
+    File file = File('$dir/history/$fileName.json');
+    await file.writeAsString(jsonData);
+
+    Reference storageRef = FirebaseStorage.instance.ref();
+    Reference historyRef = storageRef.child('history/$fileName.json');
+    await historyRef.putFile(file);
+    String url = await historyRef.getDownloadURL();
     return url;
   }
 

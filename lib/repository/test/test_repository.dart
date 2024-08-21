@@ -23,7 +23,7 @@ class TestRepository {
         await db.ref('tests').orderByChild('groupId').equalTo(groupId).get();
     List<TestModel> list = [];
     for (var element in ((data.value ?? {}) as Map).entries) {
-      TestModel test = TestModel.fromJson(element.value as Map);
+      TestModel test = TestModel.fromJson(element.value as Map, element.key);
       String groupName =
           await GetIt.I<GroupRepository>().getGroup(test.groupId);
       test.group = GroupModel(id: test.groupId, name: groupName);

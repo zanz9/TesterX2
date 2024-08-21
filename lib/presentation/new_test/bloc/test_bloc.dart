@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/repository/repository.dart';
 import 'package:testerx2/router/router.dart';
 
@@ -33,6 +32,19 @@ class TestBloc extends Bloc<TestEvent, TestState> {
 
     on<OnTestIndexSet>((event, emit) {
       testIndex = event.testIndex;
+      emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
+    });
+
+    on<OnTestAnswer>((event, emit) {
+      var test = tests[testIndex];
+      if (test.answered) return;
+      var answerIndex = event.index;
+      if (test.answers.contains(answerIndex)) {
+        test.answers.remove(answerIndex);
+      } else {
+        test.answers.add(answerIndex);
+      }
+
       emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
     });
 

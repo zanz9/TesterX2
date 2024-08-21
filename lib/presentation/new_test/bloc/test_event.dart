@@ -19,6 +19,12 @@ class OnTestIndexSet extends TestEvent {
   OnTestIndexSet({required this.testIndex});
 }
 
+class OnTestAnswer extends TestEvent {
+  final int index;
+
+  OnTestAnswer({required this.index});
+}
+
 class OnTestSubmit extends TestEvent {}
 
 class OnTestFinish extends TestEvent {}

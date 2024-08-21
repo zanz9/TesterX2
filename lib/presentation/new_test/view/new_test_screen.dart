@@ -153,6 +153,7 @@ class NewTestScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             BlocBuilder<TestBloc, TestState>(
+                              bloc: bloc,
                               builder: (context, state) {
                                 if (state is TestLoaded) {
                                   return Text(
@@ -176,6 +177,7 @@ class NewTestScreen extends StatelessWidget {
                         ),
                       ),
                       BlocBuilder<TestBloc, TestState>(
+                        bloc: bloc,
                         builder: (context, state) {
                           if (state is TestLoaded) {
                             return Wrap(
@@ -207,6 +209,7 @@ class NewTestScreen extends StatelessWidget {
                   ),
                   const Divider(),
                   BlocBuilder<TestBloc, TestState>(
+                    bloc: bloc,
                     builder: (context, state) {
                       if (state is TestLoaded) {
                         return ListView.builder(

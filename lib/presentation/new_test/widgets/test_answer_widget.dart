@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testerx2/presentation/new_test/bloc/test_bloc.dart';
 import 'package:testerx2/repository/repository.dart';
 
-class TestAnswerWidget extends StatefulWidget {
+class TestAnswerWidget extends StatelessWidget {
   const TestAnswerWidget({
     super.key,
     required this.test,
@@ -15,33 +17,12 @@ class TestAnswerWidget extends StatefulWidget {
   final int index;
 
   @override
-  State<TestAnswerWidget> createState() => _TestAnswerWidgetState();
-}
-
-class _TestAnswerWidgetState extends State<TestAnswerWidget> {
-  @override
   Widget build(BuildContext context) {
-    var answered = widget.test.answered;
-    var isPressed = widget.test.answers.contains(widget.index);
-    var isRight = widget.test.body[widget.index].score > 0;
+    var answered = test.answered;
+    var isPressed = test.answers.contains(index);
+    var isRight = test.body[index].score > 0;
     return GestureDetector(
-      onTap: () {
-        if (answered) return;
-        setState(() {
-          if (widget.test.answers.contains(widget.index)) {
-            widget.test.answers.remove(widget.index);
-            return;
-          }
-          widget.test.answers.add(widget.index);
-        });
-      },
-      // onDoubleTap: () {
-      //   if (answered) return;
-      //   setState(() {
-      //     widget.test.answers.clear();
-      //     widget.test.answers.add(widget.index);
-      //   });
-      // },
+      onTap: () => context.read<TestBloc>().add(OnTestAnswer(index: index)),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5),
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -51,7 +32,7 @@ class _TestAnswerWidgetState extends State<TestAnswerWidget> {
         child: Wrap(
           children: [
             Icon(
-              widget.test.answers.contains(widget.index)
+              test.answers.contains(index)
                   ? Icons.circle
                   : Icons.circle_outlined,
               color: answered
@@ -63,9 +44,7 @@ class _TestAnswerWidgetState extends State<TestAnswerWidget> {
                   : Colors.black,
             ),
             const SizedBox(width: 6),
-            ...widget.test.body[widget.index].text
-                .split('<testerx_img>')
-                .map((el) {
+            ...test.body[index].text.split('<testerx_img>').map((el) {
               if (el != el.split('TESTERX').last) {
                 Uint8List u8 = base64Decode(el.split('TESTERX').last);
                 return Image.memory(u8);
