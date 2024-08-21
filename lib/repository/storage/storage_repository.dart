@@ -44,4 +44,14 @@ class StorageRepository {
     }).toList();
     return tests;
   }
+
+  Future<List<TestFileModel>> downloadHistory(String url) async {
+    var response = await http.get(Uri.parse(url));
+    String content = utf8.decode(response.bodyBytes);
+    List<dynamic> jsonContent = json.decode(content);
+    List<TestFileModel> tests = jsonContent.map((el) {
+      return TestFileModel.fromJsonHistory(el);
+    }).toList();
+    return tests;
+  }
 }

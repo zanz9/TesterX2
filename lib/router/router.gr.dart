@@ -29,6 +29,25 @@ class ForgetPasswordRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [HomeScreen]
+class HomeRoute extends PageRouteInfo<void> {
+  const HomeRoute({List<PageRouteInfo>? children})
+      : super(
+          HomeRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HomeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HomeScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [LoginScreen]
 class LoginRoute extends PageRouteInfo<void> {
   const LoginRoute({List<PageRouteInfo>? children})
@@ -45,117 +64,6 @@ class LoginRoute extends PageRouteInfo<void> {
       return const LoginScreen();
     },
   );
-}
-
-/// generated route for
-/// [HomeScreen]
-class NewHomeRoute extends PageRouteInfo<void> {
-  const NewHomeRoute({List<PageRouteInfo>? children})
-      : super(
-          NewHomeRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'NewHomeRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const HomeScreen();
-    },
-  );
-}
-
-/// generated route for
-/// [TestFinishScreen]
-class NewTestFinishRoute extends PageRouteInfo<NewTestFinishRouteArgs> {
-  NewTestFinishRoute({
-    Key? key,
-    required TestModel test,
-    List<PageRouteInfo>? children,
-  }) : super(
-          NewTestFinishRoute.name,
-          args: NewTestFinishRouteArgs(
-            key: key,
-            test: test,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'NewTestFinishRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<NewTestFinishRouteArgs>();
-      return TestFinishScreen(
-        key: args.key,
-        test: args.test,
-      );
-    },
-  );
-}
-
-class NewTestFinishRouteArgs {
-  const NewTestFinishRouteArgs({
-    this.key,
-    required this.test,
-  });
-
-  final Key? key;
-
-  final TestModel test;
-
-  @override
-  String toString() {
-    return 'NewTestFinishRouteArgs{key: $key, test: $test}';
-  }
-}
-
-/// generated route for
-/// [TestScreen]
-class NewTestRoute extends PageRouteInfo<NewTestRouteArgs> {
-  NewTestRoute({
-    Key? key,
-    required TestModel testModel,
-    List<PageRouteInfo>? children,
-  }) : super(
-          NewTestRoute.name,
-          args: NewTestRouteArgs(
-            key: key,
-            testModel: testModel,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'NewTestRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<NewTestRouteArgs>();
-      return TestScreen(
-        key: args.key,
-        testModel: args.testModel,
-      );
-    },
-  );
-}
-
-class NewTestRouteArgs {
-  const NewTestRouteArgs({
-    this.key,
-    required this.testModel,
-  });
-
-  final Key? key;
-
-  final TestModel testModel;
-
-  @override
-  String toString() {
-    return 'NewTestRouteArgs{key: $key, testModel: $testModel}';
-  }
 }
 
 /// generated route for
@@ -194,4 +102,96 @@ class RegisterRoute extends PageRouteInfo<void> {
       return const RegisterScreen();
     },
   );
+}
+
+/// generated route for
+/// [TestFinishScreen]
+class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
+  TestFinishRoute({
+    Key? key,
+    required TestModel test,
+    List<PageRouteInfo>? children,
+  }) : super(
+          TestFinishRoute.name,
+          args: TestFinishRouteArgs(
+            key: key,
+            test: test,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'TestFinishRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TestFinishRouteArgs>();
+      return TestFinishScreen(
+        key: args.key,
+        test: args.test,
+      );
+    },
+  );
+}
+
+class TestFinishRouteArgs {
+  const TestFinishRouteArgs({
+    this.key,
+    required this.test,
+  });
+
+  final Key? key;
+
+  final TestModel test;
+
+  @override
+  String toString() {
+    return 'TestFinishRouteArgs{key: $key, test: $test}';
+  }
+}
+
+/// generated route for
+/// [TestPageScreen]
+class TestPageRoute extends PageRouteInfo<TestPageRouteArgs> {
+  TestPageRoute({
+    Key? key,
+    required TestModel testModel,
+    List<PageRouteInfo>? children,
+  }) : super(
+          TestPageRoute.name,
+          args: TestPageRouteArgs(
+            key: key,
+            testModel: testModel,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'TestPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TestPageRouteArgs>();
+      return TestPageScreen(
+        key: args.key,
+        testModel: args.testModel,
+      );
+    },
+  );
+}
+
+class TestPageRouteArgs {
+  const TestPageRouteArgs({
+    this.key,
+    required this.testModel,
+  });
+
+  final Key? key;
+
+  final TestModel testModel;
+
+  @override
+  String toString() {
+    return 'TestPageRouteArgs{key: $key, testModel: $testModel}';
+  }
 }

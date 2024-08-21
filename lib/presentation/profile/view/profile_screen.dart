@@ -7,7 +7,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:testerx2/presentation/presentation.dart';
 import 'package:testerx2/repository/auth/auth_repository.dart';
 import 'package:testerx2/router/router.dart';
-import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
 class ProfileScreen extends StatelessWidget {
@@ -38,6 +37,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.scaffoldBackgroundColor,
+        surfaceTintColor: theme.scaffoldBackgroundColor,
         actions: [
           GestureDetector(
             onTap: () async {
@@ -126,7 +126,6 @@ class ProfileScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                const SizedBox(height: 30),
                 const AdminWidgets(),
                 if (kDebugMode)
                   const Column(
@@ -146,6 +145,7 @@ class ProfileScreen extends StatelessWidget {
                     }
                   },
                 ),
+                const SizedBox(height: 30),
               ],
             ),
           ),

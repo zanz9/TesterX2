@@ -37,12 +37,19 @@ class TestRepository {
   Future<TestModel> getTestById(String id) async {
     var prefs = GetIt.I<SharedPreferences>();
     var text = prefs.getString('tests/$id');
+
+    late TestModel test;
     if (text != null) {
-      return TestModel.fromJson(jsonDecode(text) as Map, id);
+      test = TestModel.fromJson(jsonDecode(text) as Map, id);
+    } else {
+      DataSnapshot data = await db.ref('tests').child(id).get();
+      var test = TestModel.fromJson(data.value as Map, id);
+      await prefs.setString('tests/$id', jsonEncode(test.toJson()));
+      test = TestModel.fromJson(data.value as Map, id);
     }
-    DataSnapshot data = await db.ref('tests').child(id).get();
-    var test = TestModel.fromJson(data.value as Map, id);
-    await prefs.setString('tests/$id', jsonEncode(test.toJson()));
-    return TestModel.fromJson(data.value as Map, id);
+    var groupName = await GetIt.I<GroupRepository>().getGroup(test.groupId);
+    test.group = GroupModel(id: test.groupId, name: groupName);
+
+    return test;
   }
 }

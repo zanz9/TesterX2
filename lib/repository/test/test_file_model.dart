@@ -47,7 +47,7 @@ class TestFileModel {
       body: (json['body'] as List).map((el) {
         return TestFileBody.fromJson(el);
       }).toList(),
-      answers: json['answers'] as List<int>,
+      answers: json['answers'].cast<int>() as List<int>,
       answered: json['answered'] as bool,
       receive: json['receive'] as int,
     );

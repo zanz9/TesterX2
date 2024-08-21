@@ -11,8 +11,8 @@ import 'package:testerx2/repository/repository.dart';
 import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
-class TestScreen extends StatelessWidget {
-  const TestScreen({super.key, required this.testModel});
+class TestPageScreen extends StatelessWidget {
+  const TestPageScreen({super.key, required this.testModel});
   final TestModel testModel;
 
   @override

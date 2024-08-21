@@ -73,8 +73,8 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       }).toList();
       await GetIt.I<HistoryRepository>().addHistory(testModel);
       GetIt.I<AppRouter>().replaceAll([
-        const NewHomeRoute(),
-        NewTestFinishRoute(
+        const HomeRoute(),
+        TestFinishRoute(
           test: testModel,
         ),
       ]);

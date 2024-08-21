@@ -134,7 +134,7 @@ class _TestPreviewState extends State<TestPreview> {
                                     startButtonLoading = false;
                                   });
                                   context.router.replace(
-                                    NewTestRoute(testModel: widget.test),
+                                    TestPageRoute(testModel: widget.test),
                                   );
                                 },
                                 child: const Text(

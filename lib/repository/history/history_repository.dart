@@ -32,12 +32,13 @@ class HistoryRepository {
     DataSnapshot data = await db
         .ref('history/$uid')
         .orderByChild('timestamp')
-        .limitToFirst(10)
+        .limitToLast(50)
         .get();
     List<HistoryModel> list = [];
     for (var element in ((data.value ?? {}) as Map).entries) {
       list.add(HistoryModel.fromJson(element.value as Map));
     }
+    list.sort((a, b) => b.timestamp.compareTo(a.timestamp));
     return list;
   }
 }
