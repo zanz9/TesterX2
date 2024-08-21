@@ -40,7 +40,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginLoading());
         try {
           await GetIt.I<AuthRepository>().login();
-          GetIt.I<AppRouter>().replace(const MainRoute());
+          GetIt.I<AppRouter>().replaceAll([const NewHomeRoute()]);
         } on FirebaseAuthException catch (e) {
           if (e.code == "network-request-failed") {
             emit(LoginConnectionWrong());

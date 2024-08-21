@@ -24,8 +24,10 @@ class ForgetPasswordScreen extends StatelessWidget {
     );
 
     send() {
+      if (emailController.text.isEmpty) return;
       gifController.play(initialFrame: 0, inverted: false);
-      bloc.add(OnForgetPassword(email: emailController.text));
+      bloc.add(OnForgetPassword(
+          email: emailController.text, gifController: gifController));
     }
 
     return BlocBuilder<ForgetPasswordBloc, ForgetPasswordState>(
@@ -66,21 +68,22 @@ class ForgetPasswordScreen extends StatelessWidget {
                     EmailInput(emailController: emailController),
                     const SizedBox(height: 25),
                     PrimaryButton(
-                        onTap: send,
-                        onTapOutside: () {
-                          errorText =
-                              'Напишите вашу почту, чтобы мы могли отправить ссылку на сброс пароля';
-                          bloc.add(OnUpdateForgetPassword());
-                        },
-                        isLoading: state is ForgetPasswordLoading,
-                        child: const Text(
-                          'Отправить',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        )),
+                      onTap: send,
+                      onTapOutside: () {
+                        errorText =
+                            'Напишите вашу почту, чтобы мы могли отправить ссылку на сброс пароля';
+                        bloc.add(OnUpdateForgetPassword());
+                      },
+                      isLoading: state is ForgetPasswordLoading,
+                      child: const Text(
+                        'Отправить',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 50),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

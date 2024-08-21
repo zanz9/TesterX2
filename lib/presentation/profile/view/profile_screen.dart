@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:testerx2/presentation/presentation.dart';
-import 'package:testerx2/presentation/profile/bloc/profile_bloc.dart';
 import 'package:testerx2/repository/auth/auth_repository.dart';
 import 'package:testerx2/router/router.dart';
 import 'package:testerx2/ui/ui.dart';
