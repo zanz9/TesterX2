@@ -5,10 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:testerx2/presentation/presentation.dart';
-import 'package:testerx2/presentation/profile/bloc/profile_bloc.dart';
 import 'package:testerx2/repository/auth/auth_repository.dart';
 import 'package:testerx2/router/router.dart';
-import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
 class ProfileScreen extends StatelessWidget {
@@ -21,12 +19,14 @@ class ProfileScreen extends StatelessWidget {
     var bloc = ProfileBloc();
     bloc.add(OnProfile());
 
-    editName() async {
+    editName(String beforeName) async {
       var result = await showCupertinoModalBottomSheet(
         duration: const Duration(milliseconds: 300),
         context: context,
         builder: (context) {
-          return const EditNameWidget();
+          return EditNameWidget(
+            beforeName: beforeName,
+          );
         },
       );
       if (result == null) {
@@ -37,6 +37,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.scaffoldBackgroundColor,
+        surfaceTintColor: theme.scaffoldBackgroundColor,
         actions: [
           GestureDetector(
             onTap: () async {
@@ -105,7 +106,11 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                     ),
                                     IconButton(
-                                      onPressed: editName,
+                                      onPressed: () {
+                                        editName(state is ProfileLoaded
+                                            ? state.user.displayName ?? ''
+                                            : '');
+                                      },
                                       icon: const Icon(Icons.edit),
                                     )
                                   ],
@@ -121,7 +126,6 @@ class ProfileScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                const SizedBox(height: 30),
                 const AdminWidgets(),
                 if (kDebugMode)
                   const Column(
@@ -130,73 +134,21 @@ class ProfileScreen extends StatelessWidget {
                       DevWidgets(),
                     ],
                   ),
+                const SizedBox(height: 30),
+                BlocBuilder<ProfileBloc, ProfileState>(
+                  bloc: bloc,
+                  builder: (context, state) {
+                    if (state is ProfileLoaded) {
+                      return HistoryWidget(history: state.history);
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                ),
+                const SizedBox(height: 30),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class EditNameWidget extends StatefulWidget {
-  const EditNameWidget({
-    super.key,
-  });
-
-  @override
-  State<EditNameWidget> createState() => _EditNameWidgetState();
-}
-
-class _EditNameWidgetState extends State<EditNameWidget> {
-  var textController = TextEditingController();
-  var buttonLoading = false;
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        height: 300 + MediaQuery.of(context).viewInsets.bottom,
-        child: Column(
-          children: [
-            const SizedBox(height: 30),
-            const Text(
-              'Изменить имя',
-              style: TextStyle(fontSize: 24),
-            ),
-            const SizedBox(height: 30),
-            PrimaryInput(
-              controller: textController,
-              hintText: 'Название отображаемого имени',
-              obscureText: false,
-              focusNode: FocusNode(),
-            ),
-            const SizedBox(height: 30),
-            PrimaryButton(
-              onTap: () async {
-                setState(() {
-                  buttonLoading = true;
-                });
-                await AuthRepository()
-                    .setUserDisplayName(textController.text.trim());
-                setState(() {
-                  buttonLoading = false;
-                });
-                if (context.mounted) {
-                  Navigator.pop(context);
-                }
-              },
-              isLoading: buttonLoading,
-              child: const Text(
-                'Изменить',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );

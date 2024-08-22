@@ -14,6 +14,7 @@ class EmailInput extends StatelessWidget {
       hintText: 'Почта',
       obscureText: false,
       prefixIcon: const Icon(Icons.email_rounded),
+      keyboardType: TextInputType.emailAddress,
     );
   }
 }

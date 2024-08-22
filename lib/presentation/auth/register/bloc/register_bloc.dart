@@ -28,7 +28,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       }
 
       try {
-        var authRepo = AuthRepository();
+        var authRepo = GetIt.I<AuthRepository>();
         await authRepo.register(
           event.email.trim().toLowerCase(),
           event.password.trim(),
@@ -37,7 +37,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           email: event.email.trim().toLowerCase(),
           password: event.password.trim(),
         );
-        GetIt.I<AppRouter>().replaceAll([const NewHomeRoute()]);
+        GetIt.I<AppRouter>().replaceAll([const HomeRoute()]);
       } on FirebaseAuthException catch (e) {
         if (e.code == "invalid-email") {
           emit(RegisterInvalidEmail());

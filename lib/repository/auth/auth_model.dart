@@ -1,6 +1,5 @@
 class AuthModel {
   AuthModel({this.groupId, this.isAdmin = false, this.displayName});
-
   String? displayName;
   String? groupId;
   bool isAdmin;

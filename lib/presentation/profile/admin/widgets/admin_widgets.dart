@@ -15,6 +15,7 @@ class AdminWidgets extends StatelessWidget {
           if (state is AdminLoaded) {
             return const Column(
               children: [
+                SizedBox(height: 30),
                 Text(
                   'Админка',
                   style: TextStyle(fontSize: 24),

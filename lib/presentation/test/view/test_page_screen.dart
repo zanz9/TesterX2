@@ -1,205 +1,240 @@
-// ignore_for_file: deprecated_member_use
+import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testerx2/models/question.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:testerx2/presentation/test/test.dart';
-import 'package:testerx2/router/router.dart';
+import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
 class TestPageScreen extends StatelessWidget {
   const TestPageScreen({
     super.key,
-    required this.questions,
-    required this.testName,
-    required this.testId,
   });
-  final List<Question> questions;
-  final String testName;
-  final String? testId;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    PageController pageController = PageController(initialPage: 0);
+    final bloc = TestBloc()..add(OnTest());
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => TestCurrentPageCubit(),
-        ),
-        BlocProvider(
-          create: (context) => AnswerCubit(),
-        ),
-      ],
-      child: BlocBuilder<TestCurrentPageCubit, int>(
-        builder: (context, state) {
-          willPop() {
-            final remained =
-                questions.length - context.read<AnswerCubit>().state.length;
-            final progressMap = context.read<AnswerCubit>().state;
-            showCupertinoDialog(
-              context: context,
-              builder: (context) => CupertinoAlertDialog(
-                title: const Text('Вы действительно хотите закончить тест?'),
-                content: remained != 0
-                    ? const Text('У вас есть не отвеченные вопросы')
-                    : null,
-                actions: [
-                  CupertinoDialogAction(
-                    onPressed: () {
-                      // context.router.pop(context);
-                      context.router.replace(TestFinishRoute(
-                        progressMap: progressMap,
-                        questions: questions,
-                        testName: testName,
-                        testId: testId,
-                      ));
-                    },
-                    child: Text(
-                      'Закончить',
-                      style: TextStyle(color: theme.primaryColor),
-                    ),
-                  ),
-                  CupertinoDialogAction(
-                    onPressed: () {
-                      // context.router.pop(context);
-                    },
-                    child: Text(
-                      'Отмена',
-                      style: TextStyle(color: theme.primaryColor),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
+    onSwipe(details) async {
+      int direction = 3;
+      if (details.velocity.pixelsPerSecond.dx > direction) {
+        bloc.add(OnTestPrev());
+      }
+      if (details.velocity.pixelsPerSecond.dx < -direction) {
+        bloc.add(OnTestNext());
+      }
+    }
 
-          return CallbackShortcuts(
-            bindings: <ShortcutActivator, VoidCallback>{
-              const SingleActivator(LogicalKeyboardKey.keyA): () {
-                pageController.previousPage(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.ease,
-                );
-              },
-              const SingleActivator(LogicalKeyboardKey.keyD): () {
-                pageController.nextPage(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.ease,
-                );
-              },
-              const SingleActivator(LogicalKeyboardKey.escape): willPop
-            },
-            child: Focus(
-              autofocus: true,
-              child: WillPopScope(
-                onWillPop: () {
-                  willPop();
-                  return Future.value(true);
-                },
-                child: Scaffold(
-                  appBar: AppBar(
-                    title: GestureDetector(
-                        onTap: () {
-                          pageController.previousPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        },
-                        child: Text('${state + 1}/${questions.length}')),
-                    centerTitle: true,
-                    leading: IconButton(
-                      icon: const Icon(Icons.exit_to_app),
-                      onPressed: willPop,
-                    ),
+    showMenuQuestionNumberList() {
+      showCupertinoModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return SizedBox(
+            height: 350,
+            child: Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.all(16),
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
                   ),
-                  endDrawer: BlocBuilder<AnswerCubit, Map<int, Progress>>(
-                    builder: (context, state) {
-                      return Drawer(
-                        width: 100,
-                        child: ListView.separated(
-                          itemCount: questions.length,
-                          separatorBuilder: (context, index) => const Divider(),
-                          itemBuilder: (context, index) {
-                            final isRight = state[index]?.isRight;
-                            Color? color = theme.textTheme.bodyMedium!.color;
-                            if (isRight != null) {
-                              if (isRight) {
-                                color = Colors.greenAccent;
-                              } else {
-                                color = Colors.redAccent;
-                              }
-                            }
-                            return ListTile(
-                              title: Text(
-                                (index + 1).toString(),
-                                style: TextStyle(
-                                  color: color,
-                                ),
+                  itemCount: bloc.testModel.tests.length,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Center(
+                      child: GestureDetector(
+                        onTap: () => bloc.add(OnTestIndexSet(testIndex: index)),
+                        child: Container(
+                          height: 65,
+                          width: 65,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade300,
+                            border:
+                                bloc.testModel.tests[index].answers.isNotEmpty
+                                    ? !bloc.testModel.tests[index].answered
+                                        ? Border.all()
+                                        : null
+                                    : null,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${index + 1}',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: bloc.testModel.tests[index].answered
+                                    ? bloc.testModel.tests[index].receive ==
+                                            bloc.testModel.tests[index].maxScore
+                                        ? Colors.green
+                                        : Colors.red
+                                    : Colors.black,
                               ),
-                              onTap: () {
-                                pageController.animateToPage(
-                                  index,
-                                  duration: const Duration(seconds: 1),
-                                  curve: Curves.ease,
-                                );
-                              },
-                            );
-                          },
+                            ),
+                          ),
                         ),
-                      );
-                    },
-                  ),
-                  body: PageView.builder(
-                    controller: pageController,
-                    onPageChanged: (page) {
-                      context.read<TestCurrentPageCubit>().changePage(page);
-                    },
-                    itemCount: questions.length,
-                    itemBuilder: (context, index) => KeepAlivePage(
-                      child: TestBody(
-                        indexPage: index,
-                        question: questions[index],
-                        pageController: pageController,
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
             ),
           );
         },
+      );
+    }
+
+    finishTestOrNot() {
+      showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return FinishDialogWidget(bloc: bloc);
+        },
+      );
+    }
+
+    return BlocProvider(
+      create: (context) => bloc,
+      child: Scaffold(
+        bottomNavigationBar: SizedBox(
+            height: 82,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: IconButton(
+                          onPressed: () => bloc.add(OnTestPrev()),
+                          icon: const Icon(Icons.arrow_back))),
+                  Expanded(
+                      child: PrimaryButton(
+                          margin: const EdgeInsets.all(10),
+                          onTap: () => bloc.add(OnTestSubmit()),
+                          isLoading: false,
+                          child: const Text('Ответить',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16)))),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: IconButton(
+                          onPressed: () => bloc.add(OnTestNext()),
+                          icon: const Icon(Icons.arrow_forward)))
+                ])),
+        body: CallbackShortcuts(
+          bindings: <ShortcutActivator, VoidCallback>{
+            const SingleActivator(LogicalKeyboardKey.keyA): () =>
+                bloc.add(OnTestPrev()),
+            const SingleActivator(LogicalKeyboardKey.keyD): () =>
+                bloc.add(OnTestNext()),
+          },
+          child: Focus(
+            autofocus: true,
+            child: GestureDetector(
+              onPanEnd: onSwipe,
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ListView(
+                    children: [
+                      const SizedBox(height: 15),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                BlocBuilder<TestBloc, TestState>(
+                                  bloc: bloc,
+                                  builder: (context, state) {
+                                    if (state is TestLoaded) {
+                                      return Text(
+                                        '${state.textIndex + 1}/${bloc.tests.length}',
+                                        style: const TextStyle(fontSize: 18),
+                                      );
+                                    }
+                                    return const SizedBox();
+                                  },
+                                ),
+                                const Spacer(),
+                                IconButton(
+                                  onPressed: showMenuQuestionNumberList,
+                                  icon: const Icon(Icons.menu_rounded),
+                                ),
+                                IconButton(
+                                  onPressed: finishTestOrNot,
+                                  icon: const Icon(Icons.exit_to_app_rounded),
+                                ),
+                              ],
+                            ),
+                          ),
+                          BlocBuilder<TestBloc, TestState>(
+                            bloc: bloc,
+                            builder: (context, state) {
+                              if (state is TestLoaded) {
+                                return Wrap(
+                                  children: [
+                                    ...state.test.title
+                                        .split('<testerx_img>')
+                                        .map((el) {
+                                      if (el != el.split('TESTERX').last) {
+                                        Uint8List u8 = base64Decode(
+                                            el.split('TESTERX').last);
+                                        return Image.memory(u8);
+                                      } else {
+                                        return Text(
+                                          el,
+                                          style: const TextStyle(
+                                            fontSize: 24,
+                                          ),
+                                        );
+                                      }
+                                    })
+                                  ],
+                                );
+                              } else {
+                                return const SizedBox();
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      const Divider(),
+                      BlocBuilder<TestBloc, TestState>(
+                        bloc: bloc,
+                        builder: (context, state) {
+                          if (state is TestLoaded) {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: state.test.body.length,
+                              itemBuilder: (context, index) {
+                                return TestAnswerWidget(
+                                  test: state.test,
+                                  index: index,
+                                  bloc: bloc,
+                                );
+                              },
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
-}
-
-class KeepAlivePage extends StatefulWidget {
-  const KeepAlivePage({
-    super.key,
-    required this.child,
-  });
-
-  final Widget child;
-
-  @override
-  // ignore: library_private_types_in_public_api
-  _KeepAlivePageState createState() => _KeepAlivePageState();
-}
-
-class _KeepAlivePageState extends State<KeepAlivePage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-
-    return widget.child;
-  }
-
-  @override
-  bool get wantKeepAlive => true;
 }

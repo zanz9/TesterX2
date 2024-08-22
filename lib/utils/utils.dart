@@ -1,3 +1,3 @@
-export 'firestore/firestore.dart';
-export 'shared_preferences/shared_preferences.dart';
+
+export 'cache.dart';
 export 'docx.dart';

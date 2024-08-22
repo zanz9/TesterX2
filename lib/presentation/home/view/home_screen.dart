@@ -1,63 +1,109 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testerx2/presentation/home/home.dart';
+import 'package:testerx2/repository/repository.dart';
 import 'package:testerx2/router/router.dart';
+import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({
-    super.key,
-  });
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return AutoTabsRouter.tabBar(
-      routes: const [
-        MainRoute(),
-        HistoryRoute(),
-        SettingsRoute(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          lazy: false,
+          create: (context) => HomeBloc()..add(OnHome()),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (context) => HomeLastTestBloc()..add(OnHomeLastTest()),
+        ),
       ],
-      builder: (context, child, controller) {
-        final tabsRouter = AutoTabsRouter.of(context);
-        return Scaffold(
-          body: child,
-          bottomNavigationBar: Theme(
-            data: ThemeData(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            const SliverToBoxAdapter(child: SizedBox(height: 30)),
+            const HomeSliverAppBar(),
+            const SliverToBoxAdapter(child: SizedBox(height: 30)),
+            BlocBuilder<HomeLastTestBloc, HomeLastTestState>(
+              builder: (context, state) {
+                if (state is HomeLastTestLoaded) {
+                  return SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: DottedBorder(
+                        color: Colors.black,
+                        borderType: BorderType.RRect,
+                        radius: const Radius.circular(20),
+                        dashPattern: const [10, 10],
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 16),
+                        child: Column(
+                          children: [
+                            const Text(
+                              'Вы еще не завершили этот тест',
+                              style: TextStyle(
+                                fontSize: 22,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            GestureDetector(
+                              onTap: () =>
+                                  context.router.replace(const TestPageRoute()),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 6),
+                                child: PrimaryListWidget(
+                                  text: state.testModel.name,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return const SliverToBoxAdapter();
+                }
+              },
             ),
-            child: BottomNavigationBar(
-              backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
-              selectedIconTheme: IconThemeData(color: theme.primaryColor),
-              unselectedIconTheme:
-                  theme.bottomNavigationBarTheme.unselectedIconTheme,
-              showUnselectedLabels: false,
-              showSelectedLabels: false,
-              currentIndex: tabsRouter.activeIndex,
-              onTap: tabsRouter.setActiveIndex,
-              items: const [
-                BottomNavigationBarItem(
-                  label: '',
-                  icon: Icon(Icons.play_arrow),
-                ),
-                BottomNavigationBarItem(
-                  label: '',
-                  icon: Icon(Icons.history),
-                ),
-                BottomNavigationBarItem(
-                  label: '',
-                  icon: Icon(Icons.settings),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+            BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                if (state is HomeTestsLoaded) {
+                  List<TestModel> tests = state.tests;
+                  return SliverList.builder(
+                    itemCount: tests.length,
+                    itemBuilder: (context, index) {
+                      TestModel test = tests[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 6),
+                        child: TestListWidget(test: test),
+                      );
+                    },
+                  );
+                } else {
+                  String text = '';
+                  if (state is HomeUserNotHaveGroup) {
+                    text = 'Пользователь не состоит в группе';
+                  } else if (state is HomeUserGroupNotHaveTests) {
+                    text = 'В этой группе нет ни одного теста';
+                  }
+                  return SliverToBoxAdapter(
+                      child: Text(text, style: const TextStyle(fontSize: 18)));
+                }
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 }

@@ -16,12 +16,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<OnLogin>((event, emit) async {
       emit(LoginLoading());
       try {
-        var authRepo = AuthRepository();
-        await authRepo.login(
+        await GetIt.I<AuthRepository>().login(
           email: event.email.trim().toLowerCase(),
           password: event.password.trim(),
         );
-        GetIt.I<AppRouter>().replaceAll([const NewHomeRoute()]);
+        GetIt.I<AppRouter>().replaceAll([const HomeRoute()]);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'invalid-email') {
           emit(LoginUserNotFound());
@@ -40,8 +39,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       (event, emit) async {
         emit(LoginLoading());
         try {
-          await AuthRepository().login();
-          GetIt.I<AppRouter>().replace(const MainRoute());
+          await GetIt.I<AuthRepository>().login();
+          GetIt.I<AppRouter>().replaceAll([const HomeRoute()]);
         } on FirebaseAuthException catch (e) {
           if (e.code == "network-request-failed") {
             emit(LoginConnectionWrong());

@@ -33,7 +33,7 @@ class GroupRepository {
   }
 
   Future<String?> getMyGroup() async {
-    AuthModel? user = await AuthRepository().getUser();
+    AuthModel? user = await GetIt.I<AuthRepository>().getUser();
     if (user == null) return null;
     String? groupId = user.groupId;
     if (groupId == null) return null;

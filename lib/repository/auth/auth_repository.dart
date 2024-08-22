@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/repository/auth/auth_model.dart';
+import 'package:testerx2/utils/utils.dart';
 
 class AuthRepository {
   final authInstance = FirebaseAuth.instance;
@@ -36,7 +37,10 @@ class AuthRepository {
     await authInstance.sendPasswordResetEmail(email: email);
   }
 
-  Future<void> logout() async => await authInstance.signOut();
+  Future<void> logout() async {
+    await prefs.clear();
+    await authInstance.signOut();
+  }
 
   bool isAuth() => authInstance.currentUser != null;
 
@@ -44,7 +48,7 @@ class AuthRepository {
     AuthModel user;
     String? displayName = authInstance.currentUser?.displayName;
     String? userFromStorage = prefs.getString('user');
-    if (userFromStorage != null) {
+    if (userFromStorage != null && await Cache.isNotExpired()) {
       user = AuthModel.fromJson(
         jsonDecode(prefs.getString('user')!) as Map,
         displayName,
@@ -59,13 +63,17 @@ class AuthRepository {
       userData.value as Map,
       displayName,
     );
-    await prefs.setString('user', jsonEncode(user.toJson()));
+    var userJson = jsonEncode(user.toJson());
+    if (userFromStorage == null || userJson != userFromStorage) {
+      await prefs.setString('user', userJson);
+    }
     return user;
   }
 
   Future<void> updateUser({AuthModel? data, bool lazy = false}) async {
     data ??= AuthModel();
     await prefs.setString('user', jsonEncode(data.toJson()));
+    await getUser();
     String? uid = authInstance.currentUser?.uid;
     if (lazy) {
       database.ref('users/$uid').set(data.toJson());

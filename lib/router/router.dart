@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:testerx2/models/index.dart';
 import 'package:testerx2/presentation/presentation.dart';
 import 'package:testerx2/repository/repository.dart';
 import 'package:testerx2/router/guard.dart';
@@ -15,7 +12,7 @@ class AppRouter extends RootStackRouter {
   List<AutoRoute> get routes => [
         AutoRoute(
           path: '/',
-          page: NewHomeRoute.page,
+          page: HomeRoute.page,
           guards: [AuthGuard()],
         ),
         CustomRoute(
@@ -26,47 +23,19 @@ class AppRouter extends RootStackRouter {
           guards: [AuthGuard()],
         ),
         CustomRoute(
-          page: NewTestRoute.page,
+          page: TestPageRoute.page,
           path: '/test',
           transitionsBuilder: TransitionsBuilders.slideTop,
           durationInMilliseconds: 300,
           guards: [AuthGuard()],
         ),
         CustomRoute(
-          page: NewTestFinishRoute.page,
+          page: TestFinishRoute.page,
           path: '/test_finish',
           transitionsBuilder: TransitionsBuilders.slideBottom,
           durationInMilliseconds: 300,
           guards: [AuthGuard()],
         ),
-        AutoRoute(page: HomeRoute.page, path: '/old', children: [
-          AutoRoute(
-            path: '',
-            page: MainRoute.page,
-          ),
-          AutoRoute(
-            path: 'history',
-            page: HistoryRoute.page,
-          ),
-          AutoRoute(
-            path: 'settings',
-            page: SettingsRoute.page,
-          ),
-          AutoRoute(
-            path: 'test_preview',
-            page: TestPreviewRoute.page,
-          ),
-          AutoRoute(
-            path: 'test',
-            page: TestPageRoute.page,
-          ),
-          AutoRoute(
-            path: 'test_finish',
-            page: TestFinishRoute.page,
-          ),
-        ], guards: [
-          AuthGuard()
-        ]),
         CustomRoute(
           path: '/login',
           page: LoginRoute.page,
