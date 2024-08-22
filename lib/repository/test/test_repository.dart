@@ -39,12 +39,14 @@ class TestRepository {
     var text = prefs.getString('tests/$id');
 
     late TestModel test;
-    if (text != null) {
+    if (text != null && await Cache.isNotExpired()) {
       test = TestModel.fromJson(jsonDecode(text) as Map, id);
     } else {
       DataSnapshot data = await db.ref('tests').child(id).get();
       test = TestModel.fromJson(data.value as Map, id);
-      await prefs.setString('tests/$id', jsonEncode(test.toJson()));
+      if (text == null || text != jsonEncode(test.toJson())) {
+        await prefs.setString('tests/$id', jsonEncode(test.toJson()));
+      }
     }
     var groupName = await GetIt.I<GroupRepository>().getGroup(test.groupId);
     test.group = GroupModel(id: test.groupId, name: groupName);

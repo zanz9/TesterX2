@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:testerx2/firebase_options.dart';
 import 'package:testerx2/myapp.dart';
 import 'package:testerx2/singletons.dart';
+import 'package:testerx2/utils/utils.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 Future<void> main() async {
@@ -11,6 +12,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await registerSingletons();
+  await Cache.isNotExpired();
   setPathUrlStrategy();
   bool isDark = false;
   runApp(MyApp(isDark: isDark));
