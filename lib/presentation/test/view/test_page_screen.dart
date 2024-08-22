@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:testerx2/presentation/test/test.dart';
@@ -124,68 +124,102 @@ class TestPageScreen extends StatelessWidget {
                           onPressed: () => bloc.add(OnTestNext()),
                           icon: const Icon(Icons.arrow_forward)))
                 ])),
-        body: GestureDetector(
-          onPanEnd: onSwipe,
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView(
-                children: [
-                  const SizedBox(height: 15),
-                  Column(
+        body: CallbackShortcuts(
+          bindings: <ShortcutActivator, VoidCallback>{
+            const SingleActivator(LogicalKeyboardKey.keyA): () =>
+                bloc.add(OnTestPrev()),
+            const SingleActivator(LogicalKeyboardKey.keyD): () =>
+                bloc.add(OnTestNext()),
+          },
+          child: Focus(
+            autofocus: true,
+            child: GestureDetector(
+              onPanEnd: onSwipe,
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ListView(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            BlocBuilder<TestBloc, TestState>(
-                              bloc: bloc,
-                              builder: (context, state) {
-                                if (state is TestLoaded) {
-                                  return Text(
-                                    '${state.textIndex + 1}/${testModel.tests.length}',
-                                    style: const TextStyle(fontSize: 18),
-                                  );
-                                }
+                      const SizedBox(height: 15),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                BlocBuilder<TestBloc, TestState>(
+                                  bloc: bloc,
+                                  builder: (context, state) {
+                                    if (state is TestLoaded) {
+                                      return Text(
+                                        '${state.textIndex + 1}/${testModel.tests.length}',
+                                        style: const TextStyle(fontSize: 18),
+                                      );
+                                    }
+                                    return const SizedBox();
+                                  },
+                                ),
+                                const Spacer(),
+                                IconButton(
+                                  onPressed: showMenuQuestionNumberList,
+                                  icon: const Icon(Icons.menu_rounded),
+                                ),
+                                IconButton(
+                                  onPressed: finishTestOrNot,
+                                  icon: const Icon(Icons.exit_to_app_rounded),
+                                ),
+                              ],
+                            ),
+                          ),
+                          BlocBuilder<TestBloc, TestState>(
+                            bloc: bloc,
+                            builder: (context, state) {
+                              if (state is TestLoaded) {
+                                return Wrap(
+                                  children: [
+                                    ...state.test.title
+                                        .split('<testerx_img>')
+                                        .map((el) {
+                                      if (el != el.split('TESTERX').last) {
+                                        Uint8List u8 = base64Decode(
+                                            el.split('TESTERX').last);
+                                        return Image.memory(u8);
+                                      } else {
+                                        return Text(
+                                          el,
+                                          style: const TextStyle(
+                                            fontSize: 24,
+                                          ),
+                                        );
+                                      }
+                                    })
+                                  ],
+                                );
+                              } else {
                                 return const SizedBox();
-                              },
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              onPressed: showMenuQuestionNumberList,
-                              icon: const Icon(Icons.menu_rounded),
-                            ),
-                            IconButton(
-                              onPressed: finishTestOrNot,
-                              icon: const Icon(Icons.exit_to_app_rounded),
-                            ),
-                          ],
-                        ),
+                              }
+                            },
+                          ),
+                        ],
                       ),
+                      const Divider(),
                       BlocBuilder<TestBloc, TestState>(
                         bloc: bloc,
                         builder: (context, state) {
                           if (state is TestLoaded) {
-                            return Wrap(
-                              children: [
-                                ...state.test.title
-                                    .split('<testerx_img>')
-                                    .map((el) {
-                                  if (el != el.split('TESTERX').last) {
-                                    Uint8List u8 =
-                                        base64Decode(el.split('TESTERX').last);
-                                    return Image.memory(u8);
-                                  } else {
-                                    return Text(
-                                      el,
-                                      style: const TextStyle(
-                                        fontSize: 24,
-                                      ),
-                                    );
-                                  }
-                                })
-                              ],
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: state.test.body.length,
+                              itemBuilder: (context, index) {
+                                return TestAnswerWidget(
+                                  test: state.test,
+                                  index: index,
+                                  bloc: bloc,
+                                );
+                              },
                             );
                           } else {
                             return const SizedBox();
@@ -194,29 +228,7 @@ class TestPageScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Divider(),
-                  BlocBuilder<TestBloc, TestState>(
-                    bloc: bloc,
-                    builder: (context, state) {
-                      if (state is TestLoaded) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: state.test.body.length,
-                          itemBuilder: (context, index) {
-                            return TestAnswerWidget(
-                              test: state.test,
-                              index: index,
-                              bloc: bloc,
-                            );
-                          },
-                        );
-                      } else {
-                        return const SizedBox();
-                      }
-                    },
-                  ),
-                ],
+                ),
               ),
             ),
           ),

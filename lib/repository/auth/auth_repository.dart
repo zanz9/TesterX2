@@ -37,7 +37,10 @@ class AuthRepository {
     await authInstance.sendPasswordResetEmail(email: email);
   }
 
-  Future<void> logout() async => await authInstance.signOut();
+  Future<void> logout() async {
+    await prefs.clear();
+    await authInstance.signOut();
+  }
 
   bool isAuth() => authInstance.currentUser != null;
 
@@ -60,9 +63,9 @@ class AuthRepository {
       userData.value as Map,
       displayName,
     );
-    if (userFromStorage == null ||
-        jsonEncode(user.toJson()) != userFromStorage) {
-      await prefs.setString('user', jsonEncode(user.toJson()));
+    var userJson = jsonEncode(user.toJson());
+    if (userFromStorage == null || userJson != userFromStorage) {
+      await prefs.setString('user', userJson);
     }
     return user;
   }
