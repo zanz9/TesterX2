@@ -20,11 +20,15 @@ class HistoryRepository {
       userId: uid!,
       testId: test.id,
       timestamp: DateTime.now(),
-      testLength: maxScoreTest,
+      testLength: test.tests.length,
       correct: correct,
+      maxScore: maxScoreTest,
       pathHistory: pathHistory,
     );
-    await db.ref('history/$uid').push().set(history.toJson());
+    var newHistory = db.ref('history/$uid').push();
+    await newHistory.set(history.toJson());
+    await GetIt.I<SortedByTestIdRepository>()
+        .addSortedByTestId(test.id, correct, maxScoreTest, newHistory.key!);
     return history;
   }
 
@@ -39,6 +43,22 @@ class HistoryRepository {
       list.add(HistoryModel.fromJson(element.value as Map));
     }
     list.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    return list;
+  }
+
+  Future<List<HistoryModel>> getAllHistoryByTestId(
+      {required String uid, required String testId, int limit = 10}) async {
+    DataSnapshot data = await db
+        .ref('history/$uid')
+        .orderByChild('testId')
+        .equalTo(testId)
+        .limitToLast(10)
+        .get();
+    List<HistoryModel> list = [];
+    for (var element in ((data.value ?? {}) as Map).entries) {
+      list.add(HistoryModel.fromJson(element.value as Map));
+    }
+    list.sort((a, b) => a.timestamp.compareTo(b.timestamp));
     return list;
   }
 }

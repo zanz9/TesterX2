@@ -146,6 +146,13 @@ class ProfileScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 30),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text('Version: v1.1.3'),
+                  ],
+                ),
+                const SizedBox(height: 30),
               ],
             ),
           ),

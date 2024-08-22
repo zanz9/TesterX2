@@ -66,7 +66,7 @@ class _HistoryListWidgetState extends State<HistoryListWidget> {
     setState(() {
       isPressed = false;
     });
-    GetIt.I<AppRouter>().push(TestFinishRoute(test: widget.data.test));
+    GetIt.I<AppRouter>().push(TestFinishRoute(testModel: widget.data.test));
   }
 
   @override
