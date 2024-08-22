@@ -57,6 +57,7 @@ class _HistoryListWidgetState extends State<HistoryListWidget> {
   bool isPressed = false;
 
   openHistoryTest() async {
+    if (isPressed) return;
     setState(() {
       isPressed = true;
     });
