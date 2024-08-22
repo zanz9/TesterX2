@@ -90,19 +90,7 @@ class TestPageScreen extends StatelessWidget {
       showCupertinoDialog(
         context: context,
         builder: (context) {
-          return CupertinoAlertDialog(
-            title: const Text('Вы уверены что хотите закончить тест?'),
-            actions: [
-              CupertinoDialogAction(
-                child: const Text('Да'),
-                onPressed: () => bloc.add(OnTestFinish()),
-              ),
-              CupertinoDialogAction(
-                child: const Text('Нет'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          );
+          return FinishDialogWidget(bloc: bloc);
         },
       );
     }

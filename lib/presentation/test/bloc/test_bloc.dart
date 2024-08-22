@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -50,44 +52,34 @@ class TestBloc extends Bloc<TestEvent, TestState> {
 
     on<OnTestSubmit>((event, emit) {
       var test = tests[testIndex];
-      if (test.answered) return;
-      if (test.answers.isEmpty) return;
-      test.answered = true;
-      test.receive = (getCorrectCount() - test.answers.length);
-      test.answers.map((el) {
-        test.receive += test.body[el].score;
-      }).toList();
-      if (test.receive < 0) test.receive = 0;
+      calculateTest(test);
       emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
     });
 
     on<OnTestFinish>((event, emit) async {
-      tests.map((test) {
-        if (test.answers.isEmpty) return;
-        test.answered = true;
-        test.receive = (getCorrectCount() - test.answers.length);
-        test.answers.map((el) {
-          test.receive += test.body[el].score;
-        }).toList();
-        if (test.receive < 0) test.receive = 0;
-      }).toList();
+      for (var test in tests) {
+        calculateTest(test);
+      }
       await GetIt.I<HistoryRepository>().addHistory(testModel);
       GetIt.I<AppRouter>().replaceAll([
         const HomeRoute(),
-        TestFinishRoute(
-          test: testModel,
-        ),
+        TestFinishRoute(test: testModel),
       ]);
     });
   }
 
   int getCorrectCount() {
-    int correctCount = 0;
-    for (var el in tests[testIndex].body) {
-      if (el.score > 0) {
-        correctCount++;
-      }
-    }
-    return correctCount;
+    return tests[testIndex].body.where((el) => el.score > 0).length;
+  }
+
+  calculateTest(TestFileModel test) {
+    if (test.answered || test.answers.isEmpty) return;
+    test.answered = true;
+    test.receive = test.answers.fold<int>(
+      0,
+      (total, el) => total + (test.body[el].score),
+    );
+    test.receive = (getCorrectCount() - test.answers.length) + test.receive;
+    if (test.receive < 0) test.receive = 0;
   }
 }

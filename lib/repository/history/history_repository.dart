@@ -10,11 +10,11 @@ class HistoryRepository {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     int maxScoreTest = 0;
     int correct = 0;
-    for (var e in test.tests) {
+    List<Map<String, dynamic>> list = test.tests.map((e) {
       correct += e.receive;
       maxScoreTest += e.maxScore;
-    }
-    var list = test.tests.map((e) => e.toJsonHistory()).toList();
+      return e.toJsonHistory();
+    }).toList();
     String pathHistory = await GetIt.I<StorageRepository>().uploadHistory(list);
     final history = HistoryModel(
       userId: uid!,

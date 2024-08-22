@@ -43,9 +43,8 @@ class TestRepository {
       test = TestModel.fromJson(jsonDecode(text) as Map, id);
     } else {
       DataSnapshot data = await db.ref('tests').child(id).get();
-      var test = TestModel.fromJson(data.value as Map, id);
-      await prefs.setString('tests/$id', jsonEncode(test.toJson()));
       test = TestModel.fromJson(data.value as Map, id);
+      await prefs.setString('tests/$id', jsonEncode(test.toJson()));
     }
     var groupName = await GetIt.I<GroupRepository>().getGroup(test.groupId);
     test.group = GroupModel(id: test.groupId, name: groupName);
