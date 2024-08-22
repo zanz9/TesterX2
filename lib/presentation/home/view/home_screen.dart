@@ -1,8 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testerx2/presentation/home/home.dart';
 import 'package:testerx2/repository/repository.dart';
+import 'package:testerx2/router/router.dart';
+import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -10,15 +13,67 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      lazy: false,
-      create: (context) => HomeBloc()..add(OnHome()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          lazy: false,
+          create: (context) => HomeBloc()..add(OnHome()),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (context) => HomeLastTestBloc()..add(OnHomeLastTest()),
+        ),
+      ],
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
             const SliverToBoxAdapter(child: SizedBox(height: 30)),
             const HomeSliverAppBar(),
             const SliverToBoxAdapter(child: SizedBox(height: 30)),
+            BlocBuilder<HomeLastTestBloc, HomeLastTestState>(
+              builder: (context, state) {
+                if (state is HomeLastTestLoaded) {
+                  return SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: DottedBorder(
+                        color: Colors.black,
+                        borderType: BorderType.RRect,
+                        radius: const Radius.circular(20),
+                        dashPattern: const [10, 10],
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 16),
+                        child: Column(
+                          children: [
+                            const Text(
+                              'Вы еще не завершили этот тест',
+                              style: TextStyle(
+                                fontSize: 22,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            GestureDetector(
+                              onTap: () =>
+                                  context.router.push(const TestPageRoute()),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 6),
+                                child: PrimaryListWidget(
+                                  text: state.testModel.name,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return const SliverToBoxAdapter();
+                }
+              },
+            ),
             BlocBuilder<HomeBloc, HomeState>(
               builder: (context, state) {
                 if (state is HomeTestsLoaded) {
