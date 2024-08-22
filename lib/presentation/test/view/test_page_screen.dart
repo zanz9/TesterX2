@@ -7,17 +7,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:testerx2/presentation/test/test.dart';
-import 'package:testerx2/repository/repository.dart';
 import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
 class TestPageScreen extends StatelessWidget {
-  const TestPageScreen({super.key, required this.testModel});
-  final TestModel testModel;
+  const TestPageScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final bloc = TestBloc()..add(OnTest(testModel: testModel));
+    final bloc = TestBloc()..add(OnTest());
 
     onSwipe(details) async {
       int direction = 3;
@@ -42,7 +42,7 @@ class TestPageScreen extends StatelessWidget {
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 5,
                   ),
-                  itemCount: testModel.tests.length,
+                  itemCount: bloc.testModel.tests.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
                     return Center(
@@ -54,20 +54,21 @@ class TestPageScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             color: Colors.grey.shade300,
-                            border: testModel.tests[index].answers.isNotEmpty
-                                ? !testModel.tests[index].answered
-                                    ? Border.all()
-                                    : null
-                                : null,
+                            border:
+                                bloc.testModel.tests[index].answers.isNotEmpty
+                                    ? !bloc.testModel.tests[index].answered
+                                        ? Border.all()
+                                        : null
+                                    : null,
                           ),
                           child: Center(
                             child: Text(
                               '${index + 1}',
                               style: TextStyle(
                                 fontSize: 18,
-                                color: testModel.tests[index].answered
-                                    ? testModel.tests[index].receive ==
-                                            testModel.tests[index].maxScore
+                                color: bloc.testModel.tests[index].answered
+                                    ? bloc.testModel.tests[index].receive ==
+                                            bloc.testModel.tests[index].maxScore
                                         ? Colors.green
                                         : Colors.red
                                     : Colors.black,
@@ -154,7 +155,7 @@ class TestPageScreen extends StatelessWidget {
                                   builder: (context, state) {
                                     if (state is TestLoaded) {
                                       return Text(
-                                        '${state.textIndex + 1}/${testModel.tests.length}',
+                                        '${state.textIndex + 1}/${bloc.tests.length}',
                                         style: const TextStyle(fontSize: 18),
                                       );
                                     }

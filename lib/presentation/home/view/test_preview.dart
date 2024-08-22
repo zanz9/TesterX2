@@ -1,6 +1,9 @@
-import 'package:auto_route/auto_route.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/presentation/home/home.dart';
 import 'package:testerx2/repository/repository.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -129,7 +132,7 @@ class _TestPreviewState extends State<TestPreview> {
                             Expanded(
                               child: PrimaryButton(
                                 isLoading: startButtonLoading,
-                                onTap: () {
+                                onTap: () async {
                                   setState(() {
                                     startButtonLoading = true;
                                   });
@@ -140,9 +143,12 @@ class _TestPreviewState extends State<TestPreview> {
                                   setState(() {
                                     startButtonLoading = false;
                                   });
-                                  context.router.replace(
-                                    TestPageRoute(testModel: widget.test),
-                                  );
+                                  await GetIt.I<SharedPreferences>().setString(
+                                      'testModel',
+                                      jsonEncode(
+                                          widget.test.toJsonAllFields()));
+                                  GetIt.I<AppRouter>()
+                                      .replace(const TestPageRoute());
                                 },
                                 child: const Text(
                                   'Начать тест',

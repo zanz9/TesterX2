@@ -3,11 +3,7 @@ part of 'test_bloc.dart';
 @immutable
 sealed class TestEvent {}
 
-class OnTest extends TestEvent {
-  final TestModel testModel;
-
-  OnTest({required this.testModel});
-}
+class OnTest extends TestEvent {}
 
 class OnTestNext extends TestEvent {}
 

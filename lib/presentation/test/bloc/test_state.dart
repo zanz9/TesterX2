@@ -11,3 +11,5 @@ final class TestLoaded extends TestState {
 
   TestLoaded({required this.textIndex, required this.test});
 }
+
+final class TestLoadFailed extends TestState {}

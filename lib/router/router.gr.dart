@@ -152,17 +152,10 @@ class TestFinishRouteArgs {
 
 /// generated route for
 /// [TestPageScreen]
-class TestPageRoute extends PageRouteInfo<TestPageRouteArgs> {
-  TestPageRoute({
-    Key? key,
-    required TestModel testModel,
-    List<PageRouteInfo>? children,
-  }) : super(
+class TestPageRoute extends PageRouteInfo<void> {
+  const TestPageRoute({List<PageRouteInfo>? children})
+      : super(
           TestPageRoute.name,
-          args: TestPageRouteArgs(
-            key: key,
-            testModel: testModel,
-          ),
           initialChildren: children,
         );
 
@@ -171,27 +164,7 @@ class TestPageRoute extends PageRouteInfo<TestPageRouteArgs> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<TestPageRouteArgs>();
-      return TestPageScreen(
-        key: args.key,
-        testModel: args.testModel,
-      );
+      return const TestPageScreen();
     },
   );
-}
-
-class TestPageRouteArgs {
-  const TestPageRouteArgs({
-    this.key,
-    required this.testModel,
-  });
-
-  final Key? key;
-
-  final TestModel testModel;
-
-  @override
-  String toString() {
-    return 'TestPageRouteArgs{key: $key, testModel: $testModel}';
-  }
 }
