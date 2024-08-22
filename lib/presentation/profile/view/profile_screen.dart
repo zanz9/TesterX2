@@ -38,6 +38,10 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: theme.scaffoldBackgroundColor,
         surfaceTintColor: theme.scaffoldBackgroundColor,
+        leading: BackButton(
+          onPressed: () => GetIt.I<AppRouter>().replaceAll([const HomeRoute()]),
+        ),
+        automaticallyImplyLeading: true,
         actions: [
           GestureDetector(
             onTap: () async {
