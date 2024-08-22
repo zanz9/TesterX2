@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                             const SizedBox(height: 10),
                             GestureDetector(
                               onTap: () =>
-                                  context.router.push(const TestPageRoute()),
+                                  context.router.replace(const TestPageRoute()),
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 6),

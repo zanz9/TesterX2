@@ -26,29 +26,29 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
     });
 
-    on<OnTestNext>((event, emit) {
+    on<OnTestNext>((event, emit) async {
       if (testIndex < tests.length - 1) {
         ++testIndex;
-        setTestIndexPrefs(testIndex);
+        await setTestIndexPrefs(testIndex);
         emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
       }
     });
 
-    on<OnTestPrev>((event, emit) {
+    on<OnTestPrev>((event, emit) async {
       if (testIndex > 0) {
         --testIndex;
-        setTestIndexPrefs(testIndex);
+        await setTestIndexPrefs(testIndex);
         emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
       }
     });
 
-    on<OnTestIndexSet>((event, emit) {
+    on<OnTestIndexSet>((event, emit) async {
       testIndex = event.testIndex;
-      setTestIndexPrefs(testIndex);
+      await setTestIndexPrefs(testIndex);
       emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
     });
 
-    on<OnTestAnswer>((event, emit) {
+    on<OnTestAnswer>((event, emit) async {
       var test = tests[testIndex];
       if (test.answered) return;
       var answerIndex = event.index;
@@ -57,14 +57,14 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       } else {
         test.answers.add(answerIndex);
       }
-      setTestModelPrefs();
+      await setTestModelPrefs();
       emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
     });
 
-    on<OnTestSubmit>((event, emit) {
+    on<OnTestSubmit>((event, emit) async {
       var test = tests[testIndex];
       calculateTest(test);
-      setTestModelPrefs();
+      await setTestModelPrefs();
       emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
     });
 
@@ -73,7 +73,7 @@ class TestBloc extends Bloc<TestEvent, TestState> {
         calculateTest(test);
       }
       await GetIt.I<HistoryRepository>().addHistory(testModel);
-      testModelPrefsClear();
+      await testModelPrefsClear();
       GetIt.I<AppRouter>().replaceAll([
         const HomeRoute(),
         TestFinishRoute(test: testModel),
@@ -81,11 +81,10 @@ class TestBloc extends Bloc<TestEvent, TestState> {
     });
   }
 
-  int getCorrectCount() {
-    return tests[testIndex].body.where((el) => el.score > 0).length;
-  }
+  int getCorrectCount() =>
+      tests[testIndex].body.where((el) => el.score > 0).length;
 
-  calculateTest(TestFileModel test) {
+  void calculateTest(TestFileModel test) {
     if (test.answered || test.answers.isEmpty) return;
     test.answered = true;
     test.receive = test.answers.fold<int>(
