@@ -20,7 +20,9 @@ class _FinishDialogWidgetState extends State<FinishDialogWidget> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return CupertinoAlertDialog(
-      title: const Text('Вы уверены что хотите закончить тест?'),
+      title: isLoading
+          ? const Text('Подсчитываем результаты...')
+          : const Text('Вы уверены что хотите закончить тест?'),
       actions: [
         CupertinoDialogAction(
           child: Text(

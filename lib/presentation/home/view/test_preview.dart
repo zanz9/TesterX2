@@ -64,9 +64,16 @@ class _TestPreviewState extends State<TestPreview> {
                                 keyboardType: TextInputType.number,
                                 onChange: (value) {
                                   setState(() {
-                                    sliderValue = int.parse(value).toDouble();
-                                    textController.text =
-                                        int.tryParse(value).toString();
+                                    String val = value;
+                                    if (int.parse(val) >
+                                        state.test.tests.length) {
+                                      val = state.test.tests.length.toString();
+                                      textController.text = val;
+                                    } else if (int.parse(val) < 0) {
+                                      val = 0.toString();
+                                      textController.text = val;
+                                    }
+                                    sliderValue = int.parse(val).toDouble();
                                   });
                                 },
                               ),
