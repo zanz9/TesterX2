@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class PrimaryButton extends StatelessWidget {
+class PrimaryButton extends StatefulWidget {
   final Function() onTap;
   final bool isLoading;
   final Function()? onTapOutside;
@@ -25,42 +25,60 @@ class PrimaryButton extends StatelessWidget {
   });
 
   @override
+  State<PrimaryButton> createState() => _PrimaryButtonState();
+}
+
+class _PrimaryButtonState extends State<PrimaryButton> {
+  bool isHovering = false;
+  @override
   Widget build(BuildContext context) {
-    Color color = Colors.black;
-    if (outlined) {
-      if (isLoading) {
-        color = Colors.grey;
+    var theme = Theme.of(context);
+    Color getColorFromOutlinedOrNo() {
+      if (widget.outlined) {
+        if (isHovering) return Colors.white;
+        return theme.scaffoldBackgroundColor;
       } else {
-        color = Colors.transparent;
-      }
-    } else {
-      if (isLoading) {
-        color = Colors.grey;
-      } else {
-        color = Colors.black;
+        if (isHovering) return Colors.grey[850]!;
+        return Colors.black;
       }
     }
-    return TapRegion(
-      onTapInside: (event) {
-        onTap();
+
+    Color color = widget.isLoading ? Colors.grey : getColorFromOutlinedOrNo();
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (event) {
+        setState(() {
+          isHovering = true;
+        });
       },
-      onTapOutside: (event) {
-        if (onTapOutside != null) onTapOutside!();
+      onExit: (event) {
+        setState(() {
+          isHovering = false;
+        });
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: padding,
-        margin: margin,
-        height: height,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(borderRadius),
-          border: Border.all(
-            color: outlined ? Colors.black : Colors.transparent,
+      child: TapRegion(
+        onTapInside: (event) {
+          widget.onTap();
+        },
+        onTapOutside: (event) {
+          if (widget.onTapOutside != null) widget.onTapOutside!();
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          padding: widget.padding,
+          margin: widget.margin,
+          height: widget.height,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(widget.borderRadius),
+            border: Border.all(
+              color: widget.outlined ? Colors.black : Colors.transparent,
+            ),
           ),
-        ),
-        child: Center(
-          child: child,
+          child: Center(
+            child: widget.child,
+          ),
         ),
       ),
     );

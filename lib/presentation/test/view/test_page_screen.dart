@@ -41,39 +41,46 @@ class TestPageScreen extends StatelessWidget {
               body: Padding(
                 padding: const EdgeInsets.all(16),
                 child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 75,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
                   ),
                   itemCount: bloc.testModel.tests.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
-                    return Center(
-                      child: GestureDetector(
-                        onTap: () => bloc.add(OnTestIndexSet(testIndex: index)),
-                        child: Container(
-                          height: 65,
-                          width: 65,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.grey.shade300,
-                            border:
-                                bloc.testModel.tests[index].answers.isNotEmpty
-                                    ? !bloc.testModel.tests[index].answered
-                                        ? Border.all()
-                                        : null
-                                    : null,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${index + 1}',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: bloc.testModel.tests[index].answered
-                                    ? bloc.testModel.tests[index].receive ==
-                                            bloc.testModel.tests[index].maxScore
-                                        ? Colors.green
-                                        : Colors.red
-                                    : Colors.black,
+                    return MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: () =>
+                              bloc.add(OnTestIndexSet(testIndex: index)),
+                          child: Container(
+                            height: 65,
+                            width: 65,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.grey.shade300,
+                              border:
+                                  bloc.testModel.tests[index].answers.isNotEmpty
+                                      ? !bloc.testModel.tests[index].answered
+                                          ? Border.all()
+                                          : null
+                                      : null,
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${index + 1}',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: bloc.testModel.tests[index].answered
+                                      ? bloc.testModel.tests[index].receive ==
+                                              bloc.testModel.tests[index]
+                                                  .maxScore
+                                          ? Colors.green
+                                          : Colors.red
+                                      : Colors.black,
+                                ),
                               ),
                             ),
                           ),
