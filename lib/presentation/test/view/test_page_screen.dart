@@ -5,7 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/presentation/test/test.dart';
 import 'package:testerx2/ui/ui.dart';
 
@@ -96,6 +98,8 @@ class TestPageScreen extends StatelessWidget {
       );
     }
 
+    bool testCheck = GetIt.I<SharedPreferences>().getBool('testCheck') ?? false;
+
     return BlocProvider(
       create: (context) => bloc,
       child: Scaffold(
@@ -109,16 +113,18 @@ class TestPageScreen extends StatelessWidget {
                       child: IconButton(
                           onPressed: () => bloc.add(OnTestPrev()),
                           icon: const Icon(Icons.arrow_back))),
-                  Expanded(
-                      child: PrimaryButton(
-                          margin: const EdgeInsets.all(10),
-                          onTap: () => bloc.add(OnTestSubmit()),
-                          isLoading: false,
-                          child: const Text('Ответить',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16)))),
+                  testCheck
+                      ? const SizedBox()
+                      : Expanded(
+                          child: PrimaryButton(
+                              margin: const EdgeInsets.all(10),
+                              onTap: () => bloc.add(OnTestSubmit()),
+                              isLoading: false,
+                              child: const Text('Ответить',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16)))),
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: IconButton(
@@ -167,10 +173,16 @@ class TestPageScreen extends StatelessWidget {
                                   onPressed: showMenuQuestionNumberList,
                                   icon: const Icon(Icons.menu_rounded),
                                 ),
-                                IconButton(
-                                  onPressed: finishTestOrNot,
-                                  icon: const Icon(Icons.exit_to_app_rounded),
-                                ),
+                                testCheck
+                                    ? IconButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        icon: const Icon(Icons.close_rounded),
+                                      )
+                                    : IconButton(
+                                        onPressed: finishTestOrNot,
+                                        icon: const Icon(
+                                            Icons.exit_to_app_rounded),
+                                      ),
                               ],
                             ),
                           ),

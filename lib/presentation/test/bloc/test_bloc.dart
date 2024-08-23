@@ -22,6 +22,9 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       var testIndexInt = prefs.getInt('testIndex') ?? 0;
       testIndex = testIndexInt;
 
+      var testCheck = prefs.getBool('testCheck') ?? false;
+      if (testCheck) {}
+
       testModel = TestModel.fromJsonAllFields(jsonDecode(testModelString));
       emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
     });
