@@ -13,11 +13,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var homeBloc = HomeBloc()..add(OnHome());
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          lazy: false,
-          create: (context) => HomeBloc()..add(OnHome()),
+        BlocProvider.value(
+          value: homeBloc,
         ),
         BlocProvider(
           lazy: false,
@@ -29,7 +29,8 @@ class HomeScreen extends StatelessWidget {
           onPanEnd: (details) async {
             int direction = 3;
             if (details.velocity.pixelsPerSecond.dx < direction) {
-              context.router.push(const ProfileRoute());
+              await context.router.push(const ProfileRoute());
+              if (context.mounted) homeBloc.add(OnHome());
             }
           },
           child: CustomScrollView(
