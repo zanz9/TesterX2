@@ -86,7 +86,7 @@ class TestBloc extends Bloc<TestEvent, TestState> {
     on<OnTestFinishClose>((event, emit) async {
       await prefs.remove('testCheck');
       await testModelPrefsClear();
-      GetIt.I<AppRouter>().back();
+      Navigator.pop(event.context);
     });
   }
 

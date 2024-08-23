@@ -25,4 +25,8 @@ class OnTestSubmit extends TestEvent {}
 
 class OnTestFinishAndExit extends TestEvent {}
 
-class OnTestFinishClose extends TestEvent {}
+class OnTestFinishClose extends TestEvent {
+  final BuildContext context;
+
+  OnTestFinishClose({required this.context});
+}
