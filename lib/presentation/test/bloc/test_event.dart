@@ -24,3 +24,5 @@ class OnTestAnswer extends TestEvent {
 class OnTestSubmit extends TestEvent {}
 
 class OnTestFinishAndExit extends TestEvent {}
+
+class OnTestFinishClose extends TestEvent {}

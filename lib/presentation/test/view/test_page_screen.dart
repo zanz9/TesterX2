@@ -175,7 +175,8 @@ class TestPageScreen extends StatelessWidget {
                                 ),
                                 testCheck
                                     ? IconButton(
-                                        onPressed: () => Navigator.pop(context),
+                                        onPressed: () =>
+                                            bloc.add(OnTestFinishClose()),
                                         icon: const Icon(Icons.close_rounded),
                                       )
                                     : IconButton(

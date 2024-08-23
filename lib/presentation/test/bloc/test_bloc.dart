@@ -82,6 +82,12 @@ class TestBloc extends Bloc<TestEvent, TestState> {
         TestFinishRoute(testModel: testModel),
       ]);
     });
+
+    on<OnTestFinishClose>((event, emit) async {
+      await prefs.remove('testCheck');
+      await testModelPrefsClear();
+      GetIt.I<AppRouter>().back();
+    });
   }
 
   int getCorrectCount() =>
