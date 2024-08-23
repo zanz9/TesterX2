@@ -20,8 +20,8 @@ class SortedByTestIdModel {
       userId: json['userId'] as String,
       testId: json['testId'] as String,
       historyId: json['historyId'] as String,
-      correct: json['correct'] as int,
-      maxScore: json['maxScore'] as int,
+      correct: (json['correct'] as num).toInt(),
+      maxScore: (json['maxScore'] as num).toInt(),
       timestamp: DateTime.parse(json['timestamp'] as String),
     );
   }

@@ -17,38 +17,42 @@ class PrimaryListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        border: Border.all(color: Colors.white),
-        borderRadius: const BorderRadius.all(Radius.circular(15)),
-      ),
-      height: secondaryText == null ? 54 : 72,
-      child: Row(
-        children: [
-          secondaryText == null
-              ? Text(
-                  text,
-                  style: const TextStyle(fontSize: 18),
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      text,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    Text(
-                      secondaryText!,
-                      style: const TextStyle(fontSize: 14, color: Colors.grey),
-                    ),
-                  ],
-                ),
-          const Spacer(),
-          rightWidget,
-        ],
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 18),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          border: Border.all(color: Colors.white),
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
+        ),
+        height: secondaryText == null ? 54 : 72,
+        child: Row(
+          children: [
+            secondaryText == null
+                ? Text(
+                    text,
+                    style: const TextStyle(fontSize: 18),
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        text,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      Text(
+                        secondaryText!,
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+            const Spacer(),
+            rightWidget,
+          ],
+        ),
       ),
     );
   }

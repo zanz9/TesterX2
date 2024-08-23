@@ -3,8 +3,13 @@ part of 'test_finish_bloc.dart';
 @immutable
 sealed class TestFinishEvent {}
 
-class OnTestFinish extends TestFinishEvent {
-  final String testId;
+class OnTestFinish extends TestFinishEvent {}
 
-  OnTestFinish({required this.testId});
+class OnTestFinishAgainPassTest extends TestFinishEvent {}
+
+class OnTestFinishCheck extends TestFinishEvent {
+  final TestModel testModel;
+  final int testIndex;
+
+  OnTestFinishCheck({required this.testModel, required this.testIndex});
 }

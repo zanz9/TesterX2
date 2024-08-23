@@ -5,7 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/presentation/test/test.dart';
 import 'package:testerx2/ui/ui.dart';
 
@@ -39,39 +41,46 @@ class TestPageScreen extends StatelessWidget {
               body: Padding(
                 padding: const EdgeInsets.all(16),
                 child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 75,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
                   ),
                   itemCount: bloc.testModel.tests.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
-                    return Center(
-                      child: GestureDetector(
-                        onTap: () => bloc.add(OnTestIndexSet(testIndex: index)),
-                        child: Container(
-                          height: 65,
-                          width: 65,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.grey.shade300,
-                            border:
-                                bloc.testModel.tests[index].answers.isNotEmpty
-                                    ? !bloc.testModel.tests[index].answered
-                                        ? Border.all()
-                                        : null
-                                    : null,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${index + 1}',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: bloc.testModel.tests[index].answered
-                                    ? bloc.testModel.tests[index].receive ==
-                                            bloc.testModel.tests[index].maxScore
-                                        ? Colors.green
-                                        : Colors.red
-                                    : Colors.black,
+                    return MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: () =>
+                              bloc.add(OnTestIndexSet(testIndex: index)),
+                          child: Container(
+                            height: 65,
+                            width: 65,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.grey.shade300,
+                              border:
+                                  bloc.testModel.tests[index].answers.isNotEmpty
+                                      ? !bloc.testModel.tests[index].answered
+                                          ? Border.all()
+                                          : null
+                                      : null,
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${index + 1}',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: bloc.testModel.tests[index].answered
+                                      ? bloc.testModel.tests[index].receive ==
+                                              bloc.testModel.tests[index]
+                                                  .maxScore
+                                          ? Colors.green
+                                          : Colors.red
+                                      : Colors.black,
+                                ),
                               ),
                             ),
                           ),
@@ -96,6 +105,8 @@ class TestPageScreen extends StatelessWidget {
       );
     }
 
+    bool testCheck = GetIt.I<SharedPreferences>().getBool('testCheck') ?? false;
+
     return BlocProvider(
       create: (context) => bloc,
       child: Scaffold(
@@ -109,16 +120,18 @@ class TestPageScreen extends StatelessWidget {
                       child: IconButton(
                           onPressed: () => bloc.add(OnTestPrev()),
                           icon: const Icon(Icons.arrow_back))),
-                  Expanded(
-                      child: PrimaryButton(
-                          margin: const EdgeInsets.all(10),
-                          onTap: () => bloc.add(OnTestSubmit()),
-                          isLoading: false,
-                          child: const Text('Ответить',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16)))),
+                  testCheck
+                      ? const SizedBox()
+                      : Expanded(
+                          child: PrimaryButton(
+                              margin: const EdgeInsets.all(10),
+                              onTap: () => bloc.add(OnTestSubmit()),
+                              isLoading: false,
+                              child: const Text('Ответить',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16)))),
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: IconButton(
@@ -167,10 +180,19 @@ class TestPageScreen extends StatelessWidget {
                                   onPressed: showMenuQuestionNumberList,
                                   icon: const Icon(Icons.menu_rounded),
                                 ),
-                                IconButton(
-                                  onPressed: finishTestOrNot,
-                                  icon: const Icon(Icons.exit_to_app_rounded),
-                                ),
+                                testCheck
+                                    ? IconButton(
+                                        onPressed: () {
+                                          bloc.add(OnTestFinishClose(
+                                              context: context));
+                                        },
+                                        icon: const Icon(Icons.close_rounded),
+                                      )
+                                    : IconButton(
+                                        onPressed: finishTestOrNot,
+                                        icon: const Icon(
+                                            Icons.exit_to_app_rounded),
+                                      ),
                               ],
                             ),
                           ),

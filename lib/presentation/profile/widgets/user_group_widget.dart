@@ -30,65 +30,68 @@ class _UserGroupWidgetState extends State<UserGroupWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        var a = await showCupertinoModalBottomSheet(
-          context: context,
-          builder: (context) => const SizedBox(
-            height: 600,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: GroupListScreen(),
-            ),
-          ),
-        );
-        if (a == null) {
-          getMyGroup();
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        margin: const EdgeInsets.symmetric(horizontal: 25),
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                'Группа: $userGroup',
-                overflow: TextOverflow.fade,
-                maxLines: 1,
-                softWrap: false,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () async {
+          var a = await showCupertinoModalBottomSheet(
+            context: context,
+            builder: (context) => const SizedBox(
+              height: 600,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: GroupListScreen(),
               ),
             ),
-            const Row(
-              children: [
-                SizedBox(width: 12),
-                Text(
-                  'Сменить группу',
-                  style: TextStyle(
+          );
+          if (a == null) {
+            getMyGroup();
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          margin: const EdgeInsets.symmetric(horizontal: 25),
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  'Группа: $userGroup',
+                  overflow: TextOverflow.fade,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontSize: 16,
                   ),
                 ),
-                SizedBox(width: 4),
-                Icon(
-                  Icons.arrow_forward_rounded,
-                  color: Colors.white,
-                  size: 16,
-                )
-              ],
-            )
-          ],
+              ),
+              const Row(
+                children: [
+                  SizedBox(width: 12),
+                  Text(
+                    'Сменить группу',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  Icon(
+                    Icons.arrow_forward_rounded,
+                    color: Colors.white,
+                    size: 16,
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -43,6 +43,7 @@ dependencies:
   dotted_border: ^2.1.0
   fl_chart: ^0.68.0
   syncfusion_flutter_charts: ^26.2.10
+  floating_draggable_widget: ^2.1.5
 
 dev_dependencies:
   flutter_test:

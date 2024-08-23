@@ -106,17 +106,10 @@ class RegisterRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [TestFinishScreen]
-class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
-  TestFinishRoute({
-    Key? key,
-    required TestModel testModel,
-    List<PageRouteInfo>? children,
-  }) : super(
+class TestFinishRoute extends PageRouteInfo<void> {
+  const TestFinishRoute({List<PageRouteInfo>? children})
+      : super(
           TestFinishRoute.name,
-          args: TestFinishRouteArgs(
-            key: key,
-            testModel: testModel,
-          ),
           initialChildren: children,
         );
 
@@ -125,29 +118,9 @@ class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<TestFinishRouteArgs>();
-      return TestFinishScreen(
-        key: args.key,
-        testModel: args.testModel,
-      );
+      return const TestFinishScreen();
     },
   );
-}
-
-class TestFinishRouteArgs {
-  const TestFinishRouteArgs({
-    this.key,
-    required this.testModel,
-  });
-
-  final Key? key;
-
-  final TestModel testModel;
-
-  @override
-  String toString() {
-    return 'TestFinishRouteArgs{key: $key, testModel: $testModel}';
-  }
 }
 
 /// generated route for
