@@ -15,15 +15,14 @@ class TestBloc extends Bloc<TestEvent, TestState> {
   late TestModel testModel;
   late List<TestFileModel> tests = testModel.tests;
   var prefs = GetIt.I<SharedPreferences>();
+  bool testCheck = false;
   TestBloc() : super(TestInitial()) {
     on<OnTest>((event, emit) {
       var testModelString = prefs.getString('testModel');
       if (testModelString == null) return emit(TestLoadFailed());
       var testIndexInt = prefs.getInt('testIndex') ?? 0;
       testIndex = testIndexInt;
-
-      var testCheck = prefs.getBool('testCheck') ?? false;
-      if (testCheck) {}
+      testCheck = prefs.getBool('testCheck') ?? false;
 
       testModel = TestModel.fromJsonAllFields(jsonDecode(testModelString));
       emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
@@ -52,6 +51,7 @@ class TestBloc extends Bloc<TestEvent, TestState> {
     });
 
     on<OnTestAnswer>((event, emit) async {
+      if (testCheck) return;
       var test = tests[testIndex];
       if (test.answered) return;
       var answerIndex = event.index;
@@ -77,9 +77,10 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       }
       await GetIt.I<HistoryRepository>().addHistory(testModel);
       await testModelPrefsClear();
+      await prefs.setBool('testFinish', true);
       GetIt.I<AppRouter>().replaceAll([
         const HomeRoute(),
-        TestFinishRoute(testModel: testModel),
+        const TestFinishRoute(),
       ]);
     });
 
@@ -114,7 +115,6 @@ class TestBloc extends Bloc<TestEvent, TestState> {
   }
 
   Future<bool> testModelPrefsClear() async {
-    await prefs.remove('testIndex');
-    return await prefs.remove('testModel');
+    return await prefs.remove('testIndex');
   }
 }

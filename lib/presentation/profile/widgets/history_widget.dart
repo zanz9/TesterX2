@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/repository/repository.dart';
 import 'package:testerx2/router/router.dart';
 import 'package:testerx2/ui/ui.dart';
@@ -66,7 +69,10 @@ class _HistoryListWidgetState extends State<HistoryListWidget> {
     setState(() {
       isPressed = false;
     });
-    GetIt.I<AppRouter>().push(TestFinishRoute(testModel: widget.data.test));
+    await GetIt.I<SharedPreferences>()
+        .setString('testModel', jsonEncode(widget.data.test.toJsonAllFields()));
+    await GetIt.I<SharedPreferences>().setBool('testFinish', true);
+    GetIt.I<AppRouter>().push(const TestFinishRoute());
   }
 
   @override

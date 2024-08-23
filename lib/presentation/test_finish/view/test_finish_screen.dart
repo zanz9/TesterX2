@@ -9,23 +9,15 @@ import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
 class TestFinishScreen extends StatelessWidget {
-  const TestFinishScreen({super.key, required this.testModel});
-  final TestModel testModel;
+  const TestFinishScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    int maxScoreTest = 0;
-    int correct = 0;
-    for (var e in testModel.tests) {
-      correct += e.receive;
-      maxScoreTest += e.maxScore;
-    }
-
-    var bloc = TestFinishBloc()..add(OnTestFinish(testId: testModel.id));
+    var bloc = TestFinishBloc()..add(OnTestFinish());
     return BlocProvider.value(
       value: bloc,
       child: FloatingDraggableWidget(
-        floatingWidget: ReloadIconWidget(bloc: bloc, testModel: testModel),
+        floatingWidget: ReloadIconWidget(bloc: bloc),
         dx: MediaQuery.of(context).size.width - 50 - 10,
         dy: 60,
         floatingWidgetHeight: 50,
@@ -34,121 +26,129 @@ class TestFinishScreen extends StatelessWidget {
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView(
-                children: [
-                  const SizedBox(height: 30),
-                  Text(
-                    'Название: ${testModel.name}',
-                    style: const TextStyle(fontSize: 28),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Кол-во вопросов: ${testModel.tests.length}',
-                    style: const TextStyle(fontSize: 24),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Набранные баллы: $correct/$maxScoreTest',
-                    style: const TextStyle(fontSize: 24),
-                  ),
-                  const SizedBox(height: 20),
-                  BlocBuilder<TestFinishBloc, TestFinishState>(
-                    builder: (context, state) {
-                      if (state is TestFinishLoaded) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Последние 50:',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              children: [
-                                Flexible(
-                                  child: ChartWidget(
-                                    list: state.otherHistoryList,
-                                    underText: 'Общий',
-                                    procent: false,
-                                  ),
-                                ),
-                                Flexible(
-                                  child: ChartWidget(
-                                    list: state.myHistoryList,
-                                    underText: GetIt.I<AuthRepository>()
-                                            .authInstance
-                                            .currentUser!
-                                            .displayName ??
-                                        'Пользователь',
-                                    procent: false,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        );
-                      } else {
-                        return const SizedBox();
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: testModel.tests.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 75,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                    ),
-                    itemBuilder: (context, index) {
-                      var test = testModel.tests[index];
-
-                      var color = test.receive == test.maxScore
-                          ? Colors.green.shade300
-                          : test.answered
-                              ? Colors.red.shade200
-                              : Colors.transparent;
-                      return GestureDetector(
-                        onTap: () {
-                          bloc.add(OnTestFinishCheck(
-                            testModel: testModel,
-                            testIndex: index,
-                          ));
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius: BorderRadius.circular(12),
-                            color: color,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${index + 1}',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '${test.receive}/${test.maxScore}',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.grey.shade800,
-                                ),
-                              ),
-                            ],
-                          ),
+              child: BlocBuilder<TestFinishBloc, TestFinishState>(
+                builder: (context, state) {
+                  if (state is TestFinishLoaded) {
+                    return ListView(
+                      children: [
+                        const SizedBox(height: 30),
+                        Text(
+                          'Название: ${bloc.testModel.name}',
+                          style: const TextStyle(fontSize: 28),
                         ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                ],
+                        const SizedBox(height: 20),
+                        Text(
+                          'Кол-во вопросов: ${bloc.testModel.tests.length}',
+                          style: const TextStyle(fontSize: 24),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          'Набранные баллы: ${bloc.correct}/${bloc.maxScoreTest}',
+                          style: const TextStyle(fontSize: 24),
+                        ),
+                        const SizedBox(height: 20),
+                        BlocBuilder<TestFinishBloc, TestFinishState>(
+                          builder: (context, state) {
+                            if (state is TestFinishLoaded) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Последние 50:',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                        child: ChartWidget(
+                                          list: state.otherHistoryList,
+                                          underText: 'Общий',
+                                          procent: false,
+                                        ),
+                                      ),
+                                      Flexible(
+                                        child: ChartWidget(
+                                          list: state.myHistoryList,
+                                          underText: GetIt.I<AuthRepository>()
+                                                  .authInstance
+                                                  .currentUser!
+                                                  .displayName ??
+                                              'Пользователь',
+                                          procent: false,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: bloc.testModel.tests.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 75,
+                            mainAxisSpacing: 12,
+                            crossAxisSpacing: 12,
+                          ),
+                          itemBuilder: (context, index) {
+                            var test = bloc.testModel.tests[index];
+
+                            var color = test.receive == test.maxScore
+                                ? Colors.green.shade300
+                                : test.answered
+                                    ? Colors.red.shade200
+                                    : Colors.transparent;
+                            return GestureDetector(
+                              onTap: () {
+                                bloc.add(OnTestFinishCheck(
+                                  testModel: bloc.testModel,
+                                  testIndex: index,
+                                ));
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: color,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '${index + 1}',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${test.receive}/${test.maxScore}',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.grey.shade800,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
               ),
             ),
           ),
@@ -180,11 +180,9 @@ class ReloadIconWidget extends StatefulWidget {
   const ReloadIconWidget({
     super.key,
     required this.bloc,
-    required this.testModel,
   });
 
   final TestFinishBloc bloc;
-  final TestModel testModel;
 
   @override
   State<ReloadIconWidget> createState() => _ReloadIconWidgetState();
@@ -224,8 +222,7 @@ class _ReloadIconWidgetState extends State<ReloadIconWidget>
         ),
         onPressed: () {
           _controller.repeat();
-          widget.bloc
-              .add(OnTestFinishAgainPassTest(testModel: widget.testModel));
+          widget.bloc.add(OnTestFinishAgainPassTest());
         },
         icon: const Icon(Icons.refresh_rounded),
       ),

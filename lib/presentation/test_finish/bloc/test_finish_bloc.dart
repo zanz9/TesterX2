@@ -12,18 +12,32 @@ part 'test_finish_event.dart';
 part 'test_finish_state.dart';
 
 class TestFinishBloc extends Bloc<TestFinishEvent, TestFinishState> {
+  var prefs = GetIt.I<SharedPreferences>();
+  int maxScoreTest = 0;
+  int correct = 0;
+  late TestModel testModel;
   TestFinishBloc() : super(TestFinishInitial()) {
     on<OnTestFinish>((event, emit) async {
+      var testModelString = prefs.getString('testModel');
+      if (testModelString == null) {
+        return GetIt.I<AppRouter>().replaceAll([const HomeRoute()]);
+      }
+      testModel = TestModel.fromJsonAllFields(jsonDecode(testModelString));
+      for (var e in testModel.tests) {
+        correct += e.receive;
+        maxScoreTest += e.maxScore;
+      }
+
       List<SortedByTestIdModel> otherHistoryList =
           await GetIt.I<SortedByTestIdRepository>().getLastSortedByTestId(
-        testId: event.testId,
+        testId: testModel.id,
       );
 
       final uid = FirebaseAuth.instance.currentUser?.uid;
       List<HistoryModel> myHistoryList =
           await GetIt.I<HistoryRepository>().getAllHistoryByTestId(
         uid: uid!,
-        testId: event.testId,
+        testId: testModel.id,
       );
       emit(TestFinishLoaded(
         otherHistoryList: otherHistoryList,
@@ -33,7 +47,6 @@ class TestFinishBloc extends Bloc<TestFinishEvent, TestFinishState> {
 
     on<OnTestFinishAgainPassTest>(
       (event, emit) async {
-        var testModel = event.testModel;
         var tests =
             await GetIt.I<StorageRepository>().downloadTest(testModel.path);
         tests.shuffle();

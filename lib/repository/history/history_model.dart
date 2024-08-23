@@ -25,9 +25,9 @@ class HistoryModel {
       testId: json['testId'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
       userId: json['userId'] as String,
-      correct: json['correct'] as int,
-      maxScore: json['maxScore'] as int,
-      testLength: json['testLength'] as int,
+      correct: (json['correct'] as num).toInt(),
+      maxScore: (json['maxScore'] as num).toInt(),
+      testLength: (json['testLength'] as num).toInt(),
       pathHistory: json['pathHistory'] as String,
     );
   }

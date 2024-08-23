@@ -12,7 +12,12 @@ part 'home_last_test_state.dart';
 class HomeLastTestBloc extends Bloc<HomeLastTestEvent, HomeLastTestState> {
   HomeLastTestBloc() : super(HomeLastTestInitial()) {
     on<HomeLastTestEvent>((event, emit) {
-      var testModelString = GetIt.I<SharedPreferences>().getString('testModel');
+      var prefs = GetIt.I<SharedPreferences>();
+      bool check = prefs.getBool('testCheck') ?? false;
+      bool finish = prefs.getBool('testFinish') ?? false;
+      if (check || finish) return emit(HomeLastTestNotFound());
+
+      var testModelString = prefs.getString('testModel');
       if (testModelString == null) return emit(HomeLastTestNotFound());
 
       emit(HomeLastTestLoaded(

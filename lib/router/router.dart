@@ -1,7 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:testerx2/presentation/presentation.dart';
-import 'package:testerx2/repository/repository.dart';
 import 'package:testerx2/router/guard.dart';
 
 part 'router.gr.dart';
