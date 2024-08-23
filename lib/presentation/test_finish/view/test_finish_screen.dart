@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -63,25 +62,9 @@ class TestFinishScreen extends StatelessWidget {
                                 child: ChartWidget(
                                   list: state.otherHistoryList,
                                   underText: 'Общий',
-                                  procent: true,
+                                  procent: false,
                                 ),
                               ),
-                              Flexible(
-                                child: ChartWidget(
-                                  list: state.myHistoryList,
-                                  underText: GetIt.I<AuthRepository>()
-                                          .authInstance
-                                          .currentUser!
-                                          .displayName ??
-                                      'Пользователь',
-                                  procent: true,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
                               Flexible(
                                 child: ChartWidget(
                                   list: state.myHistoryList,
@@ -95,6 +78,22 @@ class TestFinishScreen extends StatelessWidget {
                               ),
                             ],
                           ),
+                          // const SizedBox(height: 10),
+                          // Row(
+                          //   children: [
+                          //     Flexible(
+                          //       child: ChartWidget(
+                          //         list: state.myHistoryList,
+                          //         underText: GetIt.I<AuthRepository>()
+                          //                 .authInstance
+                          //                 .currentUser!
+                          //                 .displayName ??
+                          //             'Пользователь',
+                          //         procent: false,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       );
                     } else {
@@ -180,88 +179,6 @@ class TestFinishScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ChartWidget extends StatelessWidget {
-  const ChartWidget({
-    super.key,
-    required this.list,
-    required this.underText,
-    required this.procent,
-  });
-
-  final List list;
-  final String underText;
-  final bool procent;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.all(8),
-      margin: const EdgeInsets.symmetric(horizontal: 3),
-      child: AspectRatio(
-        aspectRatio: 5 / 4,
-        child: SizedBox(
-          child: LineChart(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.linear,
-            LineChartData(
-              lineTouchData: const LineTouchData(
-                enabled: true,
-                touchSpotThreshold: 25,
-                touchTooltipData: LineTouchTooltipData(),
-              ),
-              borderData: FlBorderData(
-                show: false,
-              ),
-              titlesData: FlTitlesData(
-                bottomTitles: AxisTitles(
-                  axisNameWidget: Text(underText),
-                  axisNameSize: 22,
-                  sideTitles: const SideTitles(),
-                ),
-                topTitles: const AxisTitles(),
-                leftTitles: const AxisTitles(),
-                rightTitles: const AxisTitles(),
-              ),
-              gridData: const FlGridData(show: false),
-              lineBarsData: [
-                LineChartBarData(
-                  isCurved: true,
-                  barWidth: 3,
-                  curveSmoothness: .25,
-                  gradient: LinearGradient(colors: [
-                    Colors.black,
-                    Colors.grey.shade700,
-                    Colors.black,
-                    Colors.grey.shade700,
-                    Colors.black,
-                  ]),
-                  isStrokeCapRound: true,
-                  dotData: const FlDotData(show: false),
-                  spots: [
-                    for (var (k, v) in list.indexed)
-                      FlSpot(
-                        k.toDouble(),
-                        procent
-                            ? (v.correct.toDouble() /
-                                v.maxScore.toDouble() *
-                                100)
-                            : v.correct.toDouble(),
-                      )
-                  ],
-                ),
-              ],
             ),
           ),
         ),

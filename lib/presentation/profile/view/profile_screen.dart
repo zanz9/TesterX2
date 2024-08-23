@@ -7,6 +7,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:testerx2/presentation/presentation.dart';
 import 'package:testerx2/repository/auth/auth_repository.dart';
 import 'package:testerx2/router/router.dart';
+import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
 class ProfileScreen extends StatelessWidget {
@@ -68,96 +69,99 @@ class ProfileScreen extends StatelessWidget {
           )
         ],
       ),
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ListView(
-              children: [
-                const SizedBox(height: 30),
-                BlocProvider(
-                  create: (context) => bloc,
-                  child: BlocBuilder<ProfileBloc, ProfileState>(
-                    builder: (context, state) {
-                      String displayName = 'Пользователь';
-                      if (state is ProfileLoaded) {
-                        displayName = state.user.displayName == ''
-                            ? 'Пользователь'
-                            : state.user.displayName ?? 'Пользователь';
-                      }
-                      return Stack(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(top: 48),
-                            height: 200,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 50),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      displayName,
-                                      style: const TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500,
+      body: GestureDetector(
+        onPanEnd: (details) async {
+          int direction = 3;
+          if (details.velocity.pixelsPerSecond.dx > direction) {
+            context.router.replaceAll([const HomeRoute()]);
+          }
+        },
+        child: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ListView(
+                children: [
+                  const SizedBox(height: 30),
+                  BlocProvider(
+                    create: (context) => bloc,
+                    child: BlocBuilder<ProfileBloc, ProfileState>(
+                      builder: (context, state) {
+                        String displayName = 'Пользователь';
+                        if (state is ProfileLoaded) {
+                          displayName = state.user.displayName == ''
+                              ? 'Пользователь'
+                              : state.user.displayName ?? 'Пользователь';
+                        }
+                        return Stack(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(top: 48),
+                              height: 200,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                border: Border.all(color: Colors.white),
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 50),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        displayName,
+                                        style: const TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        editName(state is ProfileLoaded
-                                            ? state.user.displayName ?? ''
-                                            : '');
-                                      },
-                                      icon: const Icon(Icons.edit),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(height: 30),
-                                const UserGroupWidget()
-                              ],
+                                      IconButton(
+                                        onPressed: () {
+                                          editName(state is ProfileLoaded
+                                              ? state.user.displayName ?? ''
+                                              : '');
+                                        },
+                                        icon: const Icon(Icons.edit),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 30),
+                                  const UserGroupWidget()
+                                ],
+                              ),
                             ),
-                          ),
-                          const UserAvatarWithCamera(),
-                        ],
-                      );
+                            const UserAvatarWithCamera(),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  const AdminWidgets(),
+                  if (kDebugMode)
+                    const Column(
+                      children: [
+                        SizedBox(height: 30),
+                        DevWidgets(),
+                      ],
+                    ),
+                  const SizedBox(height: 30),
+                  BlocBuilder<ProfileBloc, ProfileState>(
+                    bloc: bloc,
+                    builder: (context, state) {
+                      if (state is ProfileLoaded) {
+                        return HistoryWidget(history: state.history);
+                      } else {
+                        return const SizedBox();
+                      }
                     },
                   ),
-                ),
-                const AdminWidgets(),
-                if (kDebugMode)
-                  const Column(
-                    children: [
-                      SizedBox(height: 30),
-                      DevWidgets(),
-                    ],
-                  ),
-                const SizedBox(height: 30),
-                BlocBuilder<ProfileBloc, ProfileState>(
-                  bloc: bloc,
-                  builder: (context, state) {
-                    if (state is ProfileLoaded) {
-                      return HistoryWidget(history: state.history);
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                ),
-                const SizedBox(height: 30),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text('Version: v1.1.3'),
-                  ],
-                ),
-                const SizedBox(height: 30),
-              ],
+                  const SizedBox(height: 30),
+                  const VersionWidget(),
+                  const SizedBox(height: 30),
+                ],
+              ),
             ),
           ),
         ),

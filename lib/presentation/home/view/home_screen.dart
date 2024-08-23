@@ -25,83 +25,92 @@ class HomeScreen extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            const SliverToBoxAdapter(child: SizedBox(height: 30)),
-            const HomeSliverAppBar(),
-            const SliverToBoxAdapter(child: SizedBox(height: 30)),
-            BlocBuilder<HomeLastTestBloc, HomeLastTestState>(
-              builder: (context, state) {
-                if (state is HomeLastTestLoaded) {
-                  return SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      child: DottedBorder(
-                        color: Colors.black,
-                        borderType: BorderType.RRect,
-                        radius: const Radius.circular(20),
-                        dashPattern: const [10, 10],
+        body: GestureDetector(
+          onPanEnd: (details) async {
+            int direction = 3;
+            if (details.velocity.pixelsPerSecond.dx < direction) {
+              context.router.push(const ProfileRoute());
+            }
+          },
+          child: CustomScrollView(
+            slivers: [
+              const SliverToBoxAdapter(child: SizedBox(height: 30)),
+              const HomeSliverAppBar(),
+              const SliverToBoxAdapter(child: SizedBox(height: 30)),
+              BlocBuilder<HomeLastTestBloc, HomeLastTestState>(
+                builder: (context, state) {
+                  if (state is HomeLastTestLoaded) {
+                    return SliverToBoxAdapter(
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 16),
-                        child: Column(
-                          children: [
-                            const Text(
-                              'Вы еще не завершили этот тест',
-                              style: TextStyle(
-                                fontSize: 22,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            GestureDetector(
-                              onTap: () =>
-                                  context.router.replace(const TestPageRoute()),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 6),
-                                child: PrimaryListWidget(
-                                  text: state.testModel.name,
+                            horizontal: 16, vertical: 8),
+                        child: DottedBorder(
+                          color: Colors.black,
+                          borderType: BorderType.RRect,
+                          radius: const Radius.circular(20),
+                          dashPattern: const [10, 10],
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 16),
+                          child: Column(
+                            children: [
+                              const Text(
+                                'Вы еще не завершили этот тест',
+                                style: TextStyle(
+                                  fontSize: 22,
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 10),
+                              GestureDetector(
+                                onTap: () => context.router
+                                    .replace(const TestPageRoute()),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 6),
+                                  child: PrimaryListWidget(
+                                    text: state.testModel.name,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                } else {
-                  return const SliverToBoxAdapter();
-                }
-              },
-            ),
-            BlocBuilder<HomeBloc, HomeState>(
-              builder: (context, state) {
-                if (state is HomeTestsLoaded) {
-                  List<TestModel> tests = state.tests;
-                  return SliverList.builder(
-                    itemCount: tests.length,
-                    itemBuilder: (context, index) {
-                      TestModel test = tests[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 6),
-                        child: TestListWidget(test: test),
-                      );
-                    },
-                  );
-                } else {
-                  String text = '';
-                  if (state is HomeUserNotHaveGroup) {
-                    text = 'Пользователь не состоит в группе';
-                  } else if (state is HomeUserGroupNotHaveTests) {
-                    text = 'В этой группе нет ни одного теста';
+                    );
+                  } else {
+                    return const SliverToBoxAdapter();
                   }
-                  return SliverToBoxAdapter(
-                      child: Text(text, style: const TextStyle(fontSize: 18)));
-                }
-              },
-            )
-          ],
+                },
+              ),
+              BlocBuilder<HomeBloc, HomeState>(
+                builder: (context, state) {
+                  if (state is HomeTestsLoaded) {
+                    List<TestModel> tests = state.tests;
+                    return SliverList.builder(
+                      itemCount: tests.length,
+                      itemBuilder: (context, index) {
+                        TestModel test = tests[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 6),
+                          child: TestListWidget(test: test),
+                        );
+                      },
+                    );
+                  } else {
+                    String text = '';
+                    if (state is HomeUserNotHaveGroup) {
+                      text = 'Пользователь не состоит в группе';
+                    } else if (state is HomeUserGroupNotHaveTests) {
+                      text = 'В этой группе нет ни одного теста';
+                    }
+                    return SliverToBoxAdapter(
+                        child:
+                            Text(text, style: const TextStyle(fontSize: 18)));
+                  }
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
