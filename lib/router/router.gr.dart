@@ -109,13 +109,13 @@ class RegisterRoute extends PageRouteInfo<void> {
 class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
   TestFinishRoute({
     Key? key,
-    required TestModel test,
+    required TestModel testModel,
     List<PageRouteInfo>? children,
   }) : super(
           TestFinishRoute.name,
           args: TestFinishRouteArgs(
             key: key,
-            test: test,
+            testModel: testModel,
           ),
           initialChildren: children,
         );
@@ -128,7 +128,7 @@ class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
       final args = data.argsAs<TestFinishRouteArgs>();
       return TestFinishScreen(
         key: args.key,
-        test: args.test,
+        testModel: args.testModel,
       );
     },
   );
@@ -137,16 +137,16 @@ class TestFinishRoute extends PageRouteInfo<TestFinishRouteArgs> {
 class TestFinishRouteArgs {
   const TestFinishRouteArgs({
     this.key,
-    required this.test,
+    required this.testModel,
   });
 
   final Key? key;
 
-  final TestModel test;
+  final TestModel testModel;
 
   @override
   String toString() {
-    return 'TestFinishRouteArgs{key: $key, test: $test}';
+    return 'TestFinishRouteArgs{key: $key, testModel: $testModel}';
   }
 }
 

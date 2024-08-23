@@ -68,7 +68,7 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       emit(TestLoaded(textIndex: testIndex, test: tests[testIndex]));
     });
 
-    on<OnTestFinish>((event, emit) async {
+    on<OnTestFinishAndExit>((event, emit) async {
       for (var test in tests) {
         calculateTest(test);
       }
@@ -76,7 +76,7 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       await testModelPrefsClear();
       GetIt.I<AppRouter>().replaceAll([
         const HomeRoute(),
-        TestFinishRoute(test: testModel),
+        TestFinishRoute(testModel: testModel),
       ]);
     });
   }

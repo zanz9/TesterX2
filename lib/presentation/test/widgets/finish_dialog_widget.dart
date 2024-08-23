@@ -35,7 +35,7 @@ class _FinishDialogWidgetState extends State<FinishDialogWidget> {
             setState(() {
               isLoading = true;
             });
-            widget.bloc.add(OnTestFinish());
+            widget.bloc.add(OnTestFinishAndExit());
           },
         ),
         CupertinoDialogAction(

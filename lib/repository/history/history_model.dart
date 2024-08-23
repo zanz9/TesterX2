@@ -5,6 +5,7 @@ class HistoryModel {
   final DateTime timestamp;
   final String userId;
   final int correct;
+  final int maxScore;
   final int testLength;
   final String pathHistory;
   late TestModel test;
@@ -14,6 +15,7 @@ class HistoryModel {
     required this.timestamp,
     required this.userId,
     required this.correct,
+    required this.maxScore,
     required this.testLength,
     required this.pathHistory,
   });
@@ -24,6 +26,7 @@ class HistoryModel {
       timestamp: DateTime.parse(json['timestamp'] as String),
       userId: json['userId'] as String,
       correct: json['correct'] as int,
+      maxScore: json['maxScore'] as int,
       testLength: json['testLength'] as int,
       pathHistory: json['pathHistory'] as String,
     );
@@ -35,6 +38,7 @@ class HistoryModel {
     data['timestamp'] = timestamp.toIso8601String();
     data['userId'] = userId;
     data['correct'] = correct;
+    data['maxScore'] = maxScore;
     data['testLength'] = testLength;
     data['pathHistory'] = pathHistory;
     return data;
