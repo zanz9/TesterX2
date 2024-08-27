@@ -5,6 +5,8 @@ sealed class HomeState {}
 
 final class HomeInitial extends HomeState {}
 
+final class HomeLoading extends HomeState {}
+
 final class HomeUserNotHaveGroup extends HomeState {
   final AuthModel user;
 

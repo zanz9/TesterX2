@@ -24,6 +24,7 @@ class HomeSliverAppBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             BlocBuilder<HomeBloc, HomeState>(
+              bloc: context.watch<HomeBloc>(),
               builder: (context, state) {
                 String displayName = 'Пользователь';
                 if (state is HomeTestsLoaded) {

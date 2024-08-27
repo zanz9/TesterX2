@@ -6,6 +6,7 @@ class PrimaryInput extends StatefulWidget {
   final bool obscureText;
   final Widget? prefixIcon;
   final Function(String)? onChange;
+  final Function(String)? onSubmitted;
   final TextInputType? keyboardType;
   final FocusNode? focusNode;
 
@@ -18,6 +19,7 @@ class PrimaryInput extends StatefulWidget {
     this.onChange,
     this.keyboardType,
     this.focusNode,
+    this.onSubmitted,
   });
 
   @override
@@ -46,6 +48,7 @@ class _PrimaryInputState extends State<PrimaryInput> {
       keyboardType: widget.keyboardType,
       controller: widget.controller,
       obscureText: obscureText,
+      onSubmitted: widget.onSubmitted,
       decoration: InputDecoration(
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.white),

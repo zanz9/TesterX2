@@ -63,9 +63,13 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 25),
-                    EmailInput(emailController: emailController),
+                    EmailInput(
+                        emailController: emailController, onSubmitted: login),
                     const SizedBox(height: 10),
-                    PasswordInput(passwordController: passwordController),
+                    PasswordInput(
+                      passwordController: passwordController,
+                      onSubmitted: login,
+                    ),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -125,7 +129,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),

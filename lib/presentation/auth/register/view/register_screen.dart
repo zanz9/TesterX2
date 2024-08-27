@@ -67,13 +67,21 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 25),
-                    EmailInput(emailController: emailController),
-                    const SizedBox(height: 10),
-                    PasswordInput(passwordController: passwordController),
+                    EmailInput(
+                      emailController: emailController,
+                      onSubmitted: register,
+                    ),
                     const SizedBox(height: 10),
                     PasswordInput(
-                        passwordController: passwordController2,
-                        isSecond: true),
+                      passwordController: passwordController,
+                      onSubmitted: register,
+                    ),
+                    const SizedBox(height: 10),
+                    PasswordInput(
+                      passwordController: passwordController2,
+                      isSecond: true,
+                      onSubmitted: register,
+                    ),
                     const SizedBox(height: 30),
                     PrimaryButton(
                         onTap: register,

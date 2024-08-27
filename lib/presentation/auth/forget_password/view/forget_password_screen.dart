@@ -65,7 +65,10 @@ class ForgetPasswordScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 25),
-                    EmailInput(emailController: emailController),
+                    EmailInput(
+                      emailController: emailController,
+                      onSubmitted: send,
+                    ),
                     const SizedBox(height: 25),
                     PrimaryButton(
                       onTap: send,

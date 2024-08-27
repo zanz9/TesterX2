@@ -6,9 +6,11 @@ class PasswordInput extends StatelessWidget {
     super.key,
     required this.passwordController,
     this.isSecond = false,
+    this.onSubmitted,
   });
   final TextEditingController passwordController;
   final bool isSecond;
+  final Function()? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +19,9 @@ class PasswordInput extends StatelessWidget {
       hintText: !isSecond ? 'Пароль' : 'Повторите пароль',
       obscureText: true,
       keyboardType: TextInputType.visiblePassword,
+      onSubmitted: (p0) {
+        if (onSubmitted != null) onSubmitted!();
+      },
       prefixIcon: const RotatedBox(
         quarterTurns: 1,
         child: Icon(Icons.key_outlined),
