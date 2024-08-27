@@ -29,8 +29,11 @@ class HomeScreen extends StatelessWidget {
           onPanEnd: (details) async {
             int direction = 3;
             if (details.velocity.pixelsPerSecond.dx < direction) {
-              await context.router.push(const ProfileRoute());
-              if (context.mounted) homeBloc.add(OnHome());
+              bool result =
+                  await context.router.push(const ProfileRoute()) ?? false;
+              if (result) {
+                homeBloc.add(OnHome());
+              }
             }
           },
           child: CustomScrollView(
@@ -105,8 +108,11 @@ class HomeScreen extends StatelessWidget {
                       text = 'В этой группе нет ни одного теста';
                     }
                     return SliverToBoxAdapter(
-                        child:
-                            Text(text, style: const TextStyle(fontSize: 18)));
+                      child: Text(
+                        text,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
                   }
                 },
               )

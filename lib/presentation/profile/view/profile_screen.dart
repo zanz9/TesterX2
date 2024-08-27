@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:testerx2/presentation/presentation.dart';
 import 'package:testerx2/router/router.dart';
@@ -39,7 +38,7 @@ class ProfileScreen extends StatelessWidget {
         backgroundColor: theme.scaffoldBackgroundColor,
         surfaceTintColor: theme.scaffoldBackgroundColor,
         leading: BackButton(
-          onPressed: () => GetIt.I<AppRouter>().replaceAll([const HomeRoute()]),
+          onPressed: () => context.router.replaceAll([const HomeRoute()]),
         ),
         automaticallyImplyLeading: true,
         actions: const [LogoutWidget(), SizedBox(width: 16)],
@@ -48,7 +47,7 @@ class ProfileScreen extends StatelessWidget {
         onPanEnd: (details) async {
           int direction = 3;
           if (details.velocity.pixelsPerSecond.dx > direction) {
-            context.router.replaceAll([const HomeRoute()]);
+            context.router.maybePop(true);
           }
         },
         child: SafeArea(
@@ -107,7 +106,9 @@ class ProfileScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            const UserAvatarWithCamera(),
+                            UserAvatarWithCamera(
+                              username: displayName,
+                            ),
                           ],
                         );
                       },

@@ -44,6 +44,8 @@ dependencies:
   fl_chart: ^0.68.0
   syncfusion_flutter_charts: ^26.2.10
   floating_draggable_widget: ^2.1.5
+  random_avatar: ^0.0.8
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:

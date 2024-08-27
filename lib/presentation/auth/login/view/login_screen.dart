@@ -102,54 +102,6 @@ class LoginScreen extends StatelessWidget {
                           ),
                         )),
                     const SizedBox(height: 50),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    //   child: Row(
-                    //     children: [
-                    //       Expanded(
-                    //         child: Divider(
-                    //           thickness: 0.5,
-                    //           color: Colors.grey[400],
-                    //         ),
-                    //       ),
-                    //       Padding(
-                    //         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    //         child: Text(
-                    //           'Или продолжить с помощью',
-                    //           style: TextStyle(color: Colors.grey[700]),
-                    //         ),
-                    //       ),
-                    //       Expanded(
-                    //         child: Divider(
-                    //           thickness: 0.5,
-                    //           color: Colors.grey[400],
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-
-                    // const SizedBox(height: 50),
-
-                    // const Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    // SquareTile(
-                    //   imagePath: 'images/icons/user.png',
-                    //   onTap: () {
-                    //     bloc.add(OnAnonymous());
-                    //   },
-                    // ),
-                    // SizedBox(width: 25),
-                    // SquareTile(imagePath: 'images/icons/google.png'),
-                    // const SizedBox(width: 25),
-                    // const SquareTile(imagePath: 'images/icons/apple.png')
-                    //   ],
-                    // ),
-
-                    // const SizedBox(height: 50),
-
-                    // not a member? register now
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
