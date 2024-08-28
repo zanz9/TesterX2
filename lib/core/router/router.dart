@@ -13,7 +13,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           path: '/',
           page: HomeRoute.page,
-          guards: [AuthGuard()],
         ),
         CustomRoute(
           page: ProfileRoute.page,
@@ -27,14 +26,12 @@ class AppRouter extends RootStackRouter {
           path: '/test',
           transitionsBuilder: TransitionsBuilders.slideTop,
           durationInMilliseconds: 300,
-          guards: [AuthGuard()],
         ),
         CustomRoute(
           page: TestFinishRoute.page,
           path: '/test_finish',
           transitionsBuilder: TransitionsBuilders.slideBottom,
           durationInMilliseconds: 300,
-          guards: [AuthGuard()],
         ),
         CustomRoute(
           path: '/login',

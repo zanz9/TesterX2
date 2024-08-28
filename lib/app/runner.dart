@@ -12,10 +12,12 @@ class Runner {
   Future<void> run() async {
     WidgetsFlutterBinding.ensureInitialized();
     await firebaseInit();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    GetIt.I.registerSingleton<SharedPreferences>(prefs);
+
+    await registerPrefs();
     configureDependencies();
+
     await initCache();
+
     setPathUrlStrategy();
     runApplication();
   }
@@ -28,5 +30,10 @@ class Runner {
   runApplication() {
     bool isDark = false;
     runApp(Application(isDark: isDark));
+  }
+
+  registerPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    GetIt.I.registerSingleton<SharedPreferences>(prefs);
   }
 }

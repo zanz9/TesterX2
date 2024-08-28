@@ -75,8 +75,11 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       for (var test in tests) {
         calculateTest(test);
       }
-      await GetIt.I<HistoryRepository>().addHistory(testModel);
+      if (GetIt.I<AuthRepository>().isAuth()) {
+        await GetIt.I<HistoryRepository>().addHistory(testModel);
+      }
       await testModelPrefsClear();
+      await setTestModelPrefs();
       await prefs.setBool('testFinish', true);
       GetIt.I<AppRouter>().replaceAll([
         const HomeRoute(),

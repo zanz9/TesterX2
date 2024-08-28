@@ -9,6 +9,12 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
     on<OnHome>((event, emit) async {
+      if (!GetIt.I<AuthRepository>().isAuth()) {
+        var tests = await GetIt.I<TestRepository>().getTestsRandom();
+        emit(HomeTestsLoaded(tests: tests, user: AuthModel()));
+        return;
+      }
+
       AuthModel? user = await GetIt.I<AuthRepository>().getUser();
       String? groupId = user!.groupId;
       if (groupId == null) return emit(HomeUserNotHaveGroup(user: user));

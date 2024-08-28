@@ -34,6 +34,14 @@ class ForgetPasswordScreen extends StatelessWidget {
       bloc: bloc,
       builder: (context, state) {
         return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            leading: BackButton(
+              onPressed: () {
+                context.router.popUntilRoot();
+              },
+            ),
+          ),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),

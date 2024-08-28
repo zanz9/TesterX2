@@ -67,17 +67,20 @@ class TestFinishScreen extends StatelessWidget {
                                           procent: false,
                                         ),
                                       ),
-                                      Flexible(
-                                        child: ChartWidget(
-                                          list: state.myHistoryList,
-                                          underText: GetIt.I<AuthRepository>()
-                                                  .authInstance
-                                                  .currentUser!
-                                                  .displayName ??
-                                              'Пользователь',
-                                          procent: false,
-                                        ),
-                                      ),
+                                      state.myHistoryList != null
+                                          ? Flexible(
+                                              child: ChartWidget(
+                                                list: state.myHistoryList!,
+                                                underText:
+                                                    GetIt.I<AuthRepository>()
+                                                            .authInstance
+                                                            .currentUser!
+                                                            .displayName ??
+                                                        'Пользователь',
+                                                procent: false,
+                                              ),
+                                            )
+                                          : const SizedBox(),
                                     ],
                                   ),
                                 ],

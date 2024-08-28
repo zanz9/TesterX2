@@ -32,13 +32,15 @@ class TestFinishBloc extends Bloc<TestFinishEvent, TestFinishState> {
           await GetIt.I<SortedByTestIdRepository>().getLastSortedByTestId(
         testId: testModel.id,
       );
-
-      final uid = FirebaseAuth.instance.currentUser?.uid;
-      List<HistoryModel> myHistoryList =
-          await GetIt.I<HistoryRepository>().getAllHistoryByTestId(
-        uid: uid!,
-        testId: testModel.id,
-      );
+      List<HistoryModel>? myHistoryList;
+      if (GetIt.I<AuthRepository>().isAuth()) {
+        final uid = FirebaseAuth.instance.currentUser?.uid;
+        myHistoryList =
+            await GetIt.I<HistoryRepository>().getAllHistoryByTestId(
+          uid: uid!,
+          testId: testModel.id,
+        );
+      }
       emit(TestFinishLoaded(
         otherHistoryList: otherHistoryList,
         myHistoryList: myHistoryList,

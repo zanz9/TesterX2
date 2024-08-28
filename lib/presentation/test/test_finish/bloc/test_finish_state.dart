@@ -7,7 +7,7 @@ final class TestFinishInitial extends TestFinishState {}
 
 final class TestFinishLoaded extends TestFinishState {
   final List<SortedByTestIdModel> otherHistoryList;
-  final List<HistoryModel> myHistoryList;
+  final List<HistoryModel>? myHistoryList;
 
   TestFinishLoaded({
     required this.otherHistoryList,

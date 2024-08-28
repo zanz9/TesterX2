@@ -45,6 +45,9 @@ class RegisterScreen extends StatelessWidget {
           errorText = 'Пароли не совпадают';
         }
         return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+          ),
           body: Center(
             child: SingleChildScrollView(
               child: Padding(
@@ -109,7 +112,7 @@ class RegisterScreen extends StatelessWidget {
                         const SizedBox(width: 4),
                         GestureDetector(
                           onTap: () =>
-                              context.router.replaceAll([const LoginRoute()]),
+                              context.router.replace(const LoginRoute()),
                           child: const Padding(
                             padding: EdgeInsets.symmetric(vertical: 5),
                             child: Text(

@@ -5,6 +5,7 @@ class TestModel {
   final String name;
   final String path;
   final String groupId;
+  final DateTime createdAt;
   late GroupModel group;
   late List<TestFileModel> tests;
 
@@ -12,6 +13,7 @@ class TestModel {
     required this.name,
     required this.path,
     required this.groupId,
+    required this.createdAt,
   });
 
   factory TestModel.fromJson(Map json, String id) {
@@ -19,6 +21,7 @@ class TestModel {
       name: json['name'] as String,
       path: json['path'] as String,
       groupId: json['groupId'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
     );
     testModel.id = id;
     return testModel;
@@ -29,6 +32,7 @@ class TestModel {
     data['name'] = name;
     data['path'] = path;
     data['groupId'] = groupId;
+    data['createdAt'] = createdAt.toIso8601String();
     return data;
   }
 
@@ -37,6 +41,7 @@ class TestModel {
       name: json['name'] as String,
       path: json['path'] as String,
       groupId: json['groupId'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
     );
     testModel.id = json['id'] as String;
     testModel.group = GroupModel.fromJson(json['group'] as Map);
@@ -52,6 +57,7 @@ class TestModel {
     data['name'] = name;
     data['path'] = path;
     data['groupId'] = groupId;
+    data['createdAt'] = createdAt.toIso8601String();
     data['group'] = group.toJson();
     data['tests'] = tests.map((v) => v.toJsonHistory()).toList();
     return data;

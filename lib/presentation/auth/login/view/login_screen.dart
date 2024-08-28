@@ -40,6 +40,9 @@ class LoginScreen extends StatelessWidget {
           errorText = 'Что-то пошло не так';
         }
         return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+          ),
           body: Center(
             child: SingleChildScrollView(
               child: Padding(
@@ -114,8 +117,8 @@ class LoginScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         GestureDetector(
-                          onTap: () => context.router
-                              .replaceAll([const RegisterRoute()]),
+                          onTap: () =>
+                              context.router.replace(const RegisterRoute()),
                           child: const Padding(
                             padding: EdgeInsets.symmetric(vertical: 5),
                             child: Text(

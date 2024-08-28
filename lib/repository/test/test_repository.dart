@@ -16,7 +16,12 @@ class TestRepository {
     String path = testFile.path;
     File jsonFile = await Docx().convertToJson(path);
     String url = await GetIt.I<StorageRepository>().uploadFile(jsonFile);
-    TestModel test = TestModel(path: url, name: name, groupId: groupId);
+    TestModel test = TestModel(
+      path: url,
+      name: name,
+      groupId: groupId,
+      createdAt: DateTime.now(),
+    );
     DatabaseReference newTest = db.ref('tests').push();
     await newTest.set(test.toJson());
     return test;
@@ -25,6 +30,20 @@ class TestRepository {
   Future<List<TestModel>> getAllTestByGroupId(String groupId) async {
     DataSnapshot data =
         await db.ref('tests').orderByChild('groupId').equalTo(groupId).get();
+    List<TestModel> list = [];
+    for (var element in ((data.value ?? {}) as Map).entries) {
+      TestModel test = TestModel.fromJson(element.value as Map, element.key);
+      String groupName =
+          await GetIt.I<GroupRepository>().getGroup(test.groupId);
+      test.group = GroupModel(id: test.groupId, name: groupName);
+      list.add(test);
+    }
+    return list;
+  }
+
+  Future<List<TestModel>> getTestsRandom() async {
+    DataSnapshot data =
+        await db.ref('tests').orderByChild('createdAt').limitToLast(10).get();
     List<TestModel> list = [];
     for (var element in ((data.value ?? {}) as Map).entries) {
       TestModel test = TestModel.fromJson(element.value as Map, element.key);
