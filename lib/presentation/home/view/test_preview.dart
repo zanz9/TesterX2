@@ -149,6 +149,8 @@ class _TestPreviewState extends State<TestPreview> {
                                           widget.test.toJsonAllFields()));
                                   await GetIt.I<SharedPreferences>()
                                       .setInt('testIndex', 0);
+                                  await GetIt.I<SharedPreferences>()
+                                      .remove('testFinish');
                                   GetIt.I<AppRouter>()
                                       .replace(const TestPageRoute());
                                 },
