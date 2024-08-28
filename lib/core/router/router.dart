@@ -1,9 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:testerx2/core/router/guard.dart';
-import 'package:testerx2/features/auth/auth.dart';
-import 'package:testerx2/features/home/home.dart';
-import 'package:testerx2/features/profile/profile.dart';
-import 'package:testerx2/features/test/test.dart';
+import 'package:testerx2/presentation/presentation.dart';
 
 part 'router.gr.dart';
 

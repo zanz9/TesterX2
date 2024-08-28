@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:testerx2/core/router/router.dart';
-import 'package:testerx2/ui/ui.dart';
+import 'package:testerx2/core/theme/app_theme.dart';
+import 'package:testerx2/core/theme/theme_settings.dart';
 
 class Application extends StatelessWidget {
   const Application({super.key, required this.isDark});
@@ -11,8 +12,6 @@ class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppRouter appRouter = GetIt.I<AppRouter>();
-    const primaryColor = Colors.orange;
-    final theme = Theme.of(context);
     return ChangeNotifierProvider(
       create: (context) => ThemeSettings(isDark),
       builder: (context, child) {
@@ -20,8 +19,8 @@ class Application extends StatelessWidget {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: 'TesterX',
-          theme: lightTheme(),
-          darkTheme: darkTheme(primaryColor, theme),
+          theme: AppTheme.lightTheme(),
+          darkTheme: AppTheme.darkTheme(),
           themeMode: themeSettings.currentTheme,
           routerConfig: appRouter.config(),
         );
