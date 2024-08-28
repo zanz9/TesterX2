@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/core/utils/utils.dart';
 import 'package:testerx2/repository/auth/auth.dart';
 
+@Singleton()
 class AuthRepository {
   final authInstance = FirebaseAuth.instance;
   FirebaseDatabase database = FirebaseDatabase.instance;

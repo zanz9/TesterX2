@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:injectable/injectable.dart';
 import 'package:testerx2/repository/repository.dart';
 import 'package:uuid/uuid.dart';
 
+@Singleton()
 class StorageRepository {
   Reference storageRef = FirebaseStorage.instance.ref();
 

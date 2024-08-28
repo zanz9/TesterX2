@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:injectable/injectable.dart';
 import 'package:testerx2/repository/sorted_by_test_id/sorted_by_test_id_model.dart';
 
+@Singleton()
 class SortedByTestIdRepository {
   final db = FirebaseDatabase.instance;
 

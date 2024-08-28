@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:injectable/injectable.dart';
 import 'package:testerx2/core/router/guard.dart';
 import 'package:testerx2/presentation/presentation.dart';
 
 part 'router.gr.dart';
 
+@Singleton()
 @AutoRouterConfig(replaceInRouteName: 'Screen,Route')
 class AppRouter extends RootStackRouter {
   @override
