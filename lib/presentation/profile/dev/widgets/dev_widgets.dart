@@ -9,7 +9,7 @@ class DevWidgets extends StatelessWidget {
     return const Column(
       children: [
         Text(
-          'Для разработчикам',
+          'Для разработчиков',
           style: TextStyle(fontSize: 24),
         ),
         SizedBox(height: 20),

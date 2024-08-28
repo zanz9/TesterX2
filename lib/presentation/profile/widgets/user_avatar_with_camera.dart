@@ -29,18 +29,18 @@ class UserAvatarWithCamera extends StatelessWidget {
                   height: 76.0,
                   fit: BoxFit.cover,
                 ),
-                const Align(
-                  alignment: Alignment.bottomRight,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 12.0,
-                    child: Icon(
-                      Icons.camera_alt,
-                      size: 15.0,
-                      color: Color(0xFF404040),
-                    ),
-                  ),
-                ),
+                // const Align(
+                //   alignment: Alignment.bottomRight,
+                //   child: CircleAvatar(
+                //     backgroundColor: Colors.white,
+                //     radius: 12.0,
+                //     child: Icon(
+                //       Icons.camera_alt,
+                //       size: 15.0,
+                //       color: Color(0xFF404040),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

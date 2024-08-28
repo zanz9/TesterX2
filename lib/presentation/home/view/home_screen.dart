@@ -86,6 +86,7 @@ class HomeScreen extends StatelessWidget {
                 },
               ),
               BlocBuilder<HomeBloc, HomeState>(
+                bloc: homeBloc,
                 builder: (context, state) {
                   if (state is HomeTestsLoaded) {
                     List<TestModel> tests = state.tests;
@@ -108,9 +109,11 @@ class HomeScreen extends StatelessWidget {
                       text = 'В этой группе нет ни одного теста';
                     }
                     return SliverToBoxAdapter(
-                      child: Text(
-                        text,
-                        style: const TextStyle(fontSize: 18),
+                      child: Center(
+                        child: Text(
+                          text,
+                          style: const TextStyle(fontSize: 18),
+                        ),
                       ),
                     );
                   }

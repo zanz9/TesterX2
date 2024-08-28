@@ -36,6 +36,7 @@ class ForgetPasswordScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
             leading: BackButton(
               onPressed: () {
                 context.router.popUntilRoot();

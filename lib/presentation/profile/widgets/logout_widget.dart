@@ -23,7 +23,8 @@ class _LogoutWidgetState extends State<LogoutWidget> {
       child: GestureDetector(
         onTap: () async {
           await AuthRepository().logout();
-          GetIt.I<AppRouter>().replaceAll([const LoginRoute()]);
+          GetIt.I<AppRouter>()
+              .replaceAll([const HomeRoute(), const LoginRoute()]);
         },
         child: AnimatedContainer(
           padding: const EdgeInsets.all(5),
