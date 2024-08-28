@@ -41,7 +41,7 @@ class TestRepository {
     return list;
   }
 
-  Future<List<TestModel>> getTestsRandom() async {
+  Future<List<TestModel>> getLastTests() async {
     DataSnapshot data =
         await db.ref('tests').orderByChild('createdAt').limitToLast(10).get();
     List<TestModel> list = [];
