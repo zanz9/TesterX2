@@ -46,25 +46,21 @@ class AuthRepository {
 
   bool isAuth() => authInstance.currentUser != null;
 
-  Future<AuthModel?> getUser() async {
+  Future<AuthModel?> getUser({bool cache = true}) async {
     AuthModel user;
-    String? displayName = authInstance.currentUser?.displayName;
-    String? userFromStorage = prefs.getString('user');
-    if (userFromStorage != null && await Cache.isNotExpired()) {
-      user = AuthModel.fromJson(
-        jsonDecode(prefs.getString('user')!) as Map,
-        displayName,
-      );
-      return user;
+    String? userFromStorage;
+    if (cache) {
+      userFromStorage = prefs.getString('user');
+      if (userFromStorage != null && await Cache.isNotExpired()) {
+        user = AuthModel.fromJson(jsonDecode(prefs.getString('user')!) as Map);
+        return user;
+      }
     }
 
     String? uid = authInstance.currentUser?.uid;
     DataSnapshot userData = await database.ref().child('users/$uid').get();
     if (userData.value == null) return null;
-    user = AuthModel.fromJson(
-      userData.value as Map,
-      displayName,
-    );
+    user = AuthModel.fromJson(userData.value as Map);
     var userJson = jsonEncode(user.toJson());
     if (userFromStorage == null || userJson != userFromStorage) {
       await prefs.setString('user', userJson);
@@ -75,7 +71,6 @@ class AuthRepository {
   Future<void> updateUser({AuthModel? data, bool lazy = false}) async {
     data ??= AuthModel();
     await prefs.setString('user', jsonEncode(data.toJson()));
-    await getUser();
     String? uid = authInstance.currentUser?.uid;
     if (lazy) {
       database.ref('users/$uid').set(data.toJson());
@@ -85,11 +80,14 @@ class AuthRepository {
   }
 
   Future<bool> isAdmin() async {
-    final user = await getUser();
+    final user = await getUser(cache: false);
     return user!.isAdmin;
   }
 
   Future<void> setUserDisplayName(String displayName) async {
-    await authInstance.currentUser!.updateDisplayName(displayName);
+    AuthModel? user = await getUser(cache: false);
+    if (user == null) return;
+    user.displayName = displayName;
+    await updateUser(data: user);
   }
 }

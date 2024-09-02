@@ -28,19 +28,13 @@ class HomeSliverAppBar extends StatelessWidget {
               builder: (context, state) {
                 String displayName = 'Пользователь';
                 if (state is HomeTestsLoaded) {
-                  displayName = state.user.displayName == ''
-                      ? 'Пользователь'
-                      : state.user.displayName ?? 'Пользователь';
+                  displayName = state.user.displayName;
                 }
                 if (state is HomeUserGroupNotHaveTests) {
-                  displayName = state.user.displayName == ''
-                      ? 'Пользователь'
-                      : state.user.displayName ?? 'Пользователь';
+                  displayName = state.user.displayName;
                 }
                 if (state is HomeUserNotHaveGroup) {
-                  displayName = state.user.displayName == ''
-                      ? 'Пользователь'
-                      : state.user.displayName ?? 'Пользователь';
+                  displayName = state.user.displayName;
                 }
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

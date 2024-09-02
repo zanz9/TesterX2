@@ -16,10 +16,12 @@ class TestRepository {
     String path = testFile.path;
     var jsonData = await Docx().convertToJson(path);
     String url = await GetIt.I<StorageRepository>().uploadFile(jsonData);
+    String uid = GetIt.I<AuthRepository>().authInstance.currentUser!.uid;
     TestModel test = TestModel(
       path: url,
       name: name,
       groupId: groupId,
+      authorId: uid,
       createdAt: DateTime.now(),
     );
     DatabaseReference newTest = db.ref('tests').push();
