@@ -14,8 +14,8 @@ class TestRepository {
 
   Future<TestModel> addTest(File testFile, String name, String groupId) async {
     String path = testFile.path;
-    File jsonFile = await Docx().convertToJson(path);
-    String url = await GetIt.I<StorageRepository>().uploadFile(jsonFile);
+    var jsonData = await Docx().convertToJson(path);
+    String url = await GetIt.I<StorageRepository>().uploadFile(jsonData);
     TestModel test = TestModel(
       path: url,
       name: name,

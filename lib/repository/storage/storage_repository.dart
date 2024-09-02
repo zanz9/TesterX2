@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,11 +10,15 @@ import 'package:uuid/uuid.dart';
 class StorageRepository {
   Reference storageRef = FirebaseStorage.instance.ref();
 
-  Future<String> uploadFile(File file) async {
+  Future<String> uploadFile(Object data) async {
+    String jsonData = jsonEncode(data);
+    String base64String = base64.encode(utf8.encode(jsonData));
+    String dataUrl = 'data:application/json;base64,$base64String';
+
     String fileName = const Uuid().v4();
     var path = 'tests/$fileName.json';
     Reference testsRef = storageRef.child(path);
-    await testsRef.putFile(file);
+    await testsRef.putString(dataUrl, format: PutStringFormat.dataUrl);
     return path;
   }
 

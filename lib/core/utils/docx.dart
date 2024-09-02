@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:xml/xml.dart';
 
 class Docx {
@@ -10,7 +9,7 @@ class Docx {
   Map<String, String> list = {};
   Map<String, String> imageBase64Map = <String, String>{};
 
-  Future<File> convertToJson(String docxPath) async {
+  Future<List> convertToJson(String docxPath) async {
     String text = await _convertDocxToText(docxPath);
     List<String> questions = text.split('<question>');
     questions.removeAt(0);
@@ -30,7 +29,6 @@ class Docx {
         if (variantWithScore.length > 1) {
           hasScore = true;
           variant = variantWithScore[1].trim();
-          // score = double.tryParse(variantWithScore[1].trim()) ?? 0;
           maxScore += 1;
         }
         body.add({
@@ -48,12 +46,7 @@ class Docx {
         "maxScore": maxScore,
       });
     }
-
-    String jsonData = jsonEncode(data);
-    String dir = (await getTemporaryDirectory()).path;
-    File file = File('$dir/$fileName.json');
-    await file.writeAsString(jsonData);
-    return file;
+    return data;
   }
 
   Future<String> _convertDocxToText(String docxPath) async {
