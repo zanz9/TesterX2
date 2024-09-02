@@ -25,6 +25,19 @@ class _EditNameWidgetState extends State<EditNameWidget> {
 
   @override
   Widget build(BuildContext context) {
+    submit() async {
+      setState(() {
+        buttonLoading = true;
+      });
+      await AuthRepository().setUserDisplayName(textController.text.trim());
+      setState(() {
+        buttonLoading = false;
+      });
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
+    }
+
     return Material(
       child: Container(
         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -42,22 +55,13 @@ class _EditNameWidgetState extends State<EditNameWidget> {
               hintText: 'Название отображаемого имени',
               obscureText: false,
               focusNode: FocusNode(),
+              onSubmitted: (p0) {
+                submit();
+              },
             ),
             const SizedBox(height: 30),
             PrimaryButton(
-              onTap: () async {
-                setState(() {
-                  buttonLoading = true;
-                });
-                await AuthRepository()
-                    .setUserDisplayName(textController.text.trim());
-                setState(() {
-                  buttonLoading = false;
-                });
-                if (context.mounted) {
-                  Navigator.pop(context);
-                }
-              },
+              onTap: submit,
               isLoading: buttonLoading,
               child: const Text(
                 'Изменить',

@@ -17,28 +17,31 @@ class HistoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Text(
-          'История',
-          style: TextStyle(fontSize: 24),
-        ),
-        const SizedBox(height: 20),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: history.length,
-          itemBuilder: (context, index) {
-            HistoryModel data = history[index];
-            String timestamp =
-                DateFormat('HH:mm dd-MM-yyyy').format(data.timestamp);
+    return history.isEmpty
+        ? const SizedBox()
+        : Column(
+            children: [
+              const Text(
+                'История',
+                style: TextStyle(fontSize: 24),
+              ),
+              const SizedBox(height: 20),
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: history.length,
+                itemBuilder: (context, index) {
+                  HistoryModel data = history[index];
+                  String timestamp =
+                      DateFormat('HH:mm dd-MM-yyyy').format(data.timestamp);
 
-            return HistoryListWidget(data: data, timestamp: timestamp);
-          },
-          separatorBuilder: (context, index) => const SizedBox(height: 10),
-        ),
-      ],
-    );
+                  return HistoryListWidget(data: data, timestamp: timestamp);
+                },
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 10),
+              ),
+            ],
+          );
   }
 }
 
