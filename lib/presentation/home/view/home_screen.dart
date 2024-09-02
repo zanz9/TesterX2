@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:testerx2/presentation/home/home.dart';
 import 'package:testerx2/presentation/widgets/widgets.dart';
 import 'package:testerx2/repository/repository.dart';
@@ -13,7 +14,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var homeBloc = HomeBloc()..add(OnHome());
+    HomeBloc homeBloc = GetIt.I<HomeBloc>()..add(OnHome());
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(

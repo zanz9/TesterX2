@@ -14,13 +14,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       var authRepo = GetIt.I<AuthRepository>();
       if (!authRepo.isAuth()) return;
 
-      AuthModel? user = await authRepo.getUser();
       List<HistoryModel> historyList = await GetIt.I<HistoryRepository>()
           .getAllHistory(authRepo.authInstance.currentUser!.uid);
       for (var e in historyList) {
         e.test = await GetIt.I<TestRepository>().getTestById(e.testId);
       }
-      emit(ProfileLoaded(user: user!, history: historyList));
+      emit(ProfileLoaded(history: historyList));
     });
 
     on<OnProfileChangeDisplayName>((event, emit) async {

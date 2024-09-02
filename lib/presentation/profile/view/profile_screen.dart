@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:testerx2/core/router/router.dart';
+import 'package:testerx2/presentation/home/home.dart';
 import 'package:testerx2/presentation/profile/profile.dart';
 import 'package:testerx2/presentation/widgets/widgets.dart';
 
@@ -14,7 +16,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    var bloc = GetIt.I<ProfileBloc>();
+    var bloc = GetIt.I<HomeBloc>()..add(OnHome());
 
     editName(String beforeName) async {
       var result = await showCupertinoModalBottomSheet(
@@ -27,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
         },
       );
       if (result == null) {
-        bloc.add(OnProfile());
+        bloc.add(OnHome());
       }
     }
 
@@ -36,7 +38,12 @@ class ProfileScreen extends StatelessWidget {
         backgroundColor: theme.scaffoldBackgroundColor,
         surfaceTintColor: theme.scaffoldBackgroundColor,
         leading: BackButton(
-          onPressed: () => context.router.maybePop(true),
+          onPressed: () async {
+            bool canPop = await context.router.maybePop(true);
+            if (!canPop && context.mounted) {
+              context.router.replaceAll([const HomeRoute()]);
+            }
+          },
         ),
         automaticallyImplyLeading: true,
         actions: const [LogoutWidget(), SizedBox(width: 16)],
@@ -45,7 +52,10 @@ class ProfileScreen extends StatelessWidget {
         onPanEnd: (details) async {
           int direction = 3;
           if (details.velocity.pixelsPerSecond.dx > direction) {
-            context.router.maybePop(true);
+            bool canPop = await context.router.maybePop(true);
+            if (!canPop && context.mounted) {
+              context.router.replaceAll([const HomeRoute()]);
+            }
           }
         },
         child: SafeArea(
@@ -55,14 +65,22 @@ class ProfileScreen extends StatelessWidget {
               child: ListView(
                 children: [
                   const SizedBox(height: 30),
-                  BlocBuilder<ProfileBloc, ProfileState>(
+                  BlocBuilder<HomeBloc, HomeState>(
                     bloc: bloc,
                     builder: (context, state) {
                       String displayName = 'Пользователь';
-                      if (state is ProfileLoaded) {
-                        displayName = state.user.displayName == ''
+                      String getDisplayName(String? displayName) {
+                        return displayName == ''
                             ? 'Пользователь'
-                            : state.user.displayName ?? 'Пользователь';
+                            : displayName ?? 'Пользователь';
+                      }
+
+                      if (state is HomeTestsLoaded) {
+                        displayName = getDisplayName(state.user.displayName);
+                      } else if (state is HomeUserGroupNotHaveTests) {
+                        displayName = getDisplayName(state.user.displayName);
+                      } else if (state is HomeUserNotHaveGroup) {
+                        displayName = getDisplayName(state.user.displayName);
                       }
                       return Stack(
                         children: [
@@ -90,9 +108,7 @@ class ProfileScreen extends StatelessWidget {
                                     ),
                                     IconButton(
                                       onPressed: () {
-                                        editName(state is ProfileLoaded
-                                            ? state.user.displayName ?? ''
-                                            : '');
+                                        editName(displayName);
                                       },
                                       icon: const Icon(Icons.edit),
                                     )
@@ -120,7 +136,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   const SizedBox(height: 30),
                   BlocBuilder<ProfileBloc, ProfileState>(
-                    bloc: bloc,
+                    bloc: GetIt.I<ProfileBloc>(),
                     builder: (context, state) {
                       if (state is ProfileLoaded) {
                         return HistoryWidget(history: state.history);
