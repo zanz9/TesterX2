@@ -68,7 +68,7 @@ class TestRepository {
     return list;
   }
 
-  Future<TestModel> getTestById(String id) async {
+  Future<TestModel?> getTestById(String id) async {
     var prefs = GetIt.I<SharedPreferences>();
     var text = prefs.getString('tests/$id');
 
@@ -77,6 +77,7 @@ class TestRepository {
       test = TestModel.fromJson(jsonDecode(text) as Map, id);
     } else {
       DataSnapshot data = await db.ref('tests').child(id).get();
+      if (data.value == null) return null;
       test = TestModel.fromJson(data.value as Map, id);
       if (text == null || text != jsonEncode(test.toJson())) {
         await prefs.setString('tests/$id', jsonEncode(test.toJson()));
@@ -87,5 +88,10 @@ class TestRepository {
     test.author =
         (await GetIt.I<AuthRepository>().getUser(uid: test.authorId))!;
     return test;
+  }
+
+  Future<void> deleteTest(TestModel test) async {
+    await db.ref('tests').child(test.id).remove();
+    await GetIt.I<SharedPreferences>().remove('tests/${test.id}');
   }
 }

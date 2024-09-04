@@ -51,7 +51,6 @@ class TestModel {
     );
     testModel.id = json['id'] as String;
     testModel.group = GroupModel.fromJson(json['group'] as Map);
-
     testModel.author = AuthModel.fromJson(json['author'] as Map);
     testModel.tests = (json['tests'] as List)
         .map((v) => TestFileModel.fromJsonHistory(v as Map))

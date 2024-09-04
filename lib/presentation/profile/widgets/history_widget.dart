@@ -63,17 +63,18 @@ class _HistoryListWidgetState extends State<HistoryListWidget> {
   bool isPressed = false;
 
   openHistoryTest() async {
+    if (widget.data.test == null) return;
     if (isPressed) return;
     setState(() {
       isPressed = true;
     });
-    widget.data.test.tests = await GetIt.I<StorageRepository>()
+    widget.data.test!.tests = await GetIt.I<StorageRepository>()
         .downloadHistory(widget.data.pathHistory);
     setState(() {
       isPressed = false;
     });
-    await GetIt.I<SharedPreferences>()
-        .setString('testModel', jsonEncode(widget.data.test.toJsonAllFields()));
+    await GetIt.I<SharedPreferences>().setString(
+        'testModel', jsonEncode(widget.data.test!.toJsonAllFields()));
     await GetIt.I<SharedPreferences>().setBool('testFinish', true);
     GetIt.I<AppRouter>().push(const TestFinishRoute());
   }
@@ -83,16 +84,19 @@ class _HistoryListWidgetState extends State<HistoryListWidget> {
     return GestureDetector(
       onTap: openHistoryTest,
       child: PrimaryListWidget(
-        text: widget.data.test.name,
+        text: widget.data.test == null
+            ? 'Этот тест был удален'
+            : widget.data.test!.name,
         secondaryText: widget.timestamp,
+        disabled: widget.data.test == null,
         rightWidget: isPressed
             ? const SizedBox(
                 height: 24,
                 width: 24,
                 child: CircularProgressIndicator(color: Colors.black))
-            : const Icon(
+            : Icon(
                 Icons.chevron_right_rounded,
-                color: Colors.black,
+                color: widget.data.test == null ? Colors.grey : Colors.black,
                 size: 36,
               ),
       ),

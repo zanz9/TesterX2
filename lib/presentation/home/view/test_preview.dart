@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -46,9 +47,29 @@ class _TestPreviewState extends State<TestPreview> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 30),
-                  Text(
-                    widget.test.name,
-                    style: const TextStyle(fontSize: 36),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          widget.test.name,
+                          style: const TextStyle(fontSize: 36),
+                        ),
+                      ),
+                      widget.test.authorId ==
+                              GetIt.I<AuthRepository>().getMyUid()
+                          ? IconButton(
+                              onPressed: () {
+                                bloc.add(
+                                  OnTestPreviewDelete(test: widget.test),
+                                );
+                                context.router.maybePop();
+                              },
+                              icon: const Icon(Icons.delete_outline),
+                            )
+                          : const SizedBox(),
+                    ],
                   ),
                   const SizedBox(height: 20),
                   if (state is TestPreviewLoading)

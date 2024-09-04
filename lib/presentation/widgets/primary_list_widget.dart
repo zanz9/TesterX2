@@ -10,15 +10,17 @@ class PrimaryListWidget extends StatelessWidget {
       size: 36,
     ),
     this.secondaryText,
+    this.disabled = false,
   });
   final String text;
   final String? secondaryText;
   final Widget rightWidget;
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      cursor: SystemMouseCursors.click,
+      cursor: disabled ? SystemMouseCursors.noDrop : SystemMouseCursors.click,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18),
         decoration: BoxDecoration(
@@ -28,28 +30,44 @@ class PrimaryListWidget extends StatelessWidget {
         ),
         height: secondaryText == null ? 54 : 72,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             secondaryText == null
-                ? Text(
-                    text,
-                    style: const TextStyle(fontSize: 18),
+                ? Flexible(
+                    child: Text(
+                      text,
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      softWrap: false,
+                      style: const TextStyle(fontSize: 18),
+                    ),
                   )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        text,
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      Text(
-                        secondaryText!,
-                        style:
-                            const TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                    ],
+                : Flexible(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          text,
+                          overflow: TextOverflow.fade,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: disabled ? Colors.grey : Colors.black,
+                          ),
+                        ),
+                        Text(
+                          secondaryText!,
+                          overflow: TextOverflow.fade,
+                          maxLines: 1,
+                          softWrap: false,
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   ),
-            const Spacer(),
             rightWidget,
           ],
         ),

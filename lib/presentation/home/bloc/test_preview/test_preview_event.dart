@@ -8,3 +8,9 @@ class OnTestPreview extends TestPreviewEvent {
 
   OnTestPreview({required this.test});
 }
+
+class OnTestPreviewDelete extends TestPreviewEvent {
+  final TestModel test;
+
+  OnTestPreviewDelete({required this.test});
+}

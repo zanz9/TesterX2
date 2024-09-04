@@ -14,5 +14,11 @@ class TestPreviewBloc extends Bloc<TestPreviewEvent, TestPreviewState> {
       test.tests = await GetIt.I<StorageRepository>().downloadTest(test.path);
       emit(TestPreviewLoaded(test: test));
     });
+    on<OnTestPreviewDelete>(
+      (event, emit) async {
+        await GetIt.I<TestRepository>().deleteTest(event.test);
+        // GetIt.I<HomeBloc>().add(OnHome());
+      },
+    );
   }
 }

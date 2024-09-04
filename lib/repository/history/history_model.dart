@@ -8,7 +8,7 @@ class HistoryModel {
   final int maxScore;
   final int testLength;
   final String pathHistory;
-  late TestModel test;
+  late TestModel? test;
 
   HistoryModel({
     required this.testId,
