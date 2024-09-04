@@ -46,24 +46,23 @@ class AuthRepository {
 
   bool isAuth() => authInstance.currentUser != null;
 
-  Future<AuthModel?> getUser({bool cache = true}) async {
+  Future<AuthModel?> getUser({String? uid, bool cache = true}) async {
     AuthModel user;
     String? userFromStorage;
+    uid ??= authInstance.currentUser?.uid;
     if (cache) {
-      userFromStorage = prefs.getString('user');
+      userFromStorage = prefs.getString('user/$uid');
       if (userFromStorage != null && await Cache.isNotExpired()) {
         user = AuthModel.fromJson(jsonDecode(prefs.getString('user')!) as Map);
         return user;
       }
     }
-
-    String? uid = authInstance.currentUser?.uid;
     DataSnapshot userData = await database.ref().child('users/$uid').get();
     if (userData.value == null) return null;
     user = AuthModel.fromJson(userData.value as Map);
     var userJson = jsonEncode(user.toJson());
     if (userFromStorage == null || userJson != userFromStorage) {
-      await prefs.setString('user', userJson);
+      await prefs.setString('user/$uid', userJson);
     }
     return user;
   }
@@ -90,4 +89,6 @@ class AuthRepository {
     user.displayName = displayName;
     await updateUser(data: user);
   }
+
+  String? getMyUid() => authInstance.currentUser?.uid;
 }

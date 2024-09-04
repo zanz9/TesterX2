@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:testerx2/presentation/widgets/widgets.dart';
@@ -11,18 +11,34 @@ class AddTest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    addToDbFromFile(BuildContext context, String groupId) async {
+    Future<void> addToDbFromFile(BuildContext context, String groupId) async {
       FilePickerResult? result = await FilePicker.platform.pickFiles();
       if (result != null) {
-        if (!context.mounted) return false;
+        if (!context.mounted) return;
         Navigator.of(context).pop();
-        var file = File(result.files.single.path!);
-        showCupertinoModalBottomSheet(
-          context: context,
-          builder: (context) {
-            return AddTestByWordAndAskName(file: file, groupId: groupId);
-          },
-        );
+
+        if (kIsWeb) {
+          // Для веба: используем байты файла
+          Uint8List? fileBytes = result.files.first.bytes;
+          if (fileBytes != null) {
+            showCupertinoModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return AddTestByWordAndAskName(
+                    file: fileBytes, groupId: groupId);
+              },
+            );
+          }
+        } else {
+          // Для Android и других платформ: используем File
+          File file = File(result.files.single.path!);
+          showCupertinoModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return AddTestByWordAndAskName(file: file, groupId: groupId);
+            },
+          );
+        }
       }
     }
 
@@ -125,11 +141,11 @@ class AddTest extends StatelessWidget {
 class AddTestByWordAndAskName extends StatefulWidget {
   const AddTestByWordAndAskName({
     super.key,
-    required this.file,
+    this.file,
     required this.groupId,
   });
 
-  final File file;
+  final Object? file; // Для Android и других платформ
   final String groupId;
 
   @override
@@ -140,6 +156,7 @@ class AddTestByWordAndAskName extends StatefulWidget {
 class _AddTestByWordAndAskNameState extends State<AddTestByWordAndAskName> {
   TextEditingController nameController = TextEditingController();
   bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -147,48 +164,53 @@ class _AddTestByWordAndAskNameState extends State<AddTestByWordAndAskName> {
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(30),
-          child: Column(children: [
-            const Text(
-              'Введите название теста',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            PrimaryInput(
-              controller: nameController,
-              hintText: 'Название',
-            ),
-            const SizedBox(height: 20),
-            PrimaryButton(
-              onTap: () async {
-                if (isLoading) return;
-                setState(() {
-                  isLoading = true;
-                });
-                await TestRepository().addTest(
-                  widget.file,
-                  nameController.text.trim(),
-                  widget.groupId,
-                );
-                setState(() {
-                  isLoading = false;
-                });
-                if (!context.mounted) return;
-                Navigator.of(context).pop();
-              },
-              isLoading: isLoading,
-              child: const Text(
-                'Добавить',
+          child: Column(
+            children: [
+              const Text(
+                'Введите название теста',
                 style: TextStyle(
-                  color: Colors.white,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
                 ),
               ),
-            )
-          ]),
+              const SizedBox(height: 20),
+              PrimaryInput(
+                controller: nameController,
+                hintText: 'Название',
+              ),
+              const SizedBox(height: 20),
+              PrimaryButton(
+                onTap: () async {
+                  if (isLoading) return;
+                  setState(() {
+                    isLoading = true;
+                  });
+
+                  await TestRepository().addTest(
+                    widget.file!,
+                    nameController.text.trim(),
+                    widget.groupId,
+                  );
+
+                  setState(() {
+                    isLoading = false;
+                  });
+
+                  if (!context.mounted) return;
+                  Navigator.of(context).pop();
+                },
+                isLoading: isLoading,
+                child: const Text(
+                  'Добавить',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

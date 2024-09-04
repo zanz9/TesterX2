@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:archive/archive.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:xml/xml.dart';
 
@@ -9,8 +9,8 @@ class Docx {
   Map<String, String> list = {};
   Map<String, String> imageBase64Map = <String, String>{};
 
-  Future<List> convertToJson(String docxPath) async {
-    String text = await _convertDocxToText(docxPath);
+  Future<List> convertToJson(dynamic testFile) async {
+    String text = await _convertDocxToText(testFile);
     List<String> questions = text.split('<question>');
     questions.removeAt(0);
 
@@ -49,10 +49,16 @@ class Docx {
     return data;
   }
 
-  Future<String> _convertDocxToText(String docxPath) async {
-    final file = File(docxPath);
-    fileName = basename(file.path);
-    final bytes = await file.readAsBytes();
+  Future<String> _convertDocxToText(dynamic testFile) async {
+    final Uint8List bytes;
+
+    if (kIsWeb) {
+      bytes = testFile;
+    } else {
+      bytes = await testFile.readAsBytes();
+    }
+
+    fileName = kIsWeb ? 'uploaded_file.docx' : basename(testFile.path);
     final archive = ZipDecoder().decodeBytes(bytes);
 
     String text = '';
@@ -61,7 +67,7 @@ class Docx {
       if (file.isFile) {
         final fileName = file.name;
         if (fileName.endsWith('.xml.rels')) {
-          //Process .xml.rels files
+          // Process .xml.rels files
           final content = XmlDocument.parse(utf8.decode(file.content));
           var elements = content.findAllElements('Relationship');
           for (var element in elements) {
@@ -73,6 +79,7 @@ class Docx {
         }
       }
     }
+
     for (final file in archive) {
       if (file.isFile) {
         final fileName = file.name;
