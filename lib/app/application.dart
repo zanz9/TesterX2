@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:testerx2/core/router/router.dart';
 import 'package:testerx2/core/theme/app_theme.dart';
 import 'package:testerx2/core/theme/theme_settings.dart';
 
 class Application extends StatelessWidget {
-  const Application({super.key, required this.isDark});
+  const Application({super.key, required this.isDark, required this.talker});
   final bool isDark;
+  final Talker talker;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,9 @@ class Application extends StatelessWidget {
           theme: AppTheme.lightTheme(),
           darkTheme: AppTheme.darkTheme(),
           themeMode: themeSettings.currentTheme,
-          routerConfig: appRouter.config(),
+          routerConfig: appRouter.config(
+            navigatorObservers: () => [TalkerRouteObserver(talker)],
+          ),
         );
       },
     );
