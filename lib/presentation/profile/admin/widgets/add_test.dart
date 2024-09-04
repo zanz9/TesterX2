@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:auto_route/auto_route.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:testerx2/core/router/router.dart';
 import 'package:testerx2/presentation/widgets/widgets.dart';
 import 'package:testerx2/repository/repository.dart';
 
@@ -93,7 +95,9 @@ class AddTest extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             PrimaryButton(
-                              onTap: () {},
+                              onTap: () {
+                                context.router.push(const TestEditRoute());
+                              },
                               height: 70,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 45),

@@ -34,6 +34,12 @@ class AppRouter extends RootStackRouter {
           durationInMilliseconds: 300,
         ),
         CustomRoute(
+          page: TestEditRoute.page,
+          path: '/test_edit',
+          transitionsBuilder: TransitionsBuilders.slideBottom,
+          durationInMilliseconds: 300,
+        ),
+        CustomRoute(
           path: '/login',
           page: LoginRoute.page,
           transitionsBuilder: TransitionsBuilders.fadeIn,

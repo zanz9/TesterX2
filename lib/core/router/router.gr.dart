@@ -105,6 +105,25 @@ class RegisterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [TestEditScreen]
+class TestEditRoute extends PageRouteInfo<void> {
+  const TestEditRoute({List<PageRouteInfo>? children})
+      : super(
+          TestEditRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TestEditRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TestEditScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [TestFinishScreen]
 class TestFinishRoute extends PageRouteInfo<void> {
   const TestFinishRoute({List<PageRouteInfo>? children})

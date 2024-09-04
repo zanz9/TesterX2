@@ -136,7 +136,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   const SizedBox(height: 30),
                   BlocBuilder<ProfileBloc, ProfileState>(
-                    bloc: GetIt.I<ProfileBloc>(),
+                    bloc: ProfileBloc()..add(OnProfile()),
                     builder: (context, state) {
                       if (state is ProfileLoaded) {
                         return HistoryWidget(history: state.history);

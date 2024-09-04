@@ -4,6 +4,7 @@ class PrimaryInput extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
+  final Widget? suffixIcon;
   final Widget? prefixIcon;
   final Function(String)? onChange;
   final Function(String)? onSubmitted;
@@ -20,6 +21,7 @@ class PrimaryInput extends StatefulWidget {
     this.keyboardType,
     this.focusNode,
     this.onSubmitted,
+    this.suffixIcon,
   });
 
   @override
@@ -67,7 +69,7 @@ class _PrimaryInputState extends State<PrimaryInput> {
                     ? const Icon(Icons.visibility)
                     : const Icon(Icons.visibility_off),
               )
-            : null,
+            : widget.suffixIcon,
         prefixIcon: widget.prefixIcon,
       ),
       onChanged: widget.onChange,
