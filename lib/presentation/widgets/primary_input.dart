@@ -10,6 +10,7 @@ class PrimaryInput extends StatefulWidget {
   final Function(String)? onSubmitted;
   final TextInputType? keyboardType;
   final FocusNode? focusNode;
+  final bool autoFocus;
 
   const PrimaryInput({
     super.key,
@@ -20,6 +21,7 @@ class PrimaryInput extends StatefulWidget {
     this.onChange,
     this.keyboardType,
     this.focusNode,
+    this.autoFocus = true,
     this.onSubmitted,
     this.suffixIcon,
   });
@@ -46,7 +48,7 @@ class _PrimaryInputState extends State<PrimaryInput> {
   Widget build(BuildContext context) {
     return TextField(
       focusNode: widget.focusNode,
-      autofocus: widget.focusNode != null,
+      autofocus: widget.focusNode != null && widget.autoFocus,
       keyboardType: widget.keyboardType,
       controller: widget.controller,
       obscureText: obscureText,

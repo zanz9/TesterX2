@@ -53,7 +53,7 @@ class AuthRepository {
     if (cache) {
       userFromStorage = prefs.getString('user/$uid');
       if (userFromStorage != null && await Cache.isNotExpired()) {
-        user = AuthModel.fromJson(jsonDecode(prefs.getString('user')!) as Map);
+        user = AuthModel.fromJson(jsonDecode(userFromStorage) as Map);
         return user;
       }
     }

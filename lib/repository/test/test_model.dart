@@ -2,7 +2,7 @@ import 'package:testerx2/repository/repository.dart';
 
 class TestModel {
   late String id;
-  final String name;
+  String name;
   final String path;
   final String groupId;
   final DateTime createdAt;
