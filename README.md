@@ -1,16 +1,36 @@
 # TesterX2
 
-Flutter Project
+- Flutter
+- BLoC
+- Clean Architecture
+- Firebase
 
-## Getting Started
+### Dependencies:
 
-This project is a starting point for a Flutter application.
+- flutter_bloc
+- auto_route
+- flutter_shakemywidget
+- injectable
+- get_it
+- dio
+- shared_preferences
+- gif_view
+- code generation
+- fl_chart
+- floating_draggable_widget
+- modal_bottom_sheet
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Images
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<div>
+  <img src="https://github.com/zanz9/TesterX2/blob/main/imagesForGit/login.png?raw=true" width=200 />
+  <img src="https://github.com/zanz9/TesterX2/blob/main/imagesForGit/home.png?raw=true" width=200 />
+  <img src="https://github.com/zanz9/TesterX2/blob/main/imagesForGit/profile.png?raw=true" width=200 />
+</div>
+
+<div>
+  <img src="https://github.com/zanz9/TesterX2/blob/main/imagesForGit/test_preview.png?raw=true" width=200 />
+  <img src="https://github.com/zanz9/TesterX2/blob/main/imagesForGit/test_process.png?raw=true" width=200 />
+  <img src="https://github.com/zanz9/TesterX2/blob/main/imagesForGit/test_finish.png?raw=true" width=200 />
+</div>
