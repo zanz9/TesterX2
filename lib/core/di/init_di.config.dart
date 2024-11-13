@@ -12,6 +12,8 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:testerx2/core/router/router.dart' as _i878;
 import 'package:testerx2/presentation/home/bloc/home/home_bloc.dart' as _i981;
+import 'package:testerx2/presentation/profile/bloc/group_list/group_list_bloc.dart'
+    as _i971;
 import 'package:testerx2/repository/auth/auth_repository.dart' as _i775;
 import 'package:testerx2/repository/group/group_repository.dart' as _i288;
 import 'package:testerx2/repository/history/history_repository.dart' as _i873;
@@ -40,6 +42,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i873.HistoryRepository>(() => _i873.HistoryRepository());
     gh.singleton<_i878.AppRouter>(() => _i878.AppRouter());
     gh.singleton<_i981.HomeBloc>(() => _i981.HomeBloc());
+    gh.singleton<_i971.GroupListBloc>(() => _i971.GroupListBloc());
     return this;
   }
 }

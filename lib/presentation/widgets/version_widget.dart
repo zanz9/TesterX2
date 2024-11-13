@@ -10,7 +10,7 @@ class VersionWidget extends StatelessWidget {
     return const Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text('Version: v1.1.6'),
+        Text('Version: v1.1.7'),
       ],
     );
   }

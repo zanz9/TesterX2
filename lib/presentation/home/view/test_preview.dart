@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:testerx2/core/router/router.dart';
 import 'package:testerx2/presentation/home/home.dart';
 import 'package:testerx2/presentation/widgets/widgets.dart';
 import 'package:testerx2/repository/repository.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
-import 'package:testerx2/core/router/router.dart';
 
 class TestPreview extends StatefulWidget {
   const TestPreview({super.key, required this.test});
@@ -36,8 +36,19 @@ class _TestPreviewState extends State<TestPreview> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return BlocBuilder<TestPreviewBloc, TestPreviewState>(
+    return BlocConsumer<TestPreviewBloc, TestPreviewState>(
       bloc: bloc,
+      listener: (context, state) {
+        if (state is TestPreviewLoaded) {
+          setState(() {
+            var value = state.test.tests.length.toDouble() < 25
+                ? state.test.tests.length.toDouble()
+                : 25.0;
+            sliderValue = value;
+            textController.text = value.toInt().toString();
+          });
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           body: SafeArea(

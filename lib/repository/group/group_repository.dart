@@ -34,8 +34,8 @@ class GroupRepository {
     return (group.value as Map)['name'];
   }
 
-  Future<String?> getMyGroup() async {
-    AuthModel? user = await GetIt.I<AuthRepository>().getUser();
+  Future<String?> getMyGroup({bool cache = true}) async {
+    AuthModel? user = await GetIt.I<AuthRepository>().getUser(cache: cache);
     if (user == null) return null;
     String? groupId = user.groupId;
     if (groupId == null) return null;

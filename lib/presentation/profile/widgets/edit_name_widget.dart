@@ -41,7 +41,7 @@ class _EditNameWidgetState extends State<EditNameWidget> {
     return Material(
       child: Container(
         padding: const EdgeInsets.only(left: 16, right: 16),
-        height: 300 + MediaQuery.of(context).viewInsets.bottom,
+        height: 300,
         child: Column(
           children: [
             const SizedBox(height: 30),
