@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:testerx2/core/di/init_di.dart';
 import 'package:testerx2/core/router/router.dart';
 import 'package:testerx2/presentation/home/home.dart';
 import 'package:testerx2/presentation/profile/profile.dart';
@@ -16,7 +16,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    var bloc = GetIt.I<HomeBloc>()..add(OnHome());
+    var bloc = getIt<HomeBloc>()..add(OnHome());
 
     editName(String beforeName) async {
       var result = await showCupertinoModalBottomSheet(

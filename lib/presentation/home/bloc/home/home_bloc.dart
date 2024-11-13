@@ -16,7 +16,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit(HomeTestsLoaded(tests: tests, user: AuthModel()));
         return;
       }
-      AuthModel? user = await GetIt.I<AuthRepository>().getUser();
+      AuthModel? user = await GetIt.I<AuthRepository>().getUser(cache: false);
       String? groupId = user!.groupId;
       if (groupId == null) return emit(HomeUserNotHaveGroup(user: user));
       List<TestModel> tests =

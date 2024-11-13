@@ -31,15 +31,15 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
-    gh.singleton<_i878.AppRouter>(() => _i878.AppRouter());
-    gh.singleton<_i981.HomeBloc>(() => _i981.HomeBloc());
-    gh.singleton<_i775.AuthRepository>(() => _i775.AuthRepository());
-    gh.singleton<_i288.GroupRepository>(() => _i288.GroupRepository());
-    gh.singleton<_i873.HistoryRepository>(() => _i873.HistoryRepository());
+    gh.singleton<_i660.TestRepository>(() => _i660.TestRepository());
     gh.singleton<_i1029.SortedByTestIdRepository>(
         () => _i1029.SortedByTestIdRepository());
+    gh.singleton<_i775.AuthRepository>(() => _i775.AuthRepository());
+    gh.singleton<_i288.GroupRepository>(() => _i288.GroupRepository());
     gh.singleton<_i625.StorageRepository>(() => _i625.StorageRepository());
-    gh.singleton<_i660.TestRepository>(() => _i660.TestRepository());
+    gh.singleton<_i873.HistoryRepository>(() => _i873.HistoryRepository());
+    gh.singleton<_i878.AppRouter>(() => _i878.AppRouter());
+    gh.singleton<_i981.HomeBloc>(() => _i981.HomeBloc());
     return this;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testerx2/core/di/init_di.dart';
 import 'package:testerx2/core/router/router.dart';
 import 'package:testerx2/presentation/home/home.dart';
 
@@ -24,7 +25,7 @@ class HomeSliverAppBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             BlocBuilder<HomeBloc, HomeState>(
-              bloc: context.watch<HomeBloc>(),
+              bloc: getIt<HomeBloc>(),
               builder: (context, state) {
                 String displayName = 'Пользователь';
                 if (state is HomeTestsLoaded) {
