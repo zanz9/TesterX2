@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shakemywidget/flutter_shakemywidget.dart';
 import 'package:get_it/get_it.dart';
 import 'package:testerx2/repository/auth/auth_repository.dart';
-import 'package:testerx2/router/router.dart';
+import 'package:testerx2/core/router/router.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';

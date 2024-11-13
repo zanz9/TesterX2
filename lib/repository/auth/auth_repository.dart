@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testerx2/repository/auth/auth_model.dart';
-import 'package:testerx2/utils/utils.dart';
+import 'package:testerx2/core/utils/utils.dart';
+import 'package:testerx2/repository/auth/auth.dart';
 
+@Singleton()
 class AuthRepository {
   final authInstance = FirebaseAuth.instance;
   FirebaseDatabase database = FirebaseDatabase.instance;
@@ -44,28 +46,23 @@ class AuthRepository {
 
   bool isAuth() => authInstance.currentUser != null;
 
-  Future<AuthModel?> getUser() async {
+  Future<AuthModel?> getUser({String? uid, bool cache = true}) async {
     AuthModel user;
-    String? displayName = authInstance.currentUser?.displayName;
-    String? userFromStorage = prefs.getString('user');
-    if (userFromStorage != null && await Cache.isNotExpired()) {
-      user = AuthModel.fromJson(
-        jsonDecode(prefs.getString('user')!) as Map,
-        displayName,
-      );
-      return user;
+    String? userFromStorage;
+    uid ??= authInstance.currentUser?.uid;
+    if (cache) {
+      userFromStorage = prefs.getString('user/$uid');
+      if (userFromStorage != null && await Cache.isNotExpired()) {
+        user = AuthModel.fromJson(jsonDecode(userFromStorage) as Map);
+        return user;
+      }
     }
-
-    String? uid = authInstance.currentUser?.uid;
     DataSnapshot userData = await database.ref().child('users/$uid').get();
     if (userData.value == null) return null;
-    user = AuthModel.fromJson(
-      userData.value as Map,
-      displayName,
-    );
+    user = AuthModel.fromJson(userData.value as Map);
     var userJson = jsonEncode(user.toJson());
     if (userFromStorage == null || userJson != userFromStorage) {
-      await prefs.setString('user', userJson);
+      await prefs.setString('user/$uid', userJson);
     }
     return user;
   }
@@ -73,7 +70,6 @@ class AuthRepository {
   Future<void> updateUser({AuthModel? data, bool lazy = false}) async {
     data ??= AuthModel();
     await prefs.setString('user', jsonEncode(data.toJson()));
-    await getUser();
     String? uid = authInstance.currentUser?.uid;
     if (lazy) {
       database.ref('users/$uid').set(data.toJson());
@@ -83,11 +79,16 @@ class AuthRepository {
   }
 
   Future<bool> isAdmin() async {
-    final user = await getUser();
+    final user = await getUser(cache: false);
     return user!.isAdmin;
   }
 
   Future<void> setUserDisplayName(String displayName) async {
-    await authInstance.currentUser!.updateDisplayName(displayName);
+    AuthModel? user = await getUser(cache: false);
+    if (user == null) return;
+    user.displayName = displayName;
+    await updateUser(data: user);
   }
+
+  String? getMyUid() => authInstance.currentUser?.uid;
 }

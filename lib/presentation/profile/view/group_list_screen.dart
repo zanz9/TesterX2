@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testerx2/presentation/profile/bloc/group_list_bloc.dart';
-import 'package:testerx2/ui/ui.dart';
+import 'package:testerx2/core/di/init_di.dart';
+import 'package:testerx2/presentation/profile/bloc/group_list/group_list_bloc.dart';
+import 'package:testerx2/presentation/widgets/widgets.dart';
 
 class GroupListScreen extends StatelessWidget {
   const GroupListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bloc = GroupListBloc();
+    final bloc = getIt<GroupListBloc>();
     bloc.add(OnGroupList());
 
     return BlocBuilder<GroupListBloc, GroupListState>(

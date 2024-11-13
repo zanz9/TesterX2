@@ -1,7 +1,7 @@
 class TestFileModel {
-  final String title;
-  final int maxScore;
-  final List<TestFileBody> body;
+  String title;
+  int maxScore;
+  List<TestFileBody> body;
   // runtime
   List<int> answers = [];
   bool answered = false;
@@ -66,8 +66,8 @@ class TestFileModel {
 }
 
 class TestFileBody {
-  final String text;
-  final int score;
+  String text;
+  int score;
 
   TestFileBody({required this.text, required this.score});
 

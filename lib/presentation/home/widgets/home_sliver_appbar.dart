@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testerx2/core/di/init_di.dart';
+import 'package:testerx2/core/router/router.dart';
 import 'package:testerx2/presentation/home/home.dart';
-import 'package:testerx2/router/router.dart';
 
 class HomeSliverAppBar extends StatelessWidget {
   const HomeSliverAppBar({
@@ -24,22 +25,17 @@ class HomeSliverAppBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             BlocBuilder<HomeBloc, HomeState>(
+              bloc: getIt<HomeBloc>(),
               builder: (context, state) {
                 String displayName = 'Пользователь';
                 if (state is HomeTestsLoaded) {
-                  displayName = state.user.displayName == ''
-                      ? 'Пользователь'
-                      : state.user.displayName ?? 'Пользователь';
+                  displayName = state.user.displayName;
                 }
                 if (state is HomeUserGroupNotHaveTests) {
-                  displayName = state.user.displayName == ''
-                      ? 'Пользователь'
-                      : state.user.displayName ?? 'Пользователь';
+                  displayName = state.user.displayName;
                 }
                 if (state is HomeUserNotHaveGroup) {
-                  displayName = state.user.displayName == ''
-                      ? 'Пользователь'
-                      : state.user.displayName ?? 'Пользователь';
+                  displayName = state.user.displayName;
                 }
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

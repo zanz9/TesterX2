@@ -1,8 +1,10 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/repository/repository.dart';
 
+@Singleton()
 class GroupRepository {
   final db = FirebaseDatabase.instance;
 
@@ -32,8 +34,8 @@ class GroupRepository {
     return (group.value as Map)['name'];
   }
 
-  Future<String?> getMyGroup() async {
-    AuthModel? user = await GetIt.I<AuthRepository>().getUser();
+  Future<String?> getMyGroup({bool cache = true}) async {
+    AuthModel? user = await GetIt.I<AuthRepository>().getUser(cache: cache);
     if (user == null) return null;
     String? groupId = user.groupId;
     if (groupId == null) return null;

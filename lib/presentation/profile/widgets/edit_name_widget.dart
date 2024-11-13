@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:testerx2/presentation/widgets/widgets.dart';
 import 'package:testerx2/repository/repository.dart';
-import 'package:testerx2/ui/ui.dart';
 
 class EditNameWidget extends StatefulWidget {
   const EditNameWidget({
@@ -25,10 +25,23 @@ class _EditNameWidgetState extends State<EditNameWidget> {
 
   @override
   Widget build(BuildContext context) {
+    submit() async {
+      setState(() {
+        buttonLoading = true;
+      });
+      await AuthRepository().setUserDisplayName(textController.text.trim());
+      setState(() {
+        buttonLoading = false;
+      });
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
+    }
+
     return Material(
       child: Container(
         padding: const EdgeInsets.only(left: 16, right: 16),
-        height: 300 + MediaQuery.of(context).viewInsets.bottom,
+        height: 300,
         child: Column(
           children: [
             const SizedBox(height: 30),
@@ -42,22 +55,13 @@ class _EditNameWidgetState extends State<EditNameWidget> {
               hintText: 'Название отображаемого имени',
               obscureText: false,
               focusNode: FocusNode(),
+              onSubmitted: (p0) {
+                submit();
+              },
             ),
             const SizedBox(height: 30),
             PrimaryButton(
-              onTap: () async {
-                setState(() {
-                  buttonLoading = true;
-                });
-                await AuthRepository()
-                    .setUserDisplayName(textController.text.trim());
-                setState(() {
-                  buttonLoading = false;
-                });
-                if (context.mounted) {
-                  Navigator.pop(context);
-                }
-              },
+              onTap: submit,
               isLoading: buttonLoading,
               child: const Text(
                 'Изменить',

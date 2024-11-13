@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gif_view/gif_view.dart';
 import 'package:testerx2/presentation/auth/auth.dart';
-import 'package:testerx2/ui/ui.dart';
+import 'package:testerx2/presentation/widgets/widgets.dart';
 
 @RoutePage()
 class ForgetPasswordScreen extends StatelessWidget {
@@ -34,6 +34,15 @@ class ForgetPasswordScreen extends StatelessWidget {
       bloc: bloc,
       builder: (context, state) {
         return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            leading: BackButton(
+              onPressed: () {
+                context.router.popUntilRoot();
+              },
+            ),
+          ),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -65,7 +74,10 @@ class ForgetPasswordScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 25),
-                    EmailInput(emailController: emailController),
+                    EmailInput(
+                      emailController: emailController,
+                      onSubmitted: send,
+                    ),
                     const SizedBox(height: 25),
                     PrimaryButton(
                       onTap: send,

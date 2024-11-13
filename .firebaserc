@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "tester-x2"
+    "dev": "tester-x2",
+    "prod": "testerx-51a48"
   }
 }

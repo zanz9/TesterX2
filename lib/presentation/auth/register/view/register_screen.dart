@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shakemywidget/flutter_shakemywidget.dart';
+import 'package:testerx2/core/router/router.dart';
 import 'package:testerx2/presentation/auth/auth.dart';
-import 'package:testerx2/router/router.dart';
-import 'package:testerx2/ui/ui.dart';
+import 'package:testerx2/presentation/widgets/widgets.dart';
 
 @RoutePage()
 class RegisterScreen extends StatelessWidget {
@@ -45,6 +45,10 @@ class RegisterScreen extends StatelessWidget {
           errorText = 'Пароли не совпадают';
         }
         return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+          ),
           body: Center(
             child: SingleChildScrollView(
               child: Padding(
@@ -67,13 +71,21 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 25),
-                    EmailInput(emailController: emailController),
-                    const SizedBox(height: 10),
-                    PasswordInput(passwordController: passwordController),
+                    EmailInput(
+                      emailController: emailController,
+                      onSubmitted: register,
+                    ),
                     const SizedBox(height: 10),
                     PasswordInput(
-                        passwordController: passwordController2,
-                        isSecond: true),
+                      passwordController: passwordController,
+                      onSubmitted: register,
+                    ),
+                    const SizedBox(height: 10),
+                    PasswordInput(
+                      passwordController: passwordController2,
+                      isSecond: true,
+                      onSubmitted: register,
+                    ),
                     const SizedBox(height: 30),
                     PrimaryButton(
                         onTap: register,
@@ -101,7 +113,7 @@ class RegisterScreen extends StatelessWidget {
                         const SizedBox(width: 4),
                         GestureDetector(
                           onTap: () =>
-                              context.router.replaceAll([const LoginRoute()]),
+                              context.router.replace(const LoginRoute()),
                           child: const Padding(
                             padding: EdgeInsets.symmetric(vertical: 5),
                             child: Text(

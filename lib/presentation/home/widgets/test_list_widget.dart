@@ -1,8 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:testerx2/presentation/home/home.dart';
+import 'package:testerx2/presentation/widgets/widgets.dart';
 import 'package:testerx2/repository/repository.dart';
-import 'package:testerx2/ui/ui.dart';
 
 class TestListWidget extends StatelessWidget {
   const TestListWidget({

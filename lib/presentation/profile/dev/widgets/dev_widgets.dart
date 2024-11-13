@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:testerx2/presentation/presentation.dart';
+import 'package:testerx2/presentation/profile/profile.dart';
 
 class DevWidgets extends StatelessWidget {
   const DevWidgets({super.key});
@@ -9,7 +9,7 @@ class DevWidgets extends StatelessWidget {
     return const Column(
       children: [
         Text(
-          'Для разработчикам',
+          'Для разработчиков',
           style: TextStyle(fontSize: 24),
         ),
         SizedBox(height: 20),

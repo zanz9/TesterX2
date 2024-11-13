@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testerx2/ui/widgets/primary_list_widget.dart';
+import 'package:testerx2/presentation/widgets/primary_list_widget.dart';
 
 class ClearPrefs extends StatelessWidget {
   const ClearPrefs({super.key});

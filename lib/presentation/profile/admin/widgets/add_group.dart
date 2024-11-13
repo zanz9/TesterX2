@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:testerx2/presentation/profile/admin/admin.dart';
-import 'package:testerx2/ui/ui.dart';
+import 'package:testerx2/presentation/widgets/widgets.dart';
 
 class AddGroup extends StatelessWidget {
   const AddGroup({super.key});

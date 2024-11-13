@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:testerx2/repository/repository.dart';
-import 'package:testerx2/router/router.dart';
+import 'package:testerx2/core/router/router.dart';
 
 class LogoutWidget extends StatefulWidget {
   const LogoutWidget({
@@ -23,7 +23,8 @@ class _LogoutWidgetState extends State<LogoutWidget> {
       child: GestureDetector(
         onTap: () async {
           await AuthRepository().logout();
-          GetIt.I<AppRouter>().replaceAll([const LoginRoute()]);
+          GetIt.I<AppRouter>()
+              .replaceAll([const HomeRoute(), const LoginRoute()]);
         },
         child: AnimatedContainer(
           padding: const EdgeInsets.all(5),

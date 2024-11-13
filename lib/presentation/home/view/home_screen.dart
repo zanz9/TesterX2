@@ -2,10 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testerx2/core/di/init_di.dart';
+import 'package:testerx2/core/router/router.dart';
 import 'package:testerx2/presentation/home/home.dart';
+import 'package:testerx2/presentation/widgets/widgets.dart';
 import 'package:testerx2/repository/repository.dart';
-import 'package:testerx2/router/router.dart';
-import 'package:testerx2/ui/ui.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -13,7 +14,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var homeBloc = HomeBloc()..add(OnHome());
+    HomeBloc homeBloc = getIt<HomeBloc>()..add(OnHome());
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(
@@ -29,8 +30,11 @@ class HomeScreen extends StatelessWidget {
           onPanEnd: (details) async {
             int direction = 3;
             if (details.velocity.pixelsPerSecond.dx < direction) {
-              await context.router.push(const ProfileRoute());
-              if (context.mounted) homeBloc.add(OnHome());
+              bool result =
+                  await context.router.push(const ProfileRoute()) ?? false;
+              if (result) {
+                homeBloc.add(OnHome());
+              }
             }
           },
           child: CustomScrollView(
@@ -83,6 +87,7 @@ class HomeScreen extends StatelessWidget {
                 },
               ),
               BlocBuilder<HomeBloc, HomeState>(
+                bloc: homeBloc,
                 builder: (context, state) {
                   if (state is HomeTestsLoaded) {
                     List<TestModel> tests = state.tests;
@@ -105,8 +110,13 @@ class HomeScreen extends StatelessWidget {
                       text = 'В этой группе нет ни одного теста';
                     }
                     return SliverToBoxAdapter(
-                        child:
-                            Text(text, style: const TextStyle(fontSize: 18)));
+                      child: Center(
+                        child: Text(
+                          text,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    );
                   }
                 },
               )

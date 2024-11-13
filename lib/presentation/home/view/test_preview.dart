@@ -1,14 +1,15 @@
 import 'dart:convert';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testerx2/presentation/home/home.dart';
-import 'package:testerx2/repository/repository.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
-import 'package:testerx2/router/router.dart';
-import 'package:testerx2/ui/ui.dart';
+import 'package:testerx2/core/router/router.dart';
+import 'package:testerx2/presentation/home/home.dart';
+import 'package:testerx2/presentation/widgets/widgets.dart';
+import 'package:testerx2/repository/repository.dart';
 
 class TestPreview extends StatefulWidget {
   const TestPreview({super.key, required this.test});
@@ -35,8 +36,19 @@ class _TestPreviewState extends State<TestPreview> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return BlocBuilder<TestPreviewBloc, TestPreviewState>(
+    return BlocConsumer<TestPreviewBloc, TestPreviewState>(
       bloc: bloc,
+      listener: (context, state) {
+        if (state is TestPreviewLoaded) {
+          setState(() {
+            var value = state.test.tests.length.toDouble() < 25
+                ? state.test.tests.length.toDouble()
+                : 25.0;
+            sliderValue = value;
+            textController.text = value.toInt().toString();
+          });
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           body: SafeArea(
@@ -46,9 +58,29 @@ class _TestPreviewState extends State<TestPreview> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 30),
-                  Text(
-                    widget.test.name,
-                    style: const TextStyle(fontSize: 36),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          widget.test.name,
+                          style: const TextStyle(fontSize: 36),
+                        ),
+                      ),
+                      widget.test.authorId ==
+                              GetIt.I<AuthRepository>().getMyUid()
+                          ? IconButton(
+                              onPressed: () {
+                                bloc.add(
+                                  OnTestPreviewDelete(test: widget.test),
+                                );
+                                context.router.maybePop();
+                              },
+                              icon: const Icon(Icons.delete_outline),
+                            )
+                          : const SizedBox(),
+                    ],
                   ),
                   const SizedBox(height: 20),
                   if (state is TestPreviewLoading)
@@ -149,6 +181,8 @@ class _TestPreviewState extends State<TestPreview> {
                                           widget.test.toJsonAllFields()));
                                   await GetIt.I<SharedPreferences>()
                                       .setInt('testIndex', 0);
+                                  await GetIt.I<SharedPreferences>()
+                                      .remove('testFinish');
                                   GetIt.I<AppRouter>()
                                       .replace(const TestPageRoute());
                                 },

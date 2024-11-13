@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testerx2/presentation/auth/auth.dart';
-
 import 'package:flutter_shakemywidget/flutter_shakemywidget.dart';
-import 'package:testerx2/router/router.dart';
-import 'package:testerx2/ui/ui.dart';
+import 'package:testerx2/core/router/router.dart';
+import 'package:testerx2/presentation/auth/auth.dart';
+import 'package:testerx2/presentation/widgets/widgets.dart';
 
 @RoutePage()
 class LoginScreen extends StatelessWidget {
@@ -41,6 +40,10 @@ class LoginScreen extends StatelessWidget {
           errorText = 'Что-то пошло не так';
         }
         return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+          ),
           body: Center(
             child: SingleChildScrollView(
               child: Padding(
@@ -63,9 +66,13 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 25),
-                    EmailInput(emailController: emailController),
+                    EmailInput(
+                        emailController: emailController, onSubmitted: login),
                     const SizedBox(height: 10),
-                    PasswordInput(passwordController: passwordController),
+                    PasswordInput(
+                      passwordController: passwordController,
+                      onSubmitted: login,
+                    ),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -102,54 +109,6 @@ class LoginScreen extends StatelessWidget {
                           ),
                         )),
                     const SizedBox(height: 50),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    //   child: Row(
-                    //     children: [
-                    //       Expanded(
-                    //         child: Divider(
-                    //           thickness: 0.5,
-                    //           color: Colors.grey[400],
-                    //         ),
-                    //       ),
-                    //       Padding(
-                    //         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    //         child: Text(
-                    //           'Или продолжить с помощью',
-                    //           style: TextStyle(color: Colors.grey[700]),
-                    //         ),
-                    //       ),
-                    //       Expanded(
-                    //         child: Divider(
-                    //           thickness: 0.5,
-                    //           color: Colors.grey[400],
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-
-                    // const SizedBox(height: 50),
-
-                    // const Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    // SquareTile(
-                    //   imagePath: 'images/icons/user.png',
-                    //   onTap: () {
-                    //     bloc.add(OnAnonymous());
-                    //   },
-                    // ),
-                    // SizedBox(width: 25),
-                    // SquareTile(imagePath: 'images/icons/google.png'),
-                    // const SizedBox(width: 25),
-                    // const SquareTile(imagePath: 'images/icons/apple.png')
-                    //   ],
-                    // ),
-
-                    // const SizedBox(height: 50),
-
-                    // not a member? register now
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -159,8 +118,8 @@ class LoginScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         GestureDetector(
-                          onTap: () => context.router
-                              .replaceAll([const RegisterRoute()]),
+                          onTap: () =>
+                              context.router.replace(const RegisterRoute()),
                           child: const Padding(
                             padding: EdgeInsets.symmetric(vertical: 5),
                             child: Text(
@@ -173,7 +132,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
