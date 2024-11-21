@@ -3,16 +3,19 @@ class AuthModel {
     this.groupId,
     this.isAdmin = false,
     this.displayName = 'Пользователь',
+    this.token,
   });
   String displayName;
   String? groupId;
   bool isAdmin;
+  String? token;
 
   factory AuthModel.fromJson(Map json) {
     return AuthModel(
       displayName: json['displayName'] ?? 'Пользователь',
       groupId: json['groupId'] as String?,
       isAdmin: json['isAdmin'] ?? false,
+      token: json['token'] as String?,
     );
   }
 
@@ -21,6 +24,7 @@ class AuthModel {
     data['displayName'] = displayName;
     data['groupId'] = groupId;
     data['isAdmin'] = isAdmin;
+    data['token'] = token;
     return data;
   }
 }
