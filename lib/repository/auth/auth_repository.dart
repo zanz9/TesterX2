@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testerx2/core/utils/utils.dart';
 import 'package:testerx2/repository/auth/auth.dart';
+import 'package:uuid/uuid.dart';
 
 @Singleton()
 class AuthRepository {
@@ -24,7 +25,13 @@ class AuthRepository {
         password: password,
       );
     }
-    await updateUser(data: await getUser());
+    AuthModel? userData = await getUser();
+
+    var token = const Uuid().v4();
+    userData?.token = token;
+    await prefs.setString('guardToken', token);
+
+    await updateUser(data: userData);
     return user;
   }
 
@@ -50,19 +57,23 @@ class AuthRepository {
     AuthModel user;
     String? userFromStorage;
     uid ??= authInstance.currentUser?.uid;
-    if (cache) {
-      userFromStorage = prefs.getString('user/$uid');
-      if (userFromStorage != null && await Cache.isNotExpired()) {
-        user = AuthModel.fromJson(jsonDecode(userFromStorage) as Map);
-        return user;
-      }
+    userFromStorage = prefs.getString('user/$uid');
+    if (cache && userFromStorage != null && await Cache.isNotExpired()) {
+      return AuthModel.fromJson(jsonDecode(userFromStorage) as Map);
     }
     DataSnapshot userData = await database.ref().child('users/$uid').get();
     if (userData.value == null) return null;
     user = AuthModel.fromJson(userData.value as Map);
+    SharedPreferences newPrefs = await SharedPreferences.getInstance();
+    var guardToken = newPrefs.getString('guardToken');
+    if (guardToken != null) {
+      if (guardToken != user.token) {
+        logout();
+      }
+    }
     var userJson = jsonEncode(user.toJson());
     if (userFromStorage == null || userJson != userFromStorage) {
-      await prefs.setString('user/$uid', userJson);
+      await newPrefs.setString('user/$uid', userJson);
     }
     return user;
   }
@@ -85,8 +96,7 @@ class AuthRepository {
 
   Future<void> setUserDisplayName(String displayName) async {
     AuthModel? user = await getUser(cache: false);
-    if (user == null) return;
-    user.displayName = displayName;
+    user?.displayName = displayName;
     await updateUser(data: user);
   }
 
