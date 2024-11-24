@@ -34,6 +34,19 @@ class _TestPreviewState extends State<TestPreview> {
   bool backButtonLoading = false;
   bool startButtonLoading = false;
 
+  showAccessDialog(BuildContext context) async {
+    List<AuthModel> users = await getIt<AuthRepository>().getUsers();
+    if (!context.mounted) return;
+    showDialog(
+      context: context,
+      builder: (context) => AccessDialog(
+        accessList: widget.test.accessList ?? [],
+        users: users,
+        testId: widget.test.id,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -224,28 +237,7 @@ class _TestPreviewState extends State<TestPreview> {
                                 outlined: true,
                                 isLoading: false,
                                 onTap: () {
-                                  // Show dialog to manage access list
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text('Управление доступом'),
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          if (widget.test.accessList != null)
-                                            Text(widget.test.accessList!
-                                                .join(', ')),
-                                        ],
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: const Text('Закрыть'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
+                                  showAccessDialog(context);
                                 },
                                 child: const Text(
                                   'Управление доступом',
@@ -266,6 +258,77 @@ class _TestPreviewState extends State<TestPreview> {
           ),
         );
       },
+    );
+  }
+}
+
+class AccessDialog extends StatefulWidget {
+  const AccessDialog({
+    super.key,
+    required this.accessList,
+    required this.users,
+    required this.testId,
+  });
+
+  final List accessList;
+  final List<AuthModel> users;
+  final String testId;
+  @override
+  State<AccessDialog> createState() => _AccessDialogState();
+}
+
+class _AccessDialogState extends State<AccessDialog> {
+  String? selectedUser;
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Управление доступом'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text('Доступ к тесту имеют:'),
+          for (var uid in widget.accessList)
+            Text(widget.users.firstWhere((e) => e.uid == uid).displayName),
+          const Text('Добавить в доступ:'),
+          DropdownButton(
+            items: widget.users
+                .map((e) => DropdownMenuItem(
+                    value: e.uid, child: Text('${e.displayName} - ${e.uid}')))
+                .toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedUser = value;
+              });
+            },
+            value: selectedUser,
+          ),
+          const SizedBox(height: 20),
+          PrimaryButton(
+            onTap: () {
+              if (selectedUser == null) return;
+              getIt<TestRepository>()
+                  .addUserToAccessList(widget.testId, selectedUser!);
+              Navigator.pop(context);
+            },
+            isLoading: false,
+            outlined: false,
+            child: const Text(
+              'Добавить',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Закрыть'),
+        ),
+      ],
     );
   }
 }
