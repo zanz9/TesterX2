@@ -38,7 +38,7 @@ class HistoryRepository {
     DataSnapshot data = await db
         .ref('history/$uid')
         .orderByChild('timestamp')
-        .limitToLast(50)
+        .limitToLast(15)
         .get();
     List<HistoryModel> list = [];
     for (var element in ((data.value ?? {}) as Map).entries) {

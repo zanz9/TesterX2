@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:testerx2/core/di/init_di.dart';
 import 'package:testerx2/core/router/router.dart';
 import 'package:testerx2/presentation/home/home.dart';
 import 'package:testerx2/presentation/widgets/widgets.dart';
@@ -68,8 +69,7 @@ class _TestPreviewState extends State<TestPreview> {
                           style: const TextStyle(fontSize: 36),
                         ),
                       ),
-                      widget.test.authorId ==
-                              GetIt.I<AuthRepository>().getMyUid()
+                      widget.test.authorId == getIt<AuthRepository>().getMyUid()
                           ? IconButton(
                               onPressed: () {
                                 bloc.add(
@@ -83,6 +83,24 @@ class _TestPreviewState extends State<TestPreview> {
                     ],
                   ),
                   const SizedBox(height: 20),
+                  if (state is TestPreviewError)
+                    Column(
+                      children: [
+                        const Center(
+                          child: Text(
+                            'У вас нет доступа к этому тесту',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        PrimaryButton(
+                          onTap: () => context.router.maybePop(),
+                          isLoading: false,
+                          outlined: true,
+                          child: const Text('Назад'),
+                        ),
+                      ],
+                    ),
                   if (state is TestPreviewLoading)
                     const Center(child: CircularProgressIndicator()),
                   if (state is TestPreviewLoaded)
@@ -197,7 +215,49 @@ class _TestPreviewState extends State<TestPreview> {
                               ),
                             ),
                           ],
-                        )
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: PrimaryButton(
+                                outlined: true,
+                                isLoading: false,
+                                onTap: () {
+                                  // Show dialog to manage access list
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('Управление доступом'),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (widget.test.accessList != null)
+                                            Text(widget.test.accessList!
+                                                .join(', ')),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: const Text('Закрыть'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'Управление доступом',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                 ],
