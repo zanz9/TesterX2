@@ -12,3 +12,5 @@ final class TestPreviewLoaded extends TestPreviewState {
 
   TestPreviewLoaded({required this.test});
 }
+
+final class TestPreviewError extends TestPreviewState {}

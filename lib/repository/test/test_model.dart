@@ -10,6 +10,7 @@ class TestModel {
   late AuthModel author;
   late GroupModel group;
   late List<TestFileModel> tests;
+  late List<String>? accessList;
 
   TestModel({
     required this.name,
@@ -28,6 +29,7 @@ class TestModel {
       authorId: json['authorId'] as String,
     );
     testModel.id = id;
+    testModel.accessList = json['accessList']?.cast<String>();
     return testModel;
   }
 
@@ -38,6 +40,7 @@ class TestModel {
     data['groupId'] = groupId;
     data['createdAt'] = createdAt.toIso8601String();
     data['authorId'] = authorId;
+    data['accessList'] = accessList;
     return data;
   }
 
@@ -55,6 +58,7 @@ class TestModel {
     testModel.tests = (json['tests'] as List)
         .map((v) => TestFileModel.fromJsonHistory(v as Map))
         .toList();
+    testModel.accessList = json['accessList']?.cast<String>();
     return testModel;
   }
 
@@ -69,6 +73,7 @@ class TestModel {
     data['author'] = author.toJson();
     data['group'] = group.toJson();
     data['tests'] = tests.map((v) => v.toJsonHistory()).toList();
+    data['accessList'] = accessList;
     return data;
   }
 }

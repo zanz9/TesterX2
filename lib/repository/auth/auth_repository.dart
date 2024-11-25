@@ -101,4 +101,24 @@ class AuthRepository {
   }
 
   String? getMyUid() => authInstance.currentUser?.uid;
+
+  Future<List<AuthModel>> getUsers() async {
+    DataSnapshot users = await database.ref('users').get();
+    if (users.value == null) {
+      return [];
+    }
+
+    try {
+      final data = users.value as Map<dynamic, dynamic>;
+
+      return data.entries.map((e) {
+        AuthModel user = AuthModel.fromJson(Map<String, dynamic>.from(e.value));
+        user.uid = e.key;
+        return user;
+      }).toList();
+    } catch (e) {
+      print('Error parsing users: $e');
+      return [];
+    }
+  }
 }

@@ -9,6 +9,7 @@ class AuthModel {
   String? groupId;
   bool isAdmin;
   String? token;
+  String? uid;
 
   factory AuthModel.fromJson(Map json) {
     return AuthModel(

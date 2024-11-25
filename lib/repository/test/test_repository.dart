@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:testerx2/core/utils/utils.dart';
 import 'package:testerx2/repository/repository.dart';
 
@@ -93,5 +92,24 @@ class TestRepository {
   Future<void> deleteTest(TestModel test) async {
     await db.ref('tests').child(test.id).remove();
     await GetIt.I<SharedPreferences>().remove('tests/${test.id}');
+  }
+
+  Future<void> addUserToAccessList(String testId, String uid) async {
+    var accessList =
+        await db.ref('tests').child(testId).child('accessList').get();
+    if (accessList.value == null) {
+      await db.ref('tests').child(testId).child('accessList').set([uid]);
+    } else {
+      List<String> list = (accessList.value as List<dynamic>).cast<String>();
+      await db
+          .ref('tests')
+          .child(testId)
+          .child('accessList')
+          .set([...list, uid]);
+    }
+  }
+
+  Future<void> removeUserFromAccessList(String testId, String uid) async {
+    await db.ref('tests').child(testId).child('accessList').child(uid).remove();
   }
 }

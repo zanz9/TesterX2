@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:testerx2/core/di/init_di.dart';
 import 'package:testerx2/core/router/router.dart';
 import 'package:testerx2/presentation/home/home.dart';
 import 'package:testerx2/presentation/widgets/widgets.dart';
@@ -32,6 +33,19 @@ class _TestPreviewState extends State<TestPreview> {
 
   bool backButtonLoading = false;
   bool startButtonLoading = false;
+
+  showAccessDialog(BuildContext context) async {
+    List<AuthModel> users = await getIt<AuthRepository>().getUsers();
+    if (!context.mounted) return;
+    showDialog(
+      context: context,
+      builder: (context) => AccessDialog(
+        accessList: widget.test.accessList ?? [],
+        users: users,
+        testId: widget.test.id,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +82,7 @@ class _TestPreviewState extends State<TestPreview> {
                           style: const TextStyle(fontSize: 36),
                         ),
                       ),
-                      widget.test.authorId ==
-                              GetIt.I<AuthRepository>().getMyUid()
+                      widget.test.authorId == getIt<AuthRepository>().getMyUid()
                           ? IconButton(
                               onPressed: () {
                                 bloc.add(
@@ -83,6 +96,24 @@ class _TestPreviewState extends State<TestPreview> {
                     ],
                   ),
                   const SizedBox(height: 20),
+                  if (state is TestPreviewError)
+                    Column(
+                      children: [
+                        const Center(
+                          child: Text(
+                            'У вас нет доступа к этому тесту',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        PrimaryButton(
+                          onTap: () => context.router.maybePop(),
+                          isLoading: false,
+                          outlined: true,
+                          child: const Text('Назад'),
+                        ),
+                      ],
+                    ),
                   if (state is TestPreviewLoading)
                     const Center(child: CircularProgressIndicator()),
                   if (state is TestPreviewLoaded)
@@ -197,7 +228,28 @@ class _TestPreviewState extends State<TestPreview> {
                               ),
                             ),
                           ],
-                        )
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: PrimaryButton(
+                                outlined: true,
+                                isLoading: false,
+                                onTap: () {
+                                  showAccessDialog(context);
+                                },
+                                child: const Text(
+                                  'Управление доступом',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                 ],
@@ -206,6 +258,77 @@ class _TestPreviewState extends State<TestPreview> {
           ),
         );
       },
+    );
+  }
+}
+
+class AccessDialog extends StatefulWidget {
+  const AccessDialog({
+    super.key,
+    required this.accessList,
+    required this.users,
+    required this.testId,
+  });
+
+  final List accessList;
+  final List<AuthModel> users;
+  final String testId;
+  @override
+  State<AccessDialog> createState() => _AccessDialogState();
+}
+
+class _AccessDialogState extends State<AccessDialog> {
+  String? selectedUser;
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Управление доступом'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text('Доступ к тесту имеют:'),
+          for (var uid in widget.accessList)
+            Text(widget.users.firstWhere((e) => e.uid == uid).displayName),
+          const Text('Добавить в доступ:'),
+          DropdownButton(
+            items: widget.users
+                .map((e) => DropdownMenuItem(
+                    value: e.uid, child: Text('${e.displayName} - ${e.uid}')))
+                .toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedUser = value;
+              });
+            },
+            value: selectedUser,
+          ),
+          const SizedBox(height: 20),
+          PrimaryButton(
+            onTap: () {
+              if (selectedUser == null) return;
+              getIt<TestRepository>()
+                  .addUserToAccessList(widget.testId, selectedUser!);
+              Navigator.pop(context);
+            },
+            isLoading: false,
+            outlined: false,
+            child: const Text(
+              'Добавить',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Закрыть'),
+        ),
+      ],
     );
   }
 }
