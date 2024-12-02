@@ -10,7 +10,7 @@ class TestModel {
   late AuthModel author;
   late GroupModel group;
   late List<TestFileModel> tests;
-  late List<String>? accessList;
+  List<String>? accessList;
 
   TestModel({
     required this.name,
