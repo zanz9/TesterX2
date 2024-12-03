@@ -50,7 +50,11 @@ class TestAnswerWidget extends StatelessWidget {
               ...test.body[index].text.split('<testerx_img>').map((el) {
                 if (el != el.split('TESTERX').last) {
                   Uint8List u8 = base64Decode(el.split('TESTERX').last);
-                  return Image.memory(u8);
+                  return Image.memory(
+                    u8,
+                    height: 50,
+                    fit: BoxFit.contain,
+                  );
                 } else {
                   return Text(
                     el,

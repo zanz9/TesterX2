@@ -4,12 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:testerx2/app/application.dart';
 import 'package:testerx2/core/di/init_di.dart';
 import 'package:testerx2/firebase_options.dart';
-import 'package:testerx2/core/utils/utils.dart';
 import 'package:url_strategy/url_strategy.dart';
-import 'package:talker_flutter/talker_flutter.dart';
 
 class Runner {
   Future<void> run() async {
@@ -19,8 +18,6 @@ class Runner {
     await registerPrefs();
     configureDependencies();
 
-    await initCache();
-
     setPathUrlStrategy();
     runApplication();
   }
@@ -28,7 +25,7 @@ class Runner {
   firebaseInit() async => await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform);
 
-  initCache() async => await Cache.isNotExpired();
+  // initCache() async => await Cache.isNotExpired();
 
   runApplication() {
     bool isDark = false;

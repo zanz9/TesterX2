@@ -5,7 +5,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testerx2/core/utils/utils.dart';
 import 'package:testerx2/repository/auth/auth.dart';
 import 'package:uuid/uuid.dart';
 
@@ -30,7 +29,6 @@ class AuthRepository {
     var token = const Uuid().v4();
     userData?.token = token;
     await prefs.setString('guardToken', token);
-
     await updateUser(data: userData);
     return user;
   }
@@ -55,25 +53,23 @@ class AuthRepository {
 
   Future<AuthModel?> getUser({String? uid, bool cache = true}) async {
     AuthModel user;
-    String? userFromStorage;
-    uid ??= authInstance.currentUser?.uid;
-    userFromStorage = prefs.getString('user/$uid');
-    if (cache && userFromStorage != null && await Cache.isNotExpired()) {
-      return AuthModel.fromJson(jsonDecode(userFromStorage) as Map);
+    bool checkGuard = true;
+    if (uid == null) {
+      uid = authInstance.currentUser?.uid;
+    } else {
+      checkGuard = false;
     }
-    DataSnapshot userData = await database.ref().child('users/$uid').get();
+
+    final newDB = FirebaseDatabase.instance;
+    DataSnapshot userData = await newDB.ref().child('users/$uid').get();
     if (userData.value == null) return null;
     user = AuthModel.fromJson(userData.value as Map);
     SharedPreferences newPrefs = await SharedPreferences.getInstance();
     var guardToken = newPrefs.getString('guardToken');
-    if (guardToken != null) {
+    if (guardToken != null && checkGuard) {
       if (guardToken != user.token) {
         logout();
       }
-    }
-    var userJson = jsonEncode(user.toJson());
-    if (userFromStorage == null || userJson != userFromStorage) {
-      await newPrefs.setString('user/$uid', userJson);
     }
     return user;
   }
@@ -82,11 +78,7 @@ class AuthRepository {
     data ??= AuthModel();
     await prefs.setString('user', jsonEncode(data.toJson()));
     String? uid = authInstance.currentUser?.uid;
-    if (lazy) {
-      database.ref('users/$uid').set(data.toJson());
-    } else {
-      await database.ref('users/$uid').set(data.toJson());
-    }
+    await database.ref('users/$uid').set(data.toJson());
   }
 
   Future<bool> isAdmin() async {

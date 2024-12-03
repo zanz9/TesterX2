@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
@@ -68,20 +66,10 @@ class TestRepository {
   }
 
   Future<TestModel?> getTestById(String id) async {
-    var prefs = GetIt.I<SharedPreferences>();
-    var text = prefs.getString('tests/$id');
+    DataSnapshot data = await db.ref('tests').child(id).get();
+    if (data.value == null) return null;
+    TestModel test = TestModel.fromJson(data.value as Map, id);
 
-    late TestModel test;
-    if (text != null && await Cache.isNotExpired()) {
-      test = TestModel.fromJson(jsonDecode(text) as Map, id);
-    } else {
-      DataSnapshot data = await db.ref('tests').child(id).get();
-      if (data.value == null) return null;
-      test = TestModel.fromJson(data.value as Map, id);
-      if (text == null || text != jsonEncode(test.toJson())) {
-        await prefs.setString('tests/$id', jsonEncode(test.toJson()));
-      }
-    }
     var groupName = await GetIt.I<GroupRepository>().getGroup(test.groupId);
     test.group = GroupModel(id: test.groupId, name: groupName);
     test.author =
