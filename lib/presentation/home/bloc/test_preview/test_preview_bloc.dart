@@ -9,12 +9,13 @@ part 'test_preview_event.dart';
 part 'test_preview_state.dart';
 
 class TestPreviewBloc extends Bloc<TestPreviewEvent, TestPreviewState> {
+  bool isAdmin = false;
   TestPreviewBloc() : super(TestPreviewInitial()) {
     on<OnTestPreview>((event, emit) async {
       emit(TestPreviewLoading());
       TestModel test = event.test;
-      if (test.accessList != null &&
-          !(await getIt<AuthRepository>().isAdmin())) {
+      isAdmin = await getIt<AuthRepository>().isAdmin();
+      if (test.accessList != null && !isAdmin) {
         if (!test.accessList!.contains(getIt<AuthRepository>().getMyUid())) {
           return emit(TestPreviewError());
         }

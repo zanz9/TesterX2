@@ -115,7 +115,18 @@ class _TestPreviewState extends State<TestPreview> {
                       ],
                     ),
                   if (state is TestPreviewLoading)
-                    const Center(child: CircularProgressIndicator()),
+                    Column(
+                      children: [
+                        const Center(child: CircularProgressIndicator()),
+                        const SizedBox(height: 20),
+                        PrimaryButton(
+                          onTap: () => context.router.maybePop(),
+                          isLoading: false,
+                          outlined: true,
+                          child: const Text('Назад'),
+                        ),
+                      ],
+                    ),
                   if (state is TestPreviewLoaded)
                     Column(
                       children: [
@@ -230,26 +241,27 @@ class _TestPreviewState extends State<TestPreview> {
                           ],
                         ),
                         const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: PrimaryButton(
-                                outlined: true,
-                                isLoading: false,
-                                onTap: () {
-                                  showAccessDialog(context);
-                                },
-                                child: const Text(
-                                  'Управление доступом',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
+                        if (bloc.isAdmin)
+                          Row(
+                            children: [
+                              Expanded(
+                                child: PrimaryButton(
+                                  outlined: true,
+                                  isLoading: false,
+                                  onTap: () {
+                                    showAccessDialog(context);
+                                  },
+                                  child: const Text(
+                                    'Управление доступом',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                       ],
                     ),
                 ],
