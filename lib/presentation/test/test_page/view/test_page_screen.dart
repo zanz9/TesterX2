@@ -144,6 +144,8 @@ class TestPageScreen extends StatelessWidget {
                 bloc.add(OnTestPrev()),
             const SingleActivator(LogicalKeyboardKey.keyD): () =>
                 bloc.add(OnTestNext()),
+            const SingleActivator(LogicalKeyboardKey.space): () =>
+                bloc.add(OnTestSubmit()),
           },
           child: Focus(
             autofocus: true,

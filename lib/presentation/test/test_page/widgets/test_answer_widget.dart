@@ -25,6 +25,10 @@ class TestAnswerWidget extends StatelessWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
+        onDoubleTap: () {
+          bloc.add(OnTestAnswer(index: index));
+          bloc.add(OnTestSubmit());
+        },
         onTap: () => bloc.add(OnTestAnswer(index: index)),
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 5),
